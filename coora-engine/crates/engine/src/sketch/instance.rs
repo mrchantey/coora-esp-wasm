@@ -1,5 +1,4 @@
 use crate::*;
-use std::time::SystemTime;
 use wasmi::{Read, TypedFunc};
 
 // type Store = [u8; 16];

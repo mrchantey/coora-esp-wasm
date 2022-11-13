@@ -4,6 +4,7 @@ resolver = "2"
 members = [
 	"crates/engine",
 ]
+#others should exclude themselves
 exclude = []
 
 [workspace.package]
