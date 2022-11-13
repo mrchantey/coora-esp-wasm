@@ -1,0 +1,30 @@
+# https://doc.rust-lang.org/cargo/reference/manifest.html
+[workspace]
+resolver = "2"
+members = [
+	"crates/engine",
+]
+exclude = []
+
+[workspace.package]
+version = "0.1.1"
+edition = "2021"
+license-file = "../LICENSE"
+readme = "README.md"
+authors = ["Peter Hayman <peteyhayman@gmail.com>"]
+description = "Code embedded devices wirelessly from a browser"
+documentation = "https://github.com/mrchantey/coora"
+repository = "https://github.com/mrchantey/coora"
+
+[workspace.dependencies]
+# internal
+coora_wasm = {path = "./crates/wasm", version = "0.0.1" }
+# forky
+forky_core = {path = "../../forky/crates/forky_core" }
+sweet = {path = "../../forky/crates/sweet" }
+
+# wasm
+rgb = "0.8.34"
+anyhow = "1"
+extend = "1.1.2"
+wasmi = "0.20.0"

@@ -1,0 +1,13 @@
+set windows-shell := ["C:/tools/cygwin/bin/sh.exe","-c"]
+
+
+
+
+
+backtrace := '0'
+
+test crate *args:
+	RUST_BACKTRACE={{backtrace}} cargo test -p {{crate}} --test sweet -- {{args}}
+
+test-w crate *args:
+	RUST_BACKTRACE={{backtrace}} just watch 'cargo test -p {{crate}} --test sweet -- -w {{args}}'
