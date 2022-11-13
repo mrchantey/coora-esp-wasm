@@ -1,0 +1,6 @@
+{
+	"extends": "../../../config/asconfig.json",
+	"entries": [
+		"../src/main.ts"
+	]
+}

@@ -1,0 +1,10 @@
+{
+	"name": "@coora/template",
+	"version": "1.0.0",
+	"description": "",
+	"scripts": {
+		"start": "onchange -i \"src/**/*\" -- npm run build",
+		"build": "asc --config ./config/asconfig.json",
+		"build:release": "asc src/main.ts --target release"
+	}
+}

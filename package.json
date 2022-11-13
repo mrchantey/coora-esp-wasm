@@ -1,0 +1,20 @@
+{
+  "name": "coora",
+  "version": "1.0.0",
+  "description": "Repo for the Coora Engine & App framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrchantey/coora.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrchantey/coora/issues"
+  },
+  "homepage": "https://github.com/mrchantey/coora#readme"
+}

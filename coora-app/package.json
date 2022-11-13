@@ -1,0 +1,30 @@
+{
+	"name": "coora",
+	"private": true,
+	"version": "1.0.0",
+	"workspaces": [
+		"packages/template"
+	],
+	"description": "Repo for the Coora Engine & App framework",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/mrchantey/coora.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/mrchantey/coora/issues"
+	},
+	"homepage": "https://github.com/mrchantey/coora/coora-app#readme",
+	"dependencies": {
+		"assemblyscript": "^0.23.0"
+	},
+	"devDependencies": {
+		"onchange": "^7.1.0"
+	}
+}
