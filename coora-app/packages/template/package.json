@@ -5,6 +5,6 @@
 	"scripts": {
 		"start": "onchange -i \"src/**/*\" -- npm run build",
 		"build": "asc --config ./config/asconfig.json",
-		"build:release": "asc src/main.ts --target release"
+		"build:release": "npm run build -- --target release"
 	}
 }
