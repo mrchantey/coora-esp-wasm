@@ -1,5 +1,5 @@
 // use anyhow::{anyhow, Result};
-use esp_idf_sys as _;
+use coora_target_esp32::*;
 use wasmi::*;
 fn main() {
 	let engine = Engine::default();
@@ -10,6 +10,7 @@ fn main() {
 		0x01, 0x01, 0x07, 0x09, 0x01, 0x05, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x00,
 		0x01, 0x0a, 0x08, 0x01, 0x06, 0x00, 0x41, 0x03, 0x10, 0x00, 0x0b,
 	];
+
 	let module = Module::new(&engine, &mut &wasm[..]).unwrap();
 	type HostState = u32;
 	let mut store = Store::new(&engine, 42);
@@ -33,6 +34,17 @@ fn main() {
 		.typed::<(), ()>(&mut store)
 		.unwrap();
 
-	// And finally we can call the wasm!
 	hello.call(&mut store, ()).unwrap();
+	// let add = instance
+	// 	.get_export(&store, "add")
+	// 	.and_then(Extern::into_func)
+	// 	.ok_or_else(|| panic!("could not find function \"add\""))
+	// 	.unwrap()
+	// 	.typed::<(u32, u32), u32>(&mut store)
+	// 	.unwrap();
+
+	// let result = add.call(&mut store, (3, 2)).unwrap();
+	// println!("the answer is {}", result);
+
+	utility::sleep_forever();
 }

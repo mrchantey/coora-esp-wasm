@@ -11,8 +11,5 @@ fn main() {
 
 	// println!("result is {}", result);
 	// let str = String::from("hello cool world!");
-	loop {
-		// println!("{}", str);
-		utility::sleep_ms(16);
-	}
+	utility::sleep_forever();
 }
