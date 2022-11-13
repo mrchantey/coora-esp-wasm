@@ -1,0 +1,8 @@
+[package]
+name = "hello_world"
+version = {workspace = true}
+edition = {workspace = true}
+publish = false
+
+[lib]
+crate-type = ["cdylib"]

@@ -1,3 +1,12 @@
+#![allow(dead_code)]
+#![no_std]
+
+#[cfg(not(test))]
+#[panic_handler]
+fn handle_panic(_: &core::panic::PanicInfo) -> ! {
+    unreachable!()
+}
+
 #[link(wasm_import_module = "core")]
 extern "C" {
     // #[link_name = "millis"]
@@ -16,7 +25,7 @@ pub extern "C" fn run() {
         let slow = _millis / 100;
         let g = (slow % 255) as u32;
         // setAll(0, g, 0, 8);
-        setAll(0, 0, 0, 2);
+        setAll(0, 0, g, 2);
         show();
     }
 }

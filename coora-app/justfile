@@ -5,6 +5,9 @@ export PATH := "./node_modules/.bin:" + env_var('PATH')
 npm := 'node "C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js"'
 npx := 'node "C:\Program Files\nodejs\node_modules\npm\bin\npx-cli.js"'
 
+default:
+	just --list
+
 w *args:
 	echo "watching"
 	{{npx}} onchange -i packages/*/src/**/* -- just {{args}}
@@ -43,7 +46,7 @@ ping:
 wasm url crate:
 
 deploy name *args:
-	curl http://192.168.86.222/wasm \
+	curl http://192.168.86.222/sketch \
 	-X POST \
 	--data-binary @./dist/{{name}}/release.wasm
 # --data-binary @./rust_example/target/wasm32-unknown-unknown/release/{{name}}.wasm

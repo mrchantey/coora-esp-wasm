@@ -1,0 +1,8 @@
+[package]
+name = "hello_led"
+version = {workspace = true}
+edition = {workspace = true}
+publish = false
+
+[lib]
+crate-type = ["cdylib"]

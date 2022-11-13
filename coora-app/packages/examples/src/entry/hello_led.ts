@@ -10,7 +10,7 @@ export function start():void{
 }
 
 export function run():void{
-	led.setAll(0, 32, 0, 0)
+	led.setAll(0, 0, 32, 4)
 	led.show()
 }
 // export function add(a:i32,b:i32):i32{

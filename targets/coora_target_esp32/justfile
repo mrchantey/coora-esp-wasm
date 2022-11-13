@@ -1,11 +1,11 @@
 set windows-shell := ["C:/tools/cygwin/bin/sh.exe","-c"]
-# requires powershell because of CMAKE_OBJECT_PATH_MAX
-# set shell := ["powershell.exe", "-c"]
 
 port := 'COM3'
 backtrace := '0'
-# target-idf := '--target riscv32imc-esp-espidf "-Zbuild-std=std,panic_abort"
-# ./export-esp.ps1 && \
+
+default:
+	just --list
+
 
 build *args:
 	RUST_BACKTRACE={{backtrace}} && \
@@ -13,7 +13,6 @@ build *args:
 	--example {{args}} \
 
 #remove speed if experiencing issues
-# ./export-esp.ps1 && \
 flash *args:
 	cargo espflash {{port}} \
 	--monitor \
@@ -33,3 +32,12 @@ save *args:
 monitor *args:
 	cargo espflash serial-monitor {{port}} \
 	--speed 921600
+
+
+
+# Archive
+# requires powershell because of CMAKE_OBJECT_PATH_MAX
+# set shell := ["powershell.exe", "-c"]
+# not neeeded? ./export-esp.ps1 && \
+
+# target-idf := '--target riscv32imc-esp-espidf "-Zbuild-std=std,panic_abort"

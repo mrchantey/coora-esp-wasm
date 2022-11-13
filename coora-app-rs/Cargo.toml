@@ -1,10 +1,13 @@
-[package]
-name = "rust_example"
-version = "0.0.0"
+[workspace]
+members = [
+	"crates/hello_world",
+	"crates/hello_led"
+]
+
+[workspace.package]
+version = "0.0.1"
 edition = "2021"
 
-[lib]
-crate-type = ["cdylib"]
 
 [profile.release]
 opt-level = 's'

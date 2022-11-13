@@ -3,5 +3,9 @@
 version = 3
 
 [[package]]
-name = "rust_example"
-version = "0.0.0"
+name = "hello_led"
+version = "0.0.1"
+
+[[package]]
+name = "hello_world"
+version = "0.0.1"

@@ -1,19 +1,28 @@
 set windows-shell := ["C:/tools/cygwin/bin/sh.exe","-c"]
 
+default:
+	just --list
+
+
+crates := 'hello_world hello_led'
+	
+@all command:
+	for file in {{crates}}; do \
+		just {{command}} $file; \
+	done
+
 watch *args:
 	cargo watch -q --ignore '{**/mod.rs,.gitignore}' --ignore '**.{txt,md,wasm,wat}' --ignore '{target/,out/}' -- just {{args}}
 
-crate := 'rust_example'
-
-@build *args:
-	cargo build --release
+@build crate *args:
+	cargo build --release -p {{crate}}
 	stat --printf="bytes: %s\n" ./target/wasm32-unknown-unknown/release/{{crate}}.wasm
-	just wat
+	just wat {{crate}}
 
-@dump *args:
+@dump crate *args:
 	hexdump -b ./target/wasm32-unknown-unknown/release/{{crate}}.wasm {{args}}
 
-@wat *args:
+@wat crate *args:
 	C:/path/wabt/bin/wasm2wat.exe \
 	./target/wasm32-unknown-unknown/release/{{crate}}.wasm \
 	-o ./target/wasm32-unknown-unknown/release/{{crate}}.wat

@@ -1,10 +1,18 @@
+#![allow(dead_code)]
+#![no_std]
+
+#[cfg(not(test))]
+#[panic_handler]
+fn handle_panic(_: &core::panic::PanicInfo) -> ! {
+    unreachable!()
+}
+
 #[link(wasm_import_module = "host")]
 extern "C" {
     // #[link_name = "howdy"]
     // #[no_mangle]
     fn howdy(val: i32);
 }
-
 #[no_mangle]
 pub extern "C" fn hello() {
     unsafe {
