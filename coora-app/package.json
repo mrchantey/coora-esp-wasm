@@ -3,12 +3,12 @@
 	"private": true,
 	"version": "1.0.0",
 	"workspaces": [
-		"packages/template"
+		"packages/*"
 	],
 	"description": "Repo for the Coora Engine & App framework",
 	"main": "index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"build": "just all build"
 	},
 	"repository": {
 		"type": "git",

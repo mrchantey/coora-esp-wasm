@@ -1,0 +1,33 @@
+set windows-shell := ["C:/tools/cygwin/bin/sh.exe","-c"]
+# set shell := ["powershell.exe", "-c"]
+
+apps := 'hello_world hello_led'
+export PATH := "./node_modules/.bin:" + env_var('PATH')
+
+npm := 'node "C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js"'
+npx := 'node "C:\Program Files\nodejs\node_modules\npm\bin\npx-cli.js"'
+
+watch:
+	echo "watching all builds"
+	{{npx}} onchange -i packages/*/src/**/* -- just all build
+
+
+@all command:
+	echo "building all.."
+	for app in {{apps}}; do \
+		just {{command}} $app; \
+	done
+
+@list *app:
+	echo {{app}}
+
+target := 'release'
+
+@build name *args:
+	cd ./packages/examples && \
+	{{npx}} asc ./src/entry/{{name}}.ts \
+	-o ../../dist/{{name}}/{{target}}.wasm \
+	-t ../../dist/{{name}}/{{target}}.wat \
+	--config ./config/asconfig.json \
+	--target {{target}}
+	echo "built {{name}}"

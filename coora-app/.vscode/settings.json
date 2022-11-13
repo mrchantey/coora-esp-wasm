@@ -8,5 +8,5 @@
 		"**/Thumbs.db": true,
 		"vscode": true,
 		"**/package-lock.json": true
-	},
+	}
 }
