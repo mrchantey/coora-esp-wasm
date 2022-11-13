@@ -7,9 +7,9 @@ fn main() {
 	let mut instance = build_empty().unwrap();
 
 	let add = instance.get_export::<(u64, u64), u64>("add");
-	// let result = add.call(&mut instance.store, (1, 2)).unwrap();
+	let result = add.call(&mut instance.store, (1, 2)).unwrap();
 
-	// println!("result is {}", result);
+	println!("result is {}", result);
 	// let str = String::from("hello cool world!");
 	utility::sleep_forever();
 }

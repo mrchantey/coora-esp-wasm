@@ -1,7 +1,6 @@
 [build]
 target = "riscv32imc-esp-espidf"
-# required because of CMAKE_OBJECT_PATH_MAX
-target-dir = "C:/temp/esp32c3"
+# never set 'target-dir', it will cause weird stack overflows
 
 [target.riscv32imc-esp-espidf]
 linker = "ldproxy"

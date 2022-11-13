@@ -1,12 +1,17 @@
 # ESP32 Target
 
 ## Troubleshooting
+### Object Path Max
+`CMAKE_OBJECT_PATH_MAX`
+- Path too long? you may be able to get away with just using powershell instead of cygwin
+- Otherwise you need to reduce path length, DO NOT specify a target dir other than default, it will randomly 'stack overflow' at RUNTIME
 
 ### Stack Overflow
+
 `***ERROR*** A stack overflow in task main has been detected.`
-- `C:\temp\esp32c3\riscv32imc-esp-espidf\release\build\esp-idf-sys-ee2e774c5bbb1a7b\out\build\C:/temp/.embuild/espressif/esp-idf/release-v4.4/components/esp_system\ubsan.c:294
+- bla bla `release-v4.4/components/esp_system\ubsan.c:294
+- Are you specifying a target directory? if so, dont do that because it doesnt work in really weird ways, i think its a linker problem.
 - Try `cargo clean`
-	- Not sure why this works, but it does
 - Wasm Binary Stack size
 	- To see whats happening here, convert your `.wasm` to a `.wat` and inspect the text
 	- There may be a variable: `(global $__stack_pointer (mut i32) (i32.const 65536))`
