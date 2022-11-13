@@ -1,6 +1,3 @@
-#![allow(dead_code)]
-#![no_std]
-
 #[link(wasm_import_module = "core")]
 extern "C" {
     // #[link_name = "millis"]
@@ -26,10 +23,4 @@ pub extern "C" fn run() {
 #[no_mangle]
 pub extern "C" fn _millis() -> u64 {
     unsafe { millis() }
-}
-
-#[cfg(not(test))]
-#[panic_handler]
-fn handle_panic(_: &core::panic::PanicInfo) -> ! {
-    unreachable!()
 }

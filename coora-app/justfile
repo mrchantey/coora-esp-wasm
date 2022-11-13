@@ -1,5 +1,3 @@
-set windows-shell := ["C:/tools/cygwin/bin/sh.exe","-c"]
-# set shell := ["powershell.exe", "-c"]
 
 apps := 'hello_world hello_led'
 export PATH := "./node_modules/.bin:" + env_var('PATH')
@@ -7,10 +5,9 @@ export PATH := "./node_modules/.bin:" + env_var('PATH')
 npm := 'node "C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js"'
 npx := 'node "C:\Program Files\nodejs\node_modules\npm\bin\npx-cli.js"'
 
-watch:
-	echo "watching all builds"
-	{{npx}} onchange -i packages/*/src/**/* -- just all build
-
+w *args:
+	echo "watching"
+	{{npx}} onchange -i packages/*/src/**/* -- just {{args}}
 
 @all command:
 	echo "building all.."
@@ -29,5 +26,31 @@ target := 'release'
 	-o ../../dist/{{name}}/{{target}}.wasm \
 	-t ../../dist/{{name}}/{{target}}.wat \
 	--config ./config/asconfig.json \
-	--target {{target}}
+	--target {{target}} \
+	--stackSize 65536 \
+	--lowMemoryLimit \
+
 	echo "built {{name}}"
+
+
+
+## POST
+
+ping:
+	curl http://192.168.86.222/ping \
+	-X POST \
+	-d hello
+wasm url crate:
+
+deploy name *args:
+	curl http://192.168.86.222/wasm \
+	-X POST \
+	--data-binary @./dist/{{name}}/release.wasm
+# --data-binary @./rust_example/target/wasm32-unknown-unknown/release/{{name}}.wasm
+
+deploy-stress:
+	while true; do \
+		just -f jf_post sketch; \
+		echo; \
+		sleep 1; \
+	done \

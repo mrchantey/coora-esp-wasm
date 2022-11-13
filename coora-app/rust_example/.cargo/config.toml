@@ -1,0 +1,10 @@
+[build]
+target = "wasm32-unknown-unknown"
+
+[target.wasm32-unknown-unknown]
+# 512 * 256 = 131072
+# 256 * 256 = 65536
+# 256 * 128 = 32768
+rustflags = [
+  "-C", "link-args=-z stack-size=131072",
+]

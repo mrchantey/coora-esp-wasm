@@ -1,5 +1,5 @@
 [package]
-name = "wasm_sketch"
+name = "rust_example"
 version = "0.0.0"
 edition = "2021"
 

@@ -1,0 +1,19 @@
+set windows-shell := ["C:/tools/cygwin/bin/sh.exe","-c"]
+
+watch *args:
+	cargo watch -q --ignore '{**/mod.rs,.gitignore}' --ignore '**.{txt,md,wasm,wat}' --ignore '{target/,out/}' -- just {{args}}
+
+crate := 'rust_example'
+
+@build *args:
+	cargo build --release
+	stat --printf="bytes: %s\n" ./target/wasm32-unknown-unknown/release/{{crate}}.wasm
+	just wat
+
+@dump *args:
+	hexdump -b ./target/wasm32-unknown-unknown/release/{{crate}}.wasm {{args}}
+
+@wat *args:
+	C:/path/wabt/bin/wasm2wat.exe \
+	./target/wasm32-unknown-unknown/release/{{crate}}.wasm \
+	-o ./target/wasm32-unknown-unknown/release/{{crate}}.wat
