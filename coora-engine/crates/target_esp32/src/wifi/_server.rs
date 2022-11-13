@@ -10,39 +10,30 @@ use std::{
 
 use embedded_svc::{
 	http::server::{registry::Registry, Request, Response},
-	io::Read,
-	io::Write,
+	io::{Read, Write},
 };
 use esp_idf_svc::http::server::{Configuration, EspHttpRequest, EspHttpServer};
 
+use crate::{EspHttpRequest_Ext, EspHttpResponse_Ext};
 
 pub fn start_server() -> Result<EspHttpServer> {
 	let server_config = Configuration::default();
 	let mut server = EspHttpServer::new(&server_config)?;
 	server.handle_get("/", |_request, response| {
-		let html = templated("welcome");
-		let mut writer = response.into_writer()?;
-		writer.write_all(html.as_bytes())?;
+		response.write_bytes(templated("welcome").as_bytes())?;
 		Ok(())
 	})?;
 
 	server.handle_get("/nicha", move |_request, response| {
-		let html = templated("❤️❤️❤️HELLO FROM NICHA!❤️❤️❤️");
-		let mut writer = response.into_writer()?;
-		writer.write_all(html.as_bytes())?;
+		response
+			.write_bytes(templated("❤️❤️❤️HELLO FROM NICHA!❤️❤️❤️").as_bytes())?;
 		Ok(())
 	})?;
-	server.handle_post("/data", move |mut request, response| {
-		let mut reader = request.reader();
-		let mut buff: [u8; 1024] = [0; 1024];
-		let len = reader.read(&mut buff)?;
-		println!("\nbytes received!");
-		println!("bytes: {:?}", &buff[0..len]);
-		// for i in 0..len {
-		// 	println!("byte: {}", buff[i]);
-		// }
-		let mut writer = response.into_writer()?;
-		writer.write_all(b"ok")?;
+	server.handle_post("/ping", move |mut request, response| {
+		let (buf, len) = request.read_bytes::<1024>()?;
+		println!("\nping received!");
+		println!("bytes: {:?}", &buf[0..len]);
+		response.ok()?;
 		Ok(())
 	})?;
 
