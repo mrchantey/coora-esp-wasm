@@ -1,17 +1,20 @@
 {
 	"name": "cli",
 	"version": "0.0.1",
+	"type": "module",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
 		"start": "ts-node --project ../../config/typescript/tsconfig.json ./src/main.ts"
 	},
 	"devDependencies": {
+		"@types/cross-spawn": "^6.0.2",
 		"node-fetch": "^3.3.0",
 		"ts-node": "^10.9.1"
 	},
 	"dependencies": {
 		"commander": "^9.4.1",
+		"cross-spawn": "^7.0.3",
 		"fs-extra": "^10.1.0"
 	}
 }

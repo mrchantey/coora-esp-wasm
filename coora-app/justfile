@@ -7,6 +7,8 @@ npx := 'node "C:\Program Files\nodejs\node_modules\npm\bin\npx-cli.js"'
 
 default:
 	just --list
+@list *app:
+	echo {{app}}
 
 w *args:
 	echo "watching"
@@ -18,8 +20,7 @@ w *args:
 		just {{command}} $app; \
 	done
 
-@list *app:
-	echo {{app}}
+## Build
 
 target := 'release'
 
@@ -57,3 +58,10 @@ deploy-stress:
 		echo; \
 		sleep 1; \
 	done \
+
+# --watchAll \
+test *args:
+	{{npx}} jest \
+	--forceExit --runInBand --detectOpenHandles \
+	--config ./config/jest/jest.config.ts \
+	{{args}}

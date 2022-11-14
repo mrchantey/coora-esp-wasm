@@ -10,6 +10,8 @@ js-workspaces := 'coora-docs coora-app'
 	for workspace in {{js-workspaces}}; do \
 		just sync-one $workspace; \
 	done
+	just copy ../koorabel/config/jest/tsconfig.json coora-app/config/jest
+	
 
 @sync-one dest:
 	just copy ../koorabel/config/typescript/tsconfig.base.json {{dest}}/config/typescript

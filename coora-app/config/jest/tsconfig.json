@@ -1,0 +1,24 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": "../typescript/tsconfig.json",
+	"compilerOptions": {
+		// 	//enables including json files for tests
+		"composite": false,
+		"target": "ES6"
+		// "esModuleInterop": true
+	},
+	"files": [
+		"../typescript/moduleExt.d.ts",
+		"./types.d.ts",
+		"./setup.ts"
+	],
+	"include": [
+		"../../packages/*/src/**/*",
+		"../../packages/*/test/common/**/*",
+		"../../packages/*/test/jest/**/*",
+		"../../packages/*/test/jest-dom/**/*",
+		"../../packages/*/test/jest-esm/**/*",
+		"../../packages/*/test/jest-api/**/*",
+		"../../packages/*/test/jest-dom-api/**/*"
+	]
+}
