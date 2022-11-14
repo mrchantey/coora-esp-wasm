@@ -30,7 +30,7 @@ export default function Home(): JSX.Element {
 	const { siteConfig } = useDocusaurusContext()
 	return (
 		<Layout
-			title={`Coora Docs`}
+			title={'Coora Docs'}
 			description={`${siteConfig.tagline}`}>
 			<HomepageHeader />
 			<main>

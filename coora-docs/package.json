@@ -26,6 +26,11 @@
 	"devDependencies": {
 		"@docusaurus/module-type-aliases": "2.2.0",
 		"@tsconfig/docusaurus": "^1.0.5",
+		"@typescript-eslint/eslint-plugin": "^5.42.1",
+		"eslint": "^8.27.0",
+		"eslint-plugin-react": "^7.31.10",
+		"eslint-plugin-react-hooks": "^4.6.0",
+		"eslint-plugin-unicorn": "^44.0.2",
 		"typescript": "^4.7.4"
 	},
 	"browserslist": {
