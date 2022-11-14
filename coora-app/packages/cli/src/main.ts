@@ -1,15 +1,24 @@
-import { build } from './build.js'
+import { Command } from 'commander'
+import { appendBuildCommand } from './build.js'
+import { appendFlashCommand } from './flash.js'
+import { appendPingCommand } from './ping.js'
+import { appendWatchCommand } from './watch.js'
 
-// import fetch from 'node-fetch'
-export { }
-
-async function main(){
-
-	const result = await build('pizza')
-
-	// const foo = await fetch('http://www.google.com')
-	console.dir(result)
+const helpMessage = `
+🤘coora cli🤘
+`
 
 
+async function main(args = process.argv){
+	const cmd = new Command('main')
+		.version('0.0.1', '-v -V --version')
+		.on('--help', () => console.log(helpMessage))
+	appendPingCommand(cmd)
+	appendBuildCommand(cmd)
+	appendFlashCommand(cmd)
+	appendWatchCommand(cmd)
+
+	cmd.parse(args)
 }
 main()
+

@@ -20,6 +20,13 @@ w *args:
 		just {{command}} $app; \
 	done
 
+command args:
+	cd ./packages/cli && \
+	{{npx}} onchange -i dist/**/* \
+	-k \
+	-- node ./dist/main.js {{args}}
+	
+
 ## Build
 
 target := 'release'
@@ -36,7 +43,8 @@ target := 'release'
 
 	echo "built {{name}}"
 
-
+@run *args:
+	{{npm}} run {{args}}
 
 ## POST
 
@@ -59,9 +67,9 @@ deploy-stress:
 		sleep 1; \
 	done \
 
-# --watchAll \
 test *args:
 	{{npx}} jest \
+	--watchAll \
 	--forceExit --runInBand --detectOpenHandles \
 	--config ./config/jest/jest.config.ts \
 	{{args}}

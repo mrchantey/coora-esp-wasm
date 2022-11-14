@@ -22,10 +22,12 @@
 	},
 	"homepage": "https://github.com/mrchantey/coora/coora-app#readme",
 	"dependencies": {
-		"assemblyscript": "^0.23.0"
+		"assemblyscript": "^0.23.0",
+		"lodash": "^4.17.21"
 	},
 	"devDependencies": {
 		"@types/jest": "^29.2.2",
+		"@types/lodash": "^4.14.188",
 		"@typescript-eslint/eslint-plugin": "^5.42.1",
 		"eslint": "^8.27.0",
 		"eslint-plugin-react": "^7.31.10",

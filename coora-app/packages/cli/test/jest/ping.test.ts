@@ -1,17 +1,17 @@
-import { ping } from '../../src/ping'
+import { spawnCmd } from './cli.test'
 
-const ip = 'http://192.168.86.222/ping'
+
+
+const ip = '192.168.86.222'
 
 describe('ping', () => {
-	
-	beforeEach(() => {
-		
+
+	test('ping', async () => {
+		const result = spawnCmd('ping', ip)
+		expect(result).toContain('ok')
+		const duration = parseInt(result.split('-')[1])
+		expect(duration).toBeLessThan(1000)
+		expect(duration).toBeGreaterThan(100)
 	})
 
-	it('works', async () => {
-		await expect(ping('http://foo.com')).rejects.toThrow()
-		// expect(ping('http://sjkdasjiodas.com')).toThrow()
-		// ping("192.168.86.222")
-		await expect(ping(ip)).resolves.toBe(true)
-	})
 })

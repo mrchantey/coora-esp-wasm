@@ -6,8 +6,9 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "tsc --project ./tsconfig.build.json",
+		"watch": "tsc --project ./tsconfig.build.json --watch",
 		"start": "node ./dist/main.js",
-		"start-broken": "ts-node --project ../../config/typescript/tsconfig.json ./src/main.ts"
+		"command": "onchange -i \"dist/**/*\" -- node ./dist/main.js --"
 	},
 	"devDependencies": {
 		"@types/cross-spawn": "^6.0.2",
