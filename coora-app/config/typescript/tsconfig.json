@@ -4,4 +4,8 @@
 	"include": [
 		"../../packages/*/src/**/*"
 	]
+	// "compilerOptions": {
+	// 	"target": "ESNext",
+	// 	"module": "ESNext"
+	// }
 }

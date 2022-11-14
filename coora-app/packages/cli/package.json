@@ -1,12 +1,17 @@
 {
-	"name": "coora",
+	"name": "cli",
 	"version": "0.0.1",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"test": "echo howdy"
+		"start": "ts-node --project ../../config/typescript/tsconfig.json ./src/main.ts"
 	},
 	"devDependencies": {
+		"node-fetch": "^3.3.0",
 		"ts-node": "^10.9.1"
+	},
+	"dependencies": {
+		"commander": "^9.4.1",
+		"fs-extra": "^10.1.0"
 	}
 }
