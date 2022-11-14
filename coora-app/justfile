@@ -28,7 +28,7 @@ target := 'release'
 	{{npx}} asc ./src/entry/{{name}}.ts \
 	-o ../../dist/{{name}}/{{target}}.wasm \
 	-t ../../dist/{{name}}/{{target}}.wat \
-	--config ./config/asconfig.json \
+	--config ./config/assemblyscript/asconfig.json \
 	--target {{target}} \
 	--stackSize 65536 \
 	--lowMemoryLimit \

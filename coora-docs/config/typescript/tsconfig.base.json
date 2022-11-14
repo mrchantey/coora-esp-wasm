@@ -1,0 +1,55 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"files": [
+		"./moduleExt.d.ts"
+	],
+	"ts-node": {
+		// Do not forget to `npm i -D tsconfig-paths`
+		"require": [
+			"tsconfig-paths/register"
+		]
+	},
+	"compilerOptions": {
+		"lib": [
+			"DOM",
+			"ESNext"
+		],
+		//CommonJS - easy compatibility
+		"module": "CommonJS",
+		//es5 - allow accessors, es6 - allow iterators
+		"target": "ES6",
+		//required for json imports and react-dom
+		"moduleResolution": "Node",
+		//allow absolute imports relative to src
+		"baseUrl": "../../",
+		//only include source files
+		"rootDir": "../../",
+		//where does it go
+		"outDir": "../../dist",
+		//allow use of jsx
+		"jsx": "react",
+		//can be referenced, but means json fules must be explicitly referenced in 'files' https://github.com/microsoft/TypeScript/issues/25636
+		"composite": true,
+		//create source maps
+		"sourceMap": true,
+		"declaration": true,
+		//allow json, ie import * as myFile from "myFile.json"
+		"resolveJsonModule": true,
+		//handle commonJS imports (require) smoothly
+		"esModuleInterop": true,
+		"allowJs": true,
+		"checkJs": false,
+		//ignore node_modules
+		"skipLibCheck": true,
+		"noImplicitOverride": true,
+		"noImplicitThis": true,
+		"noImplicitAny": true,
+		// "noImplicitReturns": true,//dumb
+		"strict": true,
+		"strictFunctionTypes": true,
+		"strictPropertyInitialization": true,
+		"strictNullChecks": true,
+		"strictBindCallApply": true,
+		"noFallthroughCasesInSwitch": true
+	}
+}
