@@ -1,0 +1,30 @@
+/*  Infima css
+weird color tool - https://colorbox.io/
+simple color tool - https://docusaurus.io/docs/styling-layout#styling-your-site-with-infima
+*/
+:root {
+	--ifm-color-primary-lightest: #c70095;
+	--ifm-color-primary-lighter: #b00084;
+	--ifm-color-primary-light: #a8007e;
+	--ifm-color-primary: #990073;
+	--ifm-color-primary-dark: #8a0067;
+	--ifm-color-primary-darker: #820062;
+	--ifm-color-primary-darkest: #6b0050;
+	--ifm-code-font-size: 95%;
+	--docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+	--ifm-footer-padding-horizontal: .1em;
+	--ifm-footer-padding-vertical: .1em;
+}
+
+[data-theme='dark'] {
+	--ifm-color-primary-lightest: #ffd1f4;
+	--ifm-color-primary-lighter: #ff9ce6;
+	--ifm-color-primary-light: #ff8ae2;
+	--ifm-color-primary: #ff66d9;
+	--ifm-color-primary-dark: #ff42d0;
+	--ifm-color-primary-darker: #ff30cc;
+	--ifm-color-primary-darkest: #fa00bc;
+	--docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+
+}
