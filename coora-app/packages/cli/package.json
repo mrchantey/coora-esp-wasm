@@ -5,6 +5,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
+		"build": "tsc --project ./tsconfig.build.json",
 		"start": "ts-node --project ../../config/typescript/tsconfig.json ./src/main.ts"
 	},
 	"devDependencies": {

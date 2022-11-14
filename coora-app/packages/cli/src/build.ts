@@ -1,7 +1,7 @@
 // import asc from 'assemblyscript/dist/asc'
 //@ts-ignore
 import { main } from 'assemblyscript/asc'
-import crossSpawn from 'cross-spawn'
+// import crossSpawn from 'cross-spawn'
 // import { main } from './asc/asc'
 // const { main } = require('assemblyscript/dist/asc.js')
 
@@ -35,13 +35,13 @@ export const build = async (name: string, target: Target = 'release') => {
 
 
 
-export const buildSpawn = (name: string, target: Target = 'release') => {	
-	const args = ['asc', ...getArgs(name, target)]
-	return crossSpawn.sync('npx', args, {
-		cwd: 'packages/examples',
-		stdio: 'inherit',
-		shell: true,
-	})
+// export const buildSpawn = (name: string, target: Target = 'release') => {	
+// 	const args = ['asc', ...getArgs(name, target)]
+// 	return crossSpawn.sync('npx', args, {
+// 		cwd: 'packages/examples',
+// 		stdio: 'inherit',
+// 		shell: true,
+// 	})
 
 
-}
+// }
