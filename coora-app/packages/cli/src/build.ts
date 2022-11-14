@@ -30,7 +30,7 @@ const getArgs = (name: string, target: Target = 'release') => [
 export const build = async (name: string, target: Target = 'release') => {
 	// const { main } = await import('assemblyscript/dist/asc')
 
-	await main(getArgs(name, target))
+	return await main(getArgs(name, target))
 }
 
 

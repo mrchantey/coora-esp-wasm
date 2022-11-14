@@ -1,0 +1,17 @@
+{
+	// "extends": "../../config/typescript/tsconfig.json",
+	"include": [
+		"src"
+	],
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"sourceMap": true,
+		"declaration": true,
+		"declarationMap": true,
+		"outDir": "./dist",
+		// "rootDir": ".",
+	},
+}

@@ -1,16 +1,14 @@
-//until stackblitz supports node 17
-
-import { build } from './build'
+import { build } from './build.js'
 
 // import fetch from 'node-fetch'
 export { }
 
 async function main(){
 
-	await build('pizza')
+	const result = await build('pizza')
 
 	// const foo = await fetch('http://www.google.com')
-	// console.dir(foo)
+	console.dir(result)
 
 
 }
