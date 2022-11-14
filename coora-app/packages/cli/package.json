@@ -5,5 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo howdy"
+	},
+	"devDependencies": {
+		"ts-node": "^10.9.1"
 	}
 }
