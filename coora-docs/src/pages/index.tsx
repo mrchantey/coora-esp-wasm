@@ -1,9 +1,9 @@
 import Link from '@docusaurus/Link'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
-import HomepageFeatures from '@site/src/components/HomepageFeatures'
 import Layout from '@theme/Layout'
 import clsx from 'clsx'
 import React from 'react'
+import HomepageFeatures from '../components/HomepageFeatures'
 
 import styles from './index.module.css'
 
@@ -30,6 +30,7 @@ export default function Home(): JSX.Element {
 	const { siteConfig } = useDocusaurusContext()
 	return (
 		<Layout
+		//@ts-ignore you're wrong
 			title={'Coora Docs'}
 			description={`${siteConfig.tagline}`}>
 			<HomepageHeader />
