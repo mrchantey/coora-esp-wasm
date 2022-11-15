@@ -23,7 +23,7 @@ coora_wasm = {path = "./crates/wasm", version = "0.0.1" }
 # forky
 forky_core = {path = "../../forky/crates/forky_core" }
 sweet = {path = "../../forky/crates/sweet" }
-
+# forky_cli = {path = "../../forky/crates/forky_cli" }
 # wasm
 rgb = "0.8.34"
 anyhow = "1"

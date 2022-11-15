@@ -1,13 +1,5 @@
 use crate::*;
 use coora_engine::*;
-use std::{
-	fs::File,
-	io,
-	io::{BufReader, Read},
-};
-use sweet::*;
-use wasmi::*;
-
 
 sweet! {
 

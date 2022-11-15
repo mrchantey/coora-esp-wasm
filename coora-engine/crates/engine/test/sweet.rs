@@ -1,4 +1,4 @@
 #![feature(imported_main)]
 pub use sweet::*;
-mod _core;
-pub use _core::*;
+mod plugins;
+pub use self::plugins::*;

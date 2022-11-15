@@ -1,15 +1,11 @@
-use crate::{terminal_leds::TerminalLeds, *};
+use crate::{plugins::TerminalLeds, *};
 use coora_engine::*;
-use forky_core::*;
-use std::cell::RefCell;
-use sweet::*;
-use wasmi::*;
 
 sweet! {
 
 	let leds = TerminalLeds::new(2).as_shared();
 	let mut instance = SketchInstance::from_default(&leds);
-	let mut wasm = include_wasm!("../../../","hello_led");
+	let wasm = include_wasm!("../../../","hello_led");
 	test "millis" {
 		let a = instance._millis();
 		forky_core::time::sleep(1);
