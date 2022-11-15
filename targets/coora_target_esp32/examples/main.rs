@@ -1,7 +1,9 @@
 use anyhow::Result;
-use coora_target_esp32::*;
+use coora_target_esp32::{wifi::utility::get_wifi, *};
 
 fn main() -> Result<()> {
-    SketchServer::run()?;
+    let store = StoreBuilder::take()?;
+    let mut wifi = get_wifi(&store)?;
+    SketchServer::run(&store.store, &mut wifi)?;
     Ok(())
 }

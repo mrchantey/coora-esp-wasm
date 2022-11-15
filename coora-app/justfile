@@ -48,14 +48,24 @@ target := 'release'
 
 ## POST
 
-ping:
-	curl http://192.168.86.222/ping \
+ip := '192.168.86.222'
+# ip := '192.168.7.1'
+
+get path:
+	curl http://{{ip}}/{{path}}
+
+
+set key value:
+	curl http://{{ip}}/set-{{key}} \
 	-X POST \
-	-d hello
+	-d {{value}}
+ping:
+	curl http://{{ip}}/ping
+
 wasm url crate:
 
 deploy name *args:
-	curl http://192.168.86.222/sketch \
+	curl http://{{ip}}/sketch \
 	-X POST \
 	--data-binary @./dist/{{name}}/release.wasm
 # --data-binary @./rust_example/target/wasm32-unknown-unknown/release/{{name}}.wasm

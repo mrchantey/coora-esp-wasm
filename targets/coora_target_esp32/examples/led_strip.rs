@@ -14,7 +14,7 @@ fn main() -> anyhow::Result<()> {
 	strip.show()?;
 	loop {
 		
-		for i in 0..255{			
+		for _ in 0..255{			
 			// strip.set_all(0,i,0,4);
 			strip.show()?;
 			utility::sleep_ms(50);
