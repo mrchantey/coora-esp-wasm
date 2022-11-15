@@ -7,9 +7,6 @@
 	],
 	"description": "Repo for the Coora Engine & App framework",
 	"main": "index.js",
-	"scripts": {
-		"build": "just all build"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/mrchantey/coora.git"
@@ -23,7 +20,8 @@
 	"homepage": "https://github.com/mrchantey/coora/coora-app#readme",
 	"dependencies": {
 		"assemblyscript": "^0.23.0",
-		"lodash": "^4.17.21"
+		"lodash": "^4.17.21",
+		"typescript": "^4.8.4"
 	},
 	"devDependencies": {
 		"@types/jest": "^29.2.2",
