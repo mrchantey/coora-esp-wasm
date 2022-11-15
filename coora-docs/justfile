@@ -1,0 +1,10 @@
+
+@default:
+	just --list
+
+
+https:
+	HTTPS=true && \
+	SSL_CRT_FILE=config/https/localhost.pem && \
+	SSL_KEY_FILE=config/https/localhost-key.pem && \
+	yarn start

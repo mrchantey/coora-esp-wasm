@@ -5,6 +5,7 @@
 	"scripts": {
 		"docusaurus": "docusaurus --config ./src/docusaurus.config.js",
 		"start": "docusaurus start --config ./src/docusaurus.config.js",
+		"https": "docusaurus start --config ./src/docusaurus.config.js --host 0.0.0.0",
 		"build": "docusaurus build --config ./src/docusaurus.config.js",
 		"swizzle": "docusaurus swizzle --config ./src/docusaurus.config.js",
 		"deploy": "docusaurus deploy --config ./src/docusaurus.config.js",
