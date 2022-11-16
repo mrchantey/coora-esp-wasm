@@ -47,7 +47,7 @@ impl WifiAccessPoint {
         }))?;
 
         println!("WIFI AP - creating access point '{}'...", ssid);
-        wifi.wait_status_with_timeout(wifi::utility::TIMEOUT_DURATION, |s| !s.is_transitional())
+        wifi.wait_status_with_timeout(wifi::TIMEOUT_DURATION, |s| !s.is_transitional())
             .map_err(|e| anyhow::anyhow!("WIFI AP - timeout: {:?}", e))?;
 
         let status = wifi.get_status();
