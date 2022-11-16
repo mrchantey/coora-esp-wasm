@@ -37,7 +37,7 @@ watch command:
 	cargo watch -q --ignore '{**/mod.rs,justfile,.gitignore}' --ignore '**.{txt,md,wasm,wat}' --ignore '{output/,out/}' -- {{command}}
 
 mod:
-	just watch 'cargo run --manifest-path ../../forky/crates/forky_cli/Cargo.toml'
+	just watch 'cargo run --target x86_64-pc-windows-msvc --manifest-path ../../../forky/crates/forky_cli/Cargo.toml'
 
 # Archive
 # requires powershell because of CMAKE_OBJECT_PATH_MAX
