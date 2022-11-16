@@ -54,6 +54,8 @@ cmd command +args:
 
 ip := '192.168.86.222'
 
+build-wasm file:
+	just cmd build ./packages/examples/src/entry/{{file}}.ts ./packages
 watch-wasm file:
 	just cmd watch {{ip}} ./packages/examples/src/entry/{{file}}.ts ./packages
 # ip := '192.168.7.1'
