@@ -1,5 +1,5 @@
 use anyhow::Result;
-use coora_target_esp32::{wifi::utility::get_wifi, *};
+use coora_target_esp32::{wifi::get_wifi, *};
 
 fn main() -> Result<()> {
     let store = StoreBuilder::take()?;
