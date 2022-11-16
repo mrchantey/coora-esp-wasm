@@ -3,9 +3,7 @@
 	"extends": "../typescript/tsconfig.json",
 	"compilerOptions": {
 		// 	//enables including json files for tests
-		"composite": false,
-		"target": "ES6"
-		// "esModuleInterop": true
+		"composite": false
 	},
 	"files": [
 		"../typescript/moduleExt.d.ts",

@@ -12,7 +12,7 @@ export function start(): void{
 
 export function run(): void{
 	const a = millis() as i32 / 100
-	led.setAll(32, 0, 0, 2)
+	led.setAll(0, 0, 16, 5)
 	led.show()
 }
 

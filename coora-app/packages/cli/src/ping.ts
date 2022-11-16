@@ -1,6 +1,6 @@
 import { Command } from 'commander'
 import fetch from 'node-fetch'
-import { parseResponse } from './utility.js'
+import { consoleErrorOr, parseResponse } from './utility.js'
 
 export const appendPingCommand = (parent: Command) => {
 	const cmd = parent.command('ping')
@@ -8,15 +8,14 @@ export const appendPingCommand = (parent: Command) => {
 		.option('-f', 'something')
 	// .arg
 	// .argument(flags, description, fn)
-	cmd.action(async (ip, options) => {
-		const { duration } = await ping(ip)
-		console.log(`ok - ${duration.toFixed(0)} ms`)
-	})
+	cmd.action(async (ip, options) => 		
+		consoleErrorOr(await ping(ip), ({ duration }) =>
+			`PING - ok - ${duration?.toFixed(0)} ms`))
 }
 
 export const ping = async (ip: string) => {
 	//we need to make this a get
 	const url = `http://${ip}/ping`
-	const prom = fetch(url, { method: 'POST' })
+	const prom = fetch(url, { method: 'GET' })
 	return parseResponse('PING', prom, ip)
 }

@@ -31,17 +31,21 @@ command args:
 
 target := 'release'
 
-@build name *args:
-	cd ./packages/examples && \
-	{{npx}} asc ./src/entry/{{name}}.ts \
-	-o ../../dist/{{name}}/{{target}}.wasm \
-	-t ../../dist/{{name}}/{{target}}.wat \
-	--config ./config/assemblyscript/asconfig.json \
-	--target {{target}} \
-	--stackSize 65536 \
-	--lowMemoryLimit \
+cmd command +args:
+	node ./packages/cli/dist/main.js -- {{command}} {{args}}
 
-	echo "built {{name}}"
+# deprecated, use cli instead
+# @build name *args:
+#  cd ./packages/examples && \
+#  {{npx}} asc ./src/entry/{{name}}.ts \
+#  -o ../../dist/{{name}}/{{target}}.wasm \
+#  -t ../../dist/{{name}}/{{target}}.wat \
+#  --config ./config/assemblyscript/asconfig.json \
+#  --target {{target}} \
+#  --stackSize 65536 \
+#  --lowMemoryLimit \
+# 
+# echo "built {{name}}"
 
 @run *args:
 	{{npm}} run {{args}}
@@ -49,6 +53,9 @@ target := 'release'
 ## POST
 
 ip := '192.168.86.222'
+
+watch-wasm file:
+	just cmd watch {{ip}} ./packages/examples/src/entry/{{file}}.ts ./packages
 # ip := '192.168.7.1'
 
 get path:

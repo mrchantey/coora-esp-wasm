@@ -11,22 +11,22 @@ export const spawnSync = (...args: string[]) => {
 		// stdio: 'inherit',
 		shell: true,
 	})
-	const err = result.stderr.toString()
-	const out = result.stdout.toString()
-	if (err)
-		throw new Error(err)
-	return out
+	const stderr = result.stderr.toString()
+	const stdout = result.stdout.toString()
+	if (stderr.length > 0)
+		throw new Error(stderr)
+	return {  stdout }
 }
 
-describe('ping', () => {
+describe('cli', () => {
 	
 	test('spawn', async () => {
-		const result = spawnSync('echo hi')
-		expect(result).toBe('hi\r\n')
+		const { stdout } = spawnSync('echo hi')
+		expect(stdout).toBe('hi\r\n')
 	})
 
 	test('help', async () => {
-		const result = spawnCmd('node ./dist/main.js --help')
-		expect(result).toContain('coora cli')
+		const { stdout } = spawnCmd('--help')
+		expect(stdout).toContain('coora cli')
 	})
 })
