@@ -1,7 +1,6 @@
 [build]
 target = "riscv32imc-esp-espidf"
 # never set 'target-dir', it will cause weird stack overflows
-rustflags = "--cfg esp_idf_comp_mdns_enabled esp_idf_comp_nvs_flash_enabled"
 
 [target.riscv32imc-esp-espidf]
 linker = "ldproxy"
@@ -9,6 +8,8 @@ runner = "espflash --monitor"
 # Future - necessary for the experimental "native build" of esp-idf-sys with ESP32C3
 # See also https://github.com/ivmarkov/embuild/issues/16
 rustflags = ["-C", "default-linker-libraries"]
+# are these needed?
+# rustflags = "--cfg esp_idf_comp_mdns_enabled esp_idf_comp_nvs_flash_enabled"
 
 
 [unstable]
