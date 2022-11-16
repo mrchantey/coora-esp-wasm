@@ -7,6 +7,7 @@ mod sketch;
 pub use sketch::*;
 mod core;
 pub use self::core::*;
+pub mod mqtt;
 pub mod secret;
 pub mod utility;
 pub mod wifi;
