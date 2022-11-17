@@ -13,3 +13,4 @@ repository = {workspace=true}
 coora_bindings_macro = {workspace=true}
 inventory = {workspace=true}
 anyhow = {workspace=true}
+convert_case = "0.6.0"

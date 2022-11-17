@@ -20,12 +20,13 @@ pub fn generate_rust_bindings(plugin: &ItemTrait) -> TokenStream {
 	let body = plugin.items.iter();
 	let mut stream = TokenStream::new();
 	stream.append_all(body);
+	// pub mod #name{
+	// pub mod #name{
+	// }
 	quote! {
 		#[link(wasm_import_module = #name_str)]
-		pub mod #name{
 		extern "C" {
 			#stream
 			}
-		}
 	}
 }
