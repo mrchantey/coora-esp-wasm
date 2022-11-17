@@ -18,7 +18,7 @@ extend = {workspace = true}
 [dev-dependencies]
 forky_core = {workspace = true}
 sweet = {workspace = true}
-
+coora_bindings = {workspace = true}
 # [build-dependencies]
 
 [[test]]

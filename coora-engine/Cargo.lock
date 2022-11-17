@@ -111,6 +111,7 @@ name = "coora_engine"
 version = "0.1.1"
 dependencies = [
  "anyhow",
+ "coora_bindings",
  "extend",
  "forky_core",
  "rgb",

@@ -1,3 +1,5 @@
+mod bindings;
+pub use self::bindings::*;
 mod hello_led;
 pub use self::hello_led::*;
 mod hello_world;
