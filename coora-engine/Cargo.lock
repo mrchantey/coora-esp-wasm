@@ -75,6 +75,28 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dc17e449bc7854c50b943d113a98bc0e01dc6585d2c66eaa09ca645ebd8a7e62"
 
 [[package]]
+name = "coora_bindings"
+version = "0.1.1"
+dependencies = [
+ "anyhow",
+ "coora_bindings_macro",
+ "inventory",
+]
+
+[[package]]
+name = "coora_bindings_macro"
+version = "0.1.1"
+dependencies = [
+ "anyhow",
+ "backtrace",
+ "extend",
+ "inventory",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "coora_engine"
 version = "0.1.1"
 dependencies = [

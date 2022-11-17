@@ -6,6 +6,10 @@ default:
 
 backtrace := '0'
 
+
+run crate *args:
+	just watch 'cargo run -p {{crate}} --example {{args}}'
+
 test crate *args:
 	RUST_BACKTRACE={{backtrace}} cargo test -p {{crate}} --test sweet -- {{args}}
 
@@ -17,3 +21,8 @@ watch command:
 
 mod:
 	just watch 'cargo run --manifest-path ../../forky/crates/forky_cli/Cargo.toml'
+
+
+## Compiling
+expand crate example:
+	just watch 'cargo expand -p {{crate}} --example {{example}}'

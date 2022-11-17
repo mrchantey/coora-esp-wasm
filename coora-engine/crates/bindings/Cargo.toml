@@ -1,0 +1,15 @@
+[package]
+name = "coora_bindings"
+version = {workspace=true}
+edition = {workspace=true}
+authors = {workspace=true}
+documentation = {workspace=true}
+license-file = {workspace=true}
+readme = {workspace=true}
+description = {workspace=true}
+repository = {workspace=true}
+
+[dependencies]
+coora_bindings_macro = {workspace=true}
+inventory = {workspace=true}
+anyhow = {workspace=true}

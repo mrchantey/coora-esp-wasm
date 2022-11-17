@@ -8,7 +8,7 @@ sweet! {
 	let wasm = include_wasm!("../../../","hello_led");
 	test "millis" {
 		let a = instance._millis();
-		forky_core::time::sleep(1);
+		forky_core::utility::sleep(1);
 		let b = instance._millis();
 		expect((b - a) as i32).to_be_at_least(1000)?;
 	}
