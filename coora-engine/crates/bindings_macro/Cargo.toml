@@ -17,6 +17,6 @@ quote = {workspace = true}
 inventory = {workspace = true}
 extend = {workspace = true}
 anyhow = {workspace = true}
-
+convert_case = {workspace=true}
 [lib]
 proc-macro = true

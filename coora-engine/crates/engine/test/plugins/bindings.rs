@@ -1,17 +1,16 @@
 use coora_bindings::coora_plugin;
 use coora_engine::{WasmEngine, WasmInstanceBuilder};
-use std::sync::{Arc, Mutex};
+// use std::sync::{Arc, Mutex};
 use sweet::*;
-use wasmi::{Caller, Engine, Func};
+// use wasmi::{Caller, Engine, Func};
 
-// pub type SharedMathPlugin = Arc<Mutex<dyn MathPlugin + Send>>;
 
-// #[coora_plugin]
-// pub trait MathPlugin {
-// 	fn add(a: i32, b: i32) -> i32;
-// 	fn scale(a: i32);
-// 	fn foo();
-// }
+#[coora_plugin]
+pub trait MathPlugin {
+	// fn add(a: i32, b: i32) -> i32;
+	// fn scale(a: i32);
+	fn foo();
+}
 
 // pub struct MyFuncImpl {
 // 	instance: &SharedMathPlugin,
@@ -28,20 +27,16 @@ use wasmi::{Caller, Engine, Func};
 // };
 
 
-struct Foo<T, T2>
-where
-	T2: FnMut(Caller<T>) -> u32,
-	T2: FnMut(Caller<T>),
-{
-	pub val: T,
-	pub my_func: T2,
-}
-
-
 sweet! {
 	it "works" {
 		let mut engine = WasmEngine::new();
-		let a = WasmInstanceBuilder::new(&mut engine, 0);
+		let _a = WasmInstanceBuilder::new(&mut engine, 0);
+
+		// let a = MathPluginDef{
+		// 	_marker:PhantomStruct<u32>,
+		// 	foo:|_|{}
+		// 	// _marker:Phantom
+		// };
 		// let a = Foo{
 		// 	val:3,
 		// 	my_func: move |c|{

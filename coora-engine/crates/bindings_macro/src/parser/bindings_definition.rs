@@ -1,5 +1,6 @@
 use crate::*;
 use anyhow::anyhow;
+use convert_case::{Case, Casing};
 use proc_macro2::{Group, Ident, Literal, Span, TokenStream, TokenTree};
 use quote::{quote, TokenStreamExt};
 use std::fmt::format;
@@ -93,16 +94,28 @@ pub fn generate_bindings_definitions(
 	definition_stream.append_all(body.clone().map(|f| {
 		let name = &f.sig.ident;
 		let type_name = &f.type_ident;
-		// quote!(pub #name: PhantomData<#type_name>,)
 		quote!(pub #name: #type_name,)
 	}));
 
 
-	let def_name = Ident::new((name_str + "Def").as_str(), name.span());
+	let def_name = Ident::new((name_str.clone() + "Def").as_str(), name.span());
+	let helper_name = Ident::new(
+		(String::from("define") + name_str.as_str())
+			.to_case(Case::Snake)
+			.as_str(),
+		name.span(),
+	);
 	Ok(quote! {
 		pub struct #def_name<#type_stream>#constraint_stream
 		{
 			#definition_stream
+		}
+		pub fn #helper_name<#type_stream>(val:#def_name<#type_stream>)->#def_name<#type_stream>#constraint_stream{
+			val
+		}
+		impl<#type_stream> #def_name<#type_stream> #constraint_stream{
+			pub fn new(){}
+
 		}
 	})
 }
