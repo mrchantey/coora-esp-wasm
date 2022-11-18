@@ -1,38 +1,50 @@
 pub use coora_bindings::*;
 pub use coora_engine::*;
 
-fn main() {
-	type StoreT = u32;
-	let _a = FooDef::<StoreT>::new();
+fn main() {}
 
-	// _a.bind_do_thing(builder, func);
-}
-
-#[coora_plugin]
+// #[coora_plugin]
 trait Foo {
 	fn do_thing();
 	fn do_other_thing(a: u8);
 }
-
-
-trait Plugin {
-	fn bind<StoreT>(&mut self, builder: &mut WasmInstanceBuilder<StoreT>) {}
-}
-
 struct MyFoo;
 
-impl Foo for MyFoo {
-	fn do_thing() {}
-	fn do_other_thing(a: u8) {}
+trait MyTrait {}
+
+use std::sync::{Arc,Mutex};
+struct MyT<T>(std::sync::Arc<std::sync::Mutex<T>>);
+impl<T> Plugin for MyT<T> where T: Foo {
+		fn bind<StoreT>(&mut self, builder: &mut WasmInstanceBuilder<StoreT>) {}
+
 }
-impl Plugin for Arc<Mutex<MyFoo> {
-	fn bind<StoreT>(&mut self, builder: &mut WasmInstanceBuilder<StoreT>) {
-		//
-		builder.linker.//,,, self.mutex.lock_thing
 
 
-	}
-}
+
+// trait Plugin {
+// }
+
+// impl Plugin for MyFoo {}
+
+// impl Foo for MyFoo {
+// 	fn do_thing() {}
+// 	fn do_other_thing(a: u8) {}
+// }
+
+// impl<T> Plugin for T
+// where
+// 	T: Foo,
+// {
+// 	fn bind<StoreT>(&mut self, builder: &mut WasmInstanceBuilder<StoreT>) {
+// 		// builder.linker.//,,, self.mutex.lock_thing
+// 	}
+// }
+// impl Plugin for Arc<Mutex<MyFoo>> {
+// 	fn bind<StoreT>(&mut self, builder: &mut WasmInstanceBuilder<StoreT>) {
+// 		//
+// 		// builder.linker.//,,, self.mutex.lock_thing
+// 	}
+// }
 
 fn bind<T>(foo: T)
 where

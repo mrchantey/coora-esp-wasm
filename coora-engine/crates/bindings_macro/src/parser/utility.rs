@@ -1,6 +1,6 @@
 // use anyhow::Ok;
 // use anyhow::anyhow;
-use proc_macro2::TokenStream;
+use proc_macro2::{Ident, TokenStream};
 use quote::quote;
 use syn::{
 	parse::Result, spanned::Spanned, Error, FnArg, Pat, PatIdent, PathSegment, ReturnType, Type,
@@ -48,6 +48,7 @@ pub fn fn_arg_to_typed(item: &FnArg) -> Result<(PatIdent, PathSegment)> {
 		}?;
 		Ok((ident.clone(), ty.clone()))
 	} else {
+		// Ok(Ident::new("caching", item.span()))
 		Err(Error::new(item.span(), "'self' is not a valid argument"))
 	}
 }

@@ -1,3 +1,5 @@
+pub use coora_bindings::*;
+
 mod wasm;
 pub use wasm::*;
 mod sketch;

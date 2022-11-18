@@ -1,10 +1,10 @@
 use crate::*;
-use coora_bindings::*;
+// use coora_bindings::*;
 use std::sync::{Arc, Mutex};
 pub type SharedLeds = Arc<Mutex<dyn LedStrip + Send>>;
 
-use crate as coora_engine;//this is awkward
-#[coora_plugin]
+// use crate as coora_engine; //this is awkward
+// #[coora_plugin]
 pub trait LedStripPlugin {
 	fn set_all(r: u32, g: u32, b: u32, w: u32);
 	fn show();

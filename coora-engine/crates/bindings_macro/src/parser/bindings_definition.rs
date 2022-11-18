@@ -1,96 +1,109 @@
 use crate::*;
-// use convert_case::{Case, Casing};
-use proc_macro2::{Ident, TokenStream};
+use anyhow::anyhow;
+use convert_case::{Case, Casing};
+use proc_macro2::{Group, Ident, Literal, Span, TokenStream, TokenTree};
 use quote::{quote, TokenStreamExt};
+use std::fmt::format;
 use syn::{
-	parse::{Result},
+	parse::{Parse, ParseStream, Result},
+	parse_macro_input,
 	spanned::Spanned,
-	Error, ItemTrait, PatIdent, PathSegment, Signature, TraitItem,
+	Error, FnArg, ItemTrait, LitStr, PatIdent, PathSegment, Signature, TraitItem,
 };
 
 
-struct BindingFuncDefinition {
-	_index: usize,
-	sig: Signature,
-	inputs: Vec<(PatIdent, PathSegment)>,
-}
-
-fn parse_fn(index: usize, item: &TraitItem) -> Result<BindingFuncDefinition> {
-	if let TraitItem::Method(item) = item {
-		let inputs: std::result::Result<Vec<_>, _> =
-			item.sig.inputs.iter().map(|i| fn_arg_to_typed(i)).collect();
-		let inputs = inputs?;
-		// let inputs = vec![];
-
-		Ok(BindingFuncDefinition {
-			_index: index,
-			inputs,
-			sig: item.sig.clone(),
-		})
-	} else {
-		Err(Error::new(
-			item.span(),
-			"Currently only functions are supported",
-		))
-	}
-}
-
-
-
 pub fn generate_bindings_definitions(plugin: &ItemTrait) -> Result<TokenStream> {
-	let plugin_name = &plugin.ident;
+	let ident_plugin = &plugin.ident;
 
-	let plugin_name_str = plugin_name.to_string();
+	let ident_plugin_str = ident_plugin.to_string();
 	let body: std::result::Result<Vec<_>, _> = plugin
 		.items
 		.iter()
 		.enumerate()
-		.map(|(i, f)| parse_fn(i, f))
+		.map(|(i, f)| BindingFuncDefinition::parse(i, f))
 		.collect();
 	let body = body?;
 	let body = body.iter();
-		
-		let mut bind_stream = TokenStream::new();
-		#[rustfmt::skip]
-		bind_stream.append_all(body.clone().map(|f|{
-			let func_name_str = f.sig.ident.to_string();
-			let func_ident = Ident::new(format!("bind_{}",func_name_str).as_str(),f.sig.span());
-			let result = fn_result_to_typed(&f.sig.output).unwrap();
-		// let inputs = &f.sig.inputs;
-				let mut inputs = TokenStream::new();
-		inputs.append_all(f.inputs.iter().map(|i| {
-			let t = &i.1;
-			quote!(#t,)
-		}));
-		let output = &f.sig.output;
-		let constraints = quote!(where 
-		FuncT: 'static + Send + Sync 
-		+ wasmi::IntoFunc<StoreT,P, #result>
-		+ Fn(wasmi::Caller<StoreT>,#inputs)#output,
-	);
-		quote!(pub fn #func_ident<FuncT,P>(&self,
-			builder: &mut coora_engine::WasmInstanceBuilder<StoreT>, 
-			func:FuncT)->&Self #constraints {
-				builder.linker.define(#plugin_name_str, #func_name_str, wasmi::Func::wrap(&mut builder.store,func)).unwrap();
-				self
-		})
+
+	let mut bind_stream = TokenStream::new();
+	#[rustfmt::skip]
+	bind_stream.append_all(body.clone().map(|f|{
+		let func_name_str = f.sig.ident.to_string();
+		let func_ident = Ident::new(func_name_str.as_str(),f.sig.span());
+		let ident_mutex = Ident::new(format!("self{}",f.index).as_str(), f.sig.span());
+		let full_inputs = TokenStream::from_iter(f.inputs.iter().map(|(a,b)|quote!(#a:#b,)));
+		let named_inputs = TokenStream::from_iter(f.inputs.iter().map(|(a,_)|quote!(#a,)));
+		// println!("\n\nHOHOH{}",full_inputs);
+		// let full_inputs = ;
+		// let full_inputs = &f.sig.inputs;
+		quote!(
+			let #ident_mutex = std::sync::Arc::clone(&self.0);
+			builder.linker
+				.define(#ident_plugin_str, #func_name_str, wasmi::Func::wrap(&mut builder.store,
+				move |_:wasmi::Caller<StoreT>,#full_inputs| { #ident_mutex.lock().unwrap().#func_ident(#named_inputs) }))
+				.unwrap();
+		)
 	}));
 
-	let def_name = Ident::new(
-		(plugin_name_str.clone() + "Def").as_str(),
-		plugin_name.span(),
+	//names
+	let ident_shared = Ident::new(
+		format!("Shared{ident_plugin_str}").as_str(),
+		ident_plugin.span(),
 	);
+	let ident_deorphaned = Ident::new(
+		format!("DeOrphaned{ident_plugin_str}").as_str(),
+		ident_plugin.span(),
+	);
+
 	Ok(quote! {
-		pub struct #def_name<StoreT>{
-			marker:core::marker::PhantomData<StoreT>
-		}
-		impl<StoreT> #def_name<StoreT>{
-			pub fn new()->#def_name<StoreT>{
-				#def_name::<StoreT>{
-					marker:core::marker::PhantomData::<StoreT>
-				}
+		// pub type #ident_plugin_shared = std::sync::Arc<std::sync::Mutex<#ident_plugin>>;
+		pub struct #ident_deorphaned<T>(std::sync::Arc<std::sync::Mutex<T>>);		//orphan rule https://doc.rust-lang.org/error_codes/E0210.html
+		impl<T> coora_engine::Plugin for #ident_deorphaned<T> where
+		T: #ident_plugin + std::marker::Send + 'static
+		{
+			fn bind<StoreT>(&mut self, builder: &mut coora_engine::WasmInstanceBuilder<StoreT>) {
+				#bind_stream
 			}
-			#bind_stream
 		}
 	})
 }
+
+// let mut type_stream = TokenStream::new();
+
+// type_stream.append_all(quote!(StoreT,));
+// type_stream.append_all(body.clone().map(|f| {
+// 	let i1 = &f.type_ident_func;
+// 	let i2 = &f.type_ident_inputs;
+// 	quote!(#i1,)
+// }));
+
+// let mut constraint_stream = TokenStream::new();
+// constraint_stream.append_all(quote!(where));
+// constraint_stream.append_all(body.clone().map(|f| {
+// 	let ident_func = &f.type_ident_func;
+// 	let ident_inputs = &f.type_ident_inputs;
+// 	let mut inputs = TokenStream::new();
+// 	inputs.append_all(f.inputs.iter().map(|i| {
+// 		let t = &i.1;
+// 		quote!(#t,)
+// 	}));
+// 	let output = &f.sig.output;
+// 	// f.
+// 	let result = fn_result_to_typed(output).unwrap();
+// 	// output.
+// 	// println!("\n\n{}\n\n", inputs.iter();
+// 	quote!(#ident_func: 'static + Send + Sync
+// 	+ Fn(wasmi::Caller<StoreT>,#inputs)#output
+// 	+ 'static
+// 	 + wasmi::IntoFunc<StoreT,#ident_inputs, #result>
+// 	,)
+// }));
+
+// let mut definition_stream = TokenStream::new();
+// definition_stream.append_all(quote!(_marker: std::marker::PhantomData<StoreT>,));
+
+// definition_stream.append_all(body.clone().map(|f| {
+// 	let name = &f.sig.ident;
+// 	let type_name = &f.type_ident_func;
+// 	quote!(pub #name: #type_name,)
+// }));

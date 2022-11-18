@@ -34,11 +34,11 @@ impl<T> WasmInstanceBuilder<T> {
 		}
 	}
 	pub fn add_import<F, P, R>(
-		mut self,
+		&mut self,
 		module_name: &str,
 		func_name: &str,
 		func: F,
-	) -> Self
+	) -> &Self
 	where
 		F: IntoFunc<T, P, R>,
 	{

@@ -4,6 +4,8 @@ mod bindings_rust;
 pub use self::bindings_rust::*;
 mod bindings_typescript;
 pub use self::bindings_typescript::*;
+mod binding_func_definition;
+pub use self::binding_func_definition::*;
 mod coora_plugin;
 pub use self::coora_plugin::*;
 mod token;

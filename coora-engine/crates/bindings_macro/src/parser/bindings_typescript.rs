@@ -44,7 +44,9 @@ pub fn rust_method_to_ts(item: &TraitItem) -> Result<String> {
 			} else {
 				Err(Error::new(item.span(), "'self' is not a valid argument"))
 			}
-		}).collect();
+		})
+		.filter(|a|a.is_ok())//ignore invalid
+		.collect();
 		let args = args?.join(", ");
 
 		Ok(format!(

@@ -30,17 +30,16 @@ impl Parse for CooraPlugin {
 
 		let typescript_bindings = generate_typescript_bindings(&plugin_trait)?;
 		let rust_bindings = generate_rust_bindings(&plugin_trait);
-		let bindings_definitions =
-			generate_bindings_definitions(&plugin_trait)?;
+		let bindings_definitions = generate_bindings_definitions(&plugin_trait)?;
 
 		let out = quote! {
 				#plugin_trait
 				//TODO only submit with flag
-				inventory::submit!(coora_bindings::CooraPluginBindings {
-					name: #name_str,
-					typescript_bindings: #typescript_bindings,
-					rust_bindings: #rust_bindings,
-				});
+				// inventory::submit!(coora_bindings::CooraPluginBindings {
+				// 	name: #name_str,
+				// 	typescript_bindings: #typescript_bindings,
+				// 	rust_bindings: #rust_bindings,
+				// });
 				#bindings_definitions
 		}
 		.into();
