@@ -51,13 +51,18 @@ pub fn generate_bindings_definitions(plugin: &ItemTrait) -> Result<TokenStream> 
 		ident_plugin.span(),
 	);
 	let ident_deorphaned = Ident::new(
-		format!("DeOrphaned{ident_plugin_str}").as_str(),
+		format!("Deorphaned{ident_plugin_str}").as_str(),
+		ident_plugin.span(),
+	);
+	let ident_shared = Ident::new(
+		format!("Shared{ident_plugin_str}").as_str(),
 		ident_plugin.span(),
 	);
 
 	Ok(quote! {
 		// pub type #ident_plugin_shared = std::sync::Arc<std::sync::Mutex<#ident_plugin>>;
 		pub struct #ident_deorphaned<T>(std::sync::Arc<std::sync::Mutex<T>>);		//orphan rule https://doc.rust-lang.org/error_codes/E0210.html
+		// impl coora_engine::Shared for
 		impl<T> coora_engine::Plugin for #ident_deorphaned<T> where
 		T: #ident_plugin + std::marker::Send + 'static
 		{
@@ -65,6 +70,10 @@ pub fn generate_bindings_definitions(plugin: &ItemTrait) -> Result<TokenStream> 
 				#bind_stream
 			}
 		}
+		pub trait #ident_shared where Self: Sized{
+			fn as_shared(self) -> #ident_deorphaned<Self> {  #ident_deorphaned::<Self>(std::sync::Arc::new(std::sync::Mutex::new(self))) }
+		}
+		impl<T> #ident_shared for T where T: #ident_plugin{}
 	})
 }
 
