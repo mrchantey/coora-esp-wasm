@@ -34,7 +34,8 @@ impl Parse for CooraPlugin {
 
 		let out = quote! {
 				#plugin_trait
-				//TODO only submit with flag
+				//TODO better flag
+				#[cfg(any(target_os="windows",target_os="linux",target_os="macos"))]
 				inventory::submit!(coora_bindings::CooraPluginBindings {
 					name: #name_str,
 					typescript_bindings: #typescript_bindings,

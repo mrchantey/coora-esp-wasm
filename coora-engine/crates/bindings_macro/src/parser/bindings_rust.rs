@@ -11,6 +11,7 @@ pub fn generate_rust_bindings(plugin: &ItemTrait) -> LitStr {
 	let body = plugin.items.iter();
 	let mut stream = TokenStream::new();
 	stream.append_all(body);
+	
 	// pub mod #name{
 	// }
 	let out = quote! {

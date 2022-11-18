@@ -1,12 +1,11 @@
 use anyhow::{Ok, Result};
-use coora_engine::{LedStrip, SharedLeds};
+use coora_engine::LedStrip;
 use core::time::Duration;
 use esp_idf_hal::{
     gpio::OutputPin,
     rmt::{config::TransmitConfig, FixedLengthSignal, HwChannel, PinState, Pulse, Transmit},
 };
 use rgb::RGBA;
-use std::sync::{Arc, Mutex};
 
 pub type RGBA8 = RGBA<u8>;
 
@@ -66,15 +65,15 @@ impl<
         const T4: usize,
     > LedStrip for LedStripRGBW<T1, T2, T3, T4>
 {
-    fn set_leds(&mut self, r: u8, g: u8, b: u8, w: u8) {
-        self.set_all(r, g, b, w)
+    fn set_leds(&mut self, r: u32, g: u32, b: u32, w: u32) {
+        self.set_all(r as u8, g as u8, b as u8, w as u8)
     }
     fn show(&mut self) {
         self.show().unwrap();
     }
-    fn as_shared(self) -> SharedLeds {
-        Arc::new(Mutex::new(self))
-    }
+    // fn as_shared(self) -> SharedLeds {
+    //     Arc::new(Mutex::new(self))
+    // }
 }
 
 impl<PIN: OutputPin, CHANNEL: HwChannel, const NUM_LEDS: usize, const BUFF_LEN: usize>
