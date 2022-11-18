@@ -1,11 +1,8 @@
 use crate::*;
-use anyhow::anyhow;
-use proc_macro2::{Ident, Literal, Span, TokenTree};
 use quote::quote;
-use std::fmt::format;
 use syn::{
 	parse::{Parse, ParseStream, Result},
-	parse_macro_input, Error, LitStr, TraitItem,
+	parse_macro_input,
 };
 
 
@@ -26,7 +23,7 @@ impl CooraPlugin {
 impl Parse for CooraPlugin {
 	fn parse(stream: ParseStream) -> Result<Self> {
 		let plugin_trait = syn::ItemTrait::parse(stream)?;
-		let a = plugin_trait.items.iter().next().unwrap();
+		// let a = plugin_trait.items.iter().next().unwrap();
 
 		let name = &plugin_trait.ident;
 		let name_str = name.to_string();
@@ -39,11 +36,11 @@ impl Parse for CooraPlugin {
 		let out = quote! {
 				#plugin_trait
 				//TODO only submit with flag
-				// inventory::submit!(coora_bindings::CooraPluginBindings {
-				// 	name: #name_str,
-				// 	typescript_bindings: #typescript_bindings,
-				// 	rust_bindings: #rust_bindings,
-				// });
+				inventory::submit!(coora_bindings::CooraPluginBindings {
+					name: #name_str,
+					typescript_bindings: #typescript_bindings,
+					rust_bindings: #rust_bindings,
+				});
 				#bindings_definitions
 		}
 		.into();

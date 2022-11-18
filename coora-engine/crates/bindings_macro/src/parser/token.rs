@@ -1,10 +1,5 @@
-use anyhow::anyhow;
 use proc_macro2::{Group, Ident, Literal, Punct, Span, TokenTree};
-use quote::quote;
-use syn::{
-	parse::{Parse, ParseStream, Result},
-	parse_macro_input, Error,
-};
+use syn::{parse::Result, Error};
 
 use extend::ext;
 
@@ -22,7 +17,7 @@ pub impl Option<TokenTree> {
 	}
 
 	fn assert_exists(&self) -> Result<()> {
-		if let Some(token) = self {
+		if let Some(_token) = self {
 			return Ok(());
 		} else {
 			Err(Error::new(Span::call_site(), "expected a token here"))

@@ -1,15 +1,8 @@
-use std::fmt::format;
-
-use crate::*;
 // use anyhow::anyhow;
-use proc_macro2::{Group, Ident, Literal, Span, TokenStream, TokenTree};
-use quote::quote;
+use proc_macro2::Span;
 use syn::{
-	parse::{Parse, ParseStream, Result},
-	parse_macro_input,
-	spanned::Spanned,
-	token::{RArrow, Trait},
-	Error, FnArg, ItemTrait, LitStr, Pat, ReturnType, Token, TraitItem, Type,
+	parse::Result, spanned::Spanned, Error, FnArg, ItemTrait, LitStr, Pat, ReturnType, TraitItem,
+	Type,
 };
 
 
@@ -34,13 +27,11 @@ pub fn rust_type_to_ts(rtype: &Type) -> Result<String> {
 
 pub fn rust_method_to_ts(item: &TraitItem) -> Result<String> {
 	if let TraitItem::Method(item) = item {
-
-		let return_type =
-			if let ReturnType::Type(rarrow, rtype) = &item.sig.output {
-				rust_type_to_ts(&**rtype)
-			} else {
-				Ok(format!("void"))
-			}?;
+		let return_type = if let ReturnType::Type(_rarrow, rtype) = &item.sig.output {
+			rust_type_to_ts(&**rtype)
+		} else {
+			Ok(format!("void"))
+		}?;
 
 
 		#[rustfmt::skip]

@@ -1,11 +1,10 @@
-#![allow(
-	dead_code,
-	unused_imports,
-	unused_mut,
-	unused_variables,
-	unused_parens
-)]
-#![feature(iter_intersperse)]
+// #![allow(
+// 	dead_code,
+// 	unused_imports,
+// 	unused_mut,
+// 	unused_variables,
+// 	unused_parens
+// )]
 // use crate::coora_plugin::
 use proc_macro::TokenStream;
 mod parser;
