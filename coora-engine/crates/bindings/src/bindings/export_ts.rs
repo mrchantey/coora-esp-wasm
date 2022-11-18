@@ -11,12 +11,16 @@ pub fn export_ts() -> Result<()> {
 		plugin.typescript_bindings,)
 	})?;
 	write_index(plugins, &out.join("index.ts"), |plugin| {
-		format!("export * from \"./{}\";", plugin.name.to_case(Case::Camel))
+		let name = plugin.name.to_case(Case::Camel);
+// invalid asc: export * as {name} from \'./{name}\'
+		format!("
+import * as {name} from './{name}'
+export {{ {name} as {name} }}
+")
 	})?;
 	move_files_ts()?;
 	Ok(())
 }
-
 
 pub fn move_files_ts() -> Result<()> {
 	let src = PathBuf::from(EXPORT_ROOT).join("typescript");

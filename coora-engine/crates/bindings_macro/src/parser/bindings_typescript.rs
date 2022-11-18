@@ -50,7 +50,10 @@ pub fn rust_method_to_ts(plugin_name: &str, item: &TraitItem) -> Result<String> 
 		let args = args?.join(", ");
 
 		Ok(format!(
-			"\n@external(\"{}\", \"{}\")\nexport declare function {}({}): {};",
+			"
+//@ts-ignore external
+@external(\'{}\', \'{}\')
+export declare function {}({}): {};",
 			plugin_name,
 			item.sig.ident,
 			item.sig.ident.to_string().to_case(Case::Camel),

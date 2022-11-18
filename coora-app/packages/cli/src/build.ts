@@ -1,11 +1,10 @@
-//@ts-ignore
-import { main } from 'assemblyscript/asc'
 import { Command } from 'commander'
+import { run } from './runAsc.js'
 import { assertExists, consoleErrorOr, parseBuildFileNames } from './utility.js'
 export const appendBuildCommand = (parent: Command) => {
 	const cmd = parent.command('build')
 		.argument('<entry>', 'entrypoint')
-	cmd.action(async(entry, options) => 
+	cmd.action(async(entry, _options) => 
 		consoleErrorOr(await build(entry), ({ names, duration }) =>
 			`BUILD - success - ${names.name} - ${duration.toFixed(0)} millis`))
 }
@@ -28,7 +27,7 @@ export const build = async (entry: string, target: BuildTarget = 'release') => {
 		// --stackSize 65536 \
 		// --lowMemoryLimit \
 	]
-	const result = await main(args)
+	const result = await run(args)
 		.catch((err: Error) => err)
 	if (result instanceof Error)
 		return result

@@ -1,9 +1,7 @@
-import { core, led } from '../bindings'
-import { millis } from '../bindings/core'
-
+import { ledStrip, time } from '../bindings'
 //for testing
 export function _millis(): u64{
-	return core.millis()
+	return time.elapsed()
 }
 
 export function start(): void{
@@ -11,9 +9,9 @@ export function start(): void{
 }
 
 export function run(): void{
-	const a = millis() as i32 / 100
-	led.setAll(0, 0, 16, 5)
-	led.show()
+	const a = time.elapsed() as i32 / 100
+	ledStrip.setLeds(a, 0, 16, 5)
+	ledStrip.show()
 }
 
 // export function add(a:i32,b:i32):i32{
