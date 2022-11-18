@@ -1,10 +1,10 @@
 // use anyhow::anyhow;
+use convert_case::{Case, Casing};
 use proc_macro2::Span;
 use syn::{
 	parse::Result, spanned::Spanned, Error, FnArg, ItemTrait, LitStr, Pat, ReturnType, TraitItem,
 	Type,
 };
-
 
 pub fn rust_pat_to_str(pat: &Pat) -> Result<String> {
 	if let Pat::Ident(pat) = pat {
@@ -25,7 +25,7 @@ pub fn rust_type_to_ts(rtype: &Type) -> Result<String> {
 	}
 }
 
-pub fn rust_method_to_ts(item: &TraitItem) -> Result<String> {
+pub fn rust_method_to_ts(plugin_name: &str, item: &TraitItem) -> Result<String> {
 	if let TraitItem::Method(item) = item {
 		let return_type = if let ReturnType::Type(_rarrow, rtype) = &item.sig.output {
 			rust_type_to_ts(&**rtype)
@@ -50,8 +50,12 @@ pub fn rust_method_to_ts(item: &TraitItem) -> Result<String> {
 		let args = args?.join(", ");
 
 		Ok(format!(
-			"\nexport declare function {}({}): {};",
-			item.sig.ident, args, return_type
+			"\n@external(\"{}\", \"{}\")\nexport declare function {}({}): {};",
+			plugin_name,
+			item.sig.ident,
+			item.sig.ident.to_string().to_case(Case::Camel),
+			args,
+			return_type
 		))
 	} else {
 		Err(Error::new(
@@ -69,7 +73,7 @@ pub fn generate_typescript_bindings(plugin: &ItemTrait) -> Result<LitStr> {
 	let mut out = String::from(PREFIX);
 	let body = plugin.items.iter();
 	for item in body {
-		let ts_func = rust_method_to_ts(item)?;
+		let ts_func = rust_method_to_ts(plugin.ident.to_string().as_str(), item)?;
 		out.push_str(ts_func.as_str());
 	}
 
