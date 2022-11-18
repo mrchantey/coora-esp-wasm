@@ -1,6 +1,4 @@
 use coora_engine::*;
-use std::sync::{Arc, Mutex};
-
 
 // pub type SharedTerminalLeds = Arc<Mutex<TerminalLeds>>;
 
@@ -28,12 +26,12 @@ impl TerminalLeds {
 
 
 impl LedStrip for TerminalLeds {
-	fn set_leds(&mut self, r: u8, g: u8, b: u8, w: u8) {
+	fn set_leds(&mut self, r: u32, g: u32, b: u32, w: u32) {
 		for mut led in &mut self.leds {
-			led.r = r;
-			led.g = g;
-			led.b = b;
-			led.a = w;
+			led.r = r as u8;
+			led.g = g as u8;
+			led.b = b as u8;
+			led.a = w as u8;
 		}
 	}
 	fn show(&mut self) {

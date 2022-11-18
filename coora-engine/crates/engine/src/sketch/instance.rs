@@ -13,38 +13,12 @@ pub struct SketchInstance {
 
 
 impl SketchInstance {
-	pub fn from_default(leds: &SharedLeds) -> SketchInstance {
-		let mut engine = WasmEngine::new();
-		Self::from_default_with_engine(&mut engine, leds)
-	}
-	pub fn from_default_with_engine(
+	pub fn build_with_default_sketch(
 		engine: &mut WasmEngine,
-		leds: &SharedLeds,
+		builder: SketchBuilder,
 	) -> SketchInstance {
 		let stream = include_wasm!("../../../", "hello_led");
-		Self::new_with_engine(engine, &stream[..], leds)
-	}
-
-	pub fn new(stream: impl Read, leds: &SharedLeds) -> SketchInstance {
-		let mut engine = WasmEngine::new();
-		Self::new_with_engine(&mut engine, stream, leds)
-	}
-	pub fn new_with_engine(
-		engine: &mut WasmEngine,
-		stream: impl Read,
-		leds: &SharedLeds,
-	) -> SketchInstance {
-		let mut builder = SketchInstance::init(engine);
-		Core::append_imports(&mut builder);
-		Led::append_imports(&mut builder, &leds);
-		SketchInstance::build(engine, builder, stream)
-	}
-
-
-	pub fn init(engine: &mut WasmEngine) -> SketchBuilder {
-		let store: Store = 69;
-		// let mut store: Store = [0; 16];
-		engine.instantiate(store)
+		Self::build(engine, builder, &stream[..])
 	}
 
 	pub fn build(
@@ -62,10 +36,6 @@ impl SketchInstance {
 		}
 	}
 
-	pub fn run(&mut self) {
-		self.run.call(&mut self.instance.store, ()).unwrap();
-	}
-	pub fn _millis(&mut self) -> u64 {
-		self._millis.call(&mut self.instance.store, ()).unwrap()
-	}
+	pub fn run(&mut self) { self.run.call(&mut self.instance.store, ()).unwrap(); }
+	pub fn _millis(&mut self) -> u64 { self._millis.call(&mut self.instance.store, ()).unwrap() }
 }

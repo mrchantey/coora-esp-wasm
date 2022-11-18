@@ -12,7 +12,7 @@ fn main() {
 }
 
 
-fn bind_the_things<T>(plugin: T)
+fn bind_the_things<T>(_plugin: T)
 where
 	T: Plugin,
 {
@@ -22,8 +22,8 @@ struct MyFoo;
 // impl Shared for MyFoo {}
 impl Foo for MyFoo {
 	fn do_thing(&mut self) {}
-	fn do_other_thing(&self, a: u32) {}
-	fn add(&self, a: u32) -> u32 { 2 }
+	fn do_other_thing(&self, _a: u32) {}
+	fn add(&self, a: u32) -> u32 { a }
 }
 
 #[coora_plugin]

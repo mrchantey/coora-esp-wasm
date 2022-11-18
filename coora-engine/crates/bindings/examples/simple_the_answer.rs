@@ -8,14 +8,13 @@ trait Foo {
 	fn do_thing();
 	fn do_other_thing(a: u8);
 }
-struct MyFoo;
+// struct MyFoo;
 
 trait MyTrait {}
 
-use std::sync::{Arc,Mutex};
 struct MyT<T>(std::sync::Arc<std::sync::Mutex<T>>);
 impl<T> Plugin for MyT<T> where T: Foo {
-		fn bind<StoreT>(&mut self, builder: &mut WasmInstanceBuilder<StoreT>) {}
+		fn bind<StoreT>(&mut self, _builder: &mut WasmInstanceBuilder<StoreT>) {}
 
 }
 
@@ -45,9 +44,3 @@ impl<T> Plugin for MyT<T> where T: Foo {
 // 		// builder.linker.//,,, self.mutex.lock_thing
 // 	}
 // }
-
-fn bind<T>(foo: T)
-where
-	T: Foo,
-{
-}

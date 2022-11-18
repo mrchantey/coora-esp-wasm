@@ -8,3 +8,5 @@ mod terminal_leds;
 pub use self::terminal_leds::*;
 mod utility;
 pub use self::utility::*;
+mod wasm;
+pub use self::wasm::*;

@@ -1,3 +1,5 @@
+mod plugin;
+pub use self::plugin::*;
 mod wasm_engine;
 pub use self::wasm_engine::*;
 mod wasm_instance;

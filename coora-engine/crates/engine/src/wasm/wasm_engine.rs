@@ -1,10 +1,5 @@
 use wasmi::*;
 
-use crate::WasmInstanceBuilder;
-
-pub fn run_wasm() {}
-
-
 pub struct WasmEngine {
 	pub engine: Engine,
 }
@@ -23,10 +18,10 @@ impl WasmEngine {
 		}
 	}
 
-	pub fn instantiate<T>(
-		&mut self,
-		initial_state: T,
-	) -> WasmInstanceBuilder<T> {
-		WasmInstanceBuilder::new(self, initial_state)
-	}
+	// pub fn instantiate<T>(
+	// 	&mut self,
+	// 	initial_state: T,
+	// ) -> WasmInstanceBuilder<T> {
+	// 	WasmInstanceBuilder::new(self, initial_state)
+	// }
 }

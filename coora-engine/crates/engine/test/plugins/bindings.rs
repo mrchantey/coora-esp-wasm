@@ -10,21 +10,19 @@ pub trait MathPlugin {
 	fn foo(&self);
 }
 
-use std::sync::{Arc, Mutex};
-
 pub struct MyMathImpl;
 impl MathPlugin for MyMathImpl {
-	fn add(&self, a: i32, b: i32) -> i32 { 2 }
+	fn add(&self, a: i32, _b: i32) -> i32 { a }
 	fn foo(&self) {}
 }
 
 sweet! {
 	it "works" {
 		let mut engine = WasmEngine::new();
-		let mut builder = WasmInstanceBuilder::new(&mut engine, 0);
+		let mut _builder = WasmInstanceBuilder::new(&mut engine, 0);
 
-		let plugin = MyMathImpl;
-		
+		// let plugin = MyMathImpl;
+
 		// builder.
 
 		// let a = Arc::new(Mutex::new(2));

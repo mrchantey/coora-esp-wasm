@@ -3,27 +3,24 @@ use coora_engine::*;
 
 sweet! {
 
-	let leds = TerminalLeds::new(2).as_shared();
-	let mut instance = SketchInstance::from_default(&leds);
-	let wasm = include_wasm!("../../../","hello_led");
+	let mut leds = TerminalLeds::new(2).as_shared();
+	let mut time = StdTime::new().as_shared();
+	let mut engine = WasmEngine::new();
+
+	let mut app = WasmInstanceBuilder::new(&mut engine, 0);
+	app.bind(&mut leds).bind(&mut time);
+	let mut app = SketchInstance::build_with_default_sketch(&mut engine,app);
+
 	test "millis" {
-		let a = instance._millis();
+		let a = app._millis();
 		forky_core::utility::sleep(1);
-		let b = instance._millis();
+		let b = app._millis();
 		expect((b - a) as i32).to_be_at_least(1000)?;
 	}
 
 
 	test "leds"{
-		instance.run();
+		app.run();
 	}
 
-	test "size"{
-		expect(wasm.len() < 1000).to_be_true()?;
-	}
-
-	test skip "print"{
-		println!("{:?}",wasm);
-		println!("\n{} bytes\n",wasm.len());
-	}
 }
