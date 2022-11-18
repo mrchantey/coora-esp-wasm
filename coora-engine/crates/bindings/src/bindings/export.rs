@@ -1,5 +1,6 @@
 use crate::CooraPluginBindings;
 use anyhow::{anyhow, Result};
+use fs_extra::dir::CopyOptions;
 use std::{fs, path::PathBuf};
 
 pub const EXPORT_ROOT: &str = "target/bindings";
@@ -34,5 +35,13 @@ where
 	let index_str: Vec<String> = plugins.iter().map(write_line).collect();
 	let index_str = index_str.join("\n");
 	fs::write(out_dir, index_str)?;
+	Ok(())
+}
+
+
+pub fn copy_bindings(src: PathBuf, dst: PathBuf) -> Result<()> {
+	fs::remove_dir_all(&dst)?;
+	fs::create_dir_all(&dst)?;
+	fs_extra::dir::copy(&src, &dst, &CopyOptions::new())?;
 	Ok(())
 }

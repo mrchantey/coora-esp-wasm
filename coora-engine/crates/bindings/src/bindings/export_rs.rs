@@ -13,5 +13,13 @@ pub fn export_rs() -> Result<()> {
 	write_index(plugins, &out.join("mod.rs"), |plugin| {
 		format!("pub mod {};", plugin.name.to_case(Case::Snake))
 	})?;
+	move_files_rs()?;
 	Ok(())
+}
+
+
+pub fn move_files_rs() -> Result<()> {
+	let src = PathBuf::from(EXPORT_ROOT).join("rust");
+	let dst = PathBuf::new().join("../coora-app-rs/crates/hello_led/src/bindings");
+	copy_bindings(src, dst)
 }
