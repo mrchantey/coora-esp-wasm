@@ -1,6 +1,7 @@
 use std::fmt::format;
 
 use crate::*;
+// use anyhow::Ok;
 // use anyhow::anyhow;
 use proc_macro2::{Group, Ident, Literal, Span, TokenStream, TokenTree};
 use quote::quote;
@@ -9,9 +10,24 @@ use syn::{
 	parse_macro_input,
 	spanned::Spanned,
 	token::{RArrow, Trait},
-	Error, FnArg, ItemTrait, LitStr, Pat, PatIdent, PathSegment, ReturnType,
-	Token, TraitItem, Type,
+	Error, FnArg, ItemTrait, LitStr, Pat, PatIdent, PathArguments, PathSegment, ReturnType, Token,
+	TraitItem, Type,
 };
+
+
+pub fn fn_result_to_typed(item: &ReturnType) -> Result<TokenStream> {
+	match &item {
+		ReturnType::Type(rarrow, rtype) => {
+			if let Type::Path(rtype) = &**rtype {
+				let ident = rtype.path.segments.first().unwrap().clone().ident;
+				Ok(quote!(#ident))
+			} else {
+				Err(Error::new(item.span(), "Hmmm whaaat."))
+			}
+		}
+		ReturnType::Default => Ok(quote!(())),
+	}
+}
 
 pub fn fn_arg_to_typed(item: &FnArg) -> Result<(PatIdent, PathSegment)> {
 	if let FnArg::Typed(item) = item {

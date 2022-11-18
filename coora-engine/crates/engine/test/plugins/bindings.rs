@@ -1,7 +1,10 @@
+use std::marker::PhantomData;
+
 use coora_bindings::coora_plugin;
 use coora_engine::{WasmEngine, WasmInstanceBuilder};
 // use std::sync::{Arc, Mutex};
 use sweet::*;
+use wasmi::{Caller, Func};
 // use wasmi::{Caller, Engine, Func};
 
 
@@ -26,11 +29,30 @@ pub trait MathPlugin {
 
 // };
 
+use std::sync::{Arc, Mutex};
 
 sweet! {
 	it "works" {
 		let mut engine = WasmEngine::new();
-		let _a = WasmInstanceBuilder::new(&mut engine, 0);
+		let mut _a = WasmInstanceBuilder::new(&mut engine, 0);
+
+		let mut a= Arc::new(Mutex::new(2));
+
+		let a1 = Arc::clone(&a);
+		let p = define_math_plugin(MathPluginDef{
+			_marker:PhantomData::<u32>,
+			foo:move |_|{
+				let mut locked = a1.lock().unwrap();
+				*locked = *locked + 1;
+				// a1 = a1 + 1
+			}
+		});
+		_a.linker
+		.define("MathPlugin", "foo", Func::wrap(&mut _a.store,p.foo))
+		.unwrap();
+
+
+
 
 		// let a = MathPluginDef{
 		// 	_marker:PhantomStruct<u32>,

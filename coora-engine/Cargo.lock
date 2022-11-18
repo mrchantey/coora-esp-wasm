@@ -90,7 +90,9 @@ dependencies = [
  "anyhow",
  "convert_case",
  "coora_bindings_macro",
+ "coora_engine",
  "inventory",
+ "wasmi",
 ]
 
 [[package]]

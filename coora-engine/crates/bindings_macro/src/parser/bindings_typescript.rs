@@ -34,8 +34,6 @@ pub fn rust_type_to_ts(rtype: &Type) -> Result<String> {
 
 pub fn rust_method_to_ts(item: &TraitItem) -> Result<String> {
 	if let TraitItem::Method(item) = item {
-		// let return =
-		// item.sig.output
 
 		let return_type =
 			if let ReturnType::Type(rarrow, rtype) = &item.sig.output {

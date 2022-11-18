@@ -14,3 +14,7 @@ coora_bindings_macro = {workspace=true}
 inventory = {workspace=true}
 anyhow = {workspace=true}
 convert_case = {workspace=true}
+
+[dev-dependencies]
+wasmi = {workspace = true}
+coora_engine = {workspace = true}
