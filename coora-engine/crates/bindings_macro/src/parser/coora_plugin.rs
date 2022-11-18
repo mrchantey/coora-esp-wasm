@@ -35,11 +35,11 @@ impl Parse for CooraPlugin {
 		let out = quote! {
 				#plugin_trait
 				//TODO only submit with flag
-				// inventory::submit!(coora_bindings::CooraPluginBindings {
-				// 	name: #name_str,
-				// 	typescript_bindings: #typescript_bindings,
-				// 	rust_bindings: #rust_bindings,
-				// });
+				inventory::submit!(coora_bindings::CooraPluginBindings {
+					name: #name_str,
+					typescript_bindings: #typescript_bindings,
+					rust_bindings: #rust_bindings,
+				});
 				#bindings_definitions
 		}
 		.into();
