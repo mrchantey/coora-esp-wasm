@@ -5,5 +5,6 @@ pub use coora_engine::*;
 pub fn main() -> Result<()> {
 	export_ts()?;
 	export_rs()?;
+	println!("success!");
 	Ok(())
 }
