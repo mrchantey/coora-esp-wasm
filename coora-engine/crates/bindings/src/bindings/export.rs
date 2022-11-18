@@ -40,8 +40,15 @@ where
 
 
 pub fn copy_bindings(src: PathBuf, dst: PathBuf) -> Result<()> {
-	fs::remove_dir_all(&dst)?;
+	fs::remove_dir_all(&dst).unwrap_or(());
 	fs::create_dir_all(&dst)?;
-	fs_extra::dir::copy(&src, &dst, &CopyOptions::new())?;
+	fs_extra::dir::copy(
+		&src,
+		&dst,
+		&CopyOptions {
+			content_only: true,
+			..Default::default()
+		},
+	)?;
 	Ok(())
 }
