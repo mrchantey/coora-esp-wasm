@@ -14,11 +14,11 @@ rgb = {workspace = true}
 anyhow = {workspace = true}
 wasmi = {workspace = true}
 extend = {workspace = true}
+coora_bindings = {workspace = true}
 
 [dev-dependencies]
 forky_core = {workspace = true}
 sweet = {workspace = true}
-coora_bindings = {workspace = true}
 # [build-dependencies]
 
 [[test]]

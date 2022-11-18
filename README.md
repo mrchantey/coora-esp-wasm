@@ -10,3 +10,6 @@ Repo for the Coora Engine & App framework
 ### [Coora Engine](./coora-engine/README.md)
 - A rust program run on microcontrollers and allows the uploading and running of Coora Apps 
 
+### Contributing
+
+- [conventional commits?](https://www.conventionalcommits.org/en/v1.0.0/#summary)
