@@ -26,7 +26,7 @@ impl Foo for MyFoo {
 	fn add(&self, a: u32) -> u32 { a }
 }
 
-#[coora_plugin]
+#[coora_import]
 trait Foo {
 	fn do_thing(&mut self);
 	fn do_other_thing(&self, a: u32);

@@ -20,8 +20,19 @@ pub struct BindingFuncDefinition {
 }
 
 
-impl BindingFuncDefinition{
-	
+impl BindingFuncDefinition {
+
+	pub fn from_trait(plugin: &ItemTrait)->Result<Vec<BindingFuncDefinition>>{
+		plugin
+		.items
+		.iter()
+		.enumerate()
+		.map(|(i, f)| BindingFuncDefinition::parse(i, f))
+		.collect()
+	// let body = body?;
+	// let body = body.iter();
+	}
+
 	pub fn parse(index: usize, item: &TraitItem) -> Result<BindingFuncDefinition> {
 		let type_ident_func = Ident::new(format!("T{}", index).as_str(), item.span());
 		let type_ident_inputs = Ident::new(format!("TP{}", index).as_str(), item.span());
@@ -30,12 +41,12 @@ impl BindingFuncDefinition{
 				.sig
 				.inputs
 				.iter()
-				.map(|i| fn_arg_to_typed(i))
+				.map(|i| utils::fn_arg_to_typed(i))
 				.filter(|i| i.is_ok()) //skip invalid
 				.collect();
 			let inputs = inputs?;
 			// let inputs = vec![];
-	
+
 			Ok(BindingFuncDefinition {
 				index,
 				inputs,
@@ -50,8 +61,4 @@ impl BindingFuncDefinition{
 			))
 		}
 	}
-	
-
-
-}	
-
+}

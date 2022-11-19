@@ -2,7 +2,7 @@ use crate::*;
 use crate as coora_engine; //this is awkward
 
 
-#[coora_plugin]
+#[coora_import]
 pub trait LedStrip {
 	// fn as_shared(self) -> SharedLeds;
 	fn set_leds(&mut self, r: u32, g: u32, b: u32, w: u32);

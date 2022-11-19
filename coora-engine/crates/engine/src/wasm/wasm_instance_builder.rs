@@ -1,4 +1,4 @@
-use crate::{Plugin, WasmEngine, WasmInstance};
+use crate::{WasmEngine, WasmInstance};
 use wasmi::*;
 
 pub struct WasmInstanceBuilder<T> {
@@ -13,13 +13,13 @@ impl<T> WasmInstanceBuilder<T> {
 		WasmInstanceBuilder { store, linker }
 	}
 
-	pub fn bind<PluginT>(&mut self, plugin: &mut PluginT) -> &mut Self
-	where
-		PluginT: Plugin,
-	{
-		plugin.bind(self);
-		self
-	}
+	// pub fn bind<PluginT>(&mut self, plugin: &mut PluginT) -> &mut Self
+	// where
+	// 	PluginT: Plugin,
+	// {
+	// 	plugin.bind(self);
+	// 	self
+	// }
 
 	pub fn build(mut self, engine: &mut WasmEngine, stream: impl Read) -> WasmInstance<T> {
 		let module = Module::new(&engine.engine, stream).unwrap();

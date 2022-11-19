@@ -4,7 +4,7 @@ use crate as coora_engine;
 use crate::*;
 
 
-#[coora_plugin]
+#[coora_import]
 pub trait Time {
 	// fn as_shared(self) -> SharedLeds;
 	fn elapsed(&mut self) -> u64;

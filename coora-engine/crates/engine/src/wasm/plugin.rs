@@ -1,6 +1,6 @@
+use crate::WasmApp;
+use anyhow::Result;
 use std::sync::{Arc, Mutex};
-
-use crate::WasmInstanceBuilder;
 
 pub trait Shared
 where
@@ -11,7 +11,7 @@ where
 
 
 pub trait Plugin {
-	fn bind<StoreT>(&mut self, builder: &mut WasmInstanceBuilder<StoreT>);
+	fn bind<StoreT>(&mut self, builder: &mut WasmApp<StoreT>) -> Result<()>;
 }
 // trait Plugin {
 // 	fn bind<StoreT>(&mut self, builder: &mut WasmInstanceBuilder<StoreT>) {}
