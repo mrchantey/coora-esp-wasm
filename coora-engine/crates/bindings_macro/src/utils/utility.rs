@@ -1,5 +1,3 @@
-// use anyhow::Ok;
-// use anyhow::anyhow;
 use proc_macro2::{Ident, TokenStream};
 use quote::quote;
 use syn::{
@@ -23,7 +21,6 @@ pub fn fn_result_to_typed(item: &ReturnType) -> Result<TokenStream> {
 
 pub fn fn_arg_to_typed(item: &FnArg) -> Result<(PatIdent, PathSegment)> {
 	if let FnArg::Typed(item) = item {
-		// item.attrs[0].
 		let ty = if let Type::Path(rt) = &*item.ty {
 			let first = rt.path.segments.first();
 			if let Some(first) = first {
@@ -31,7 +28,6 @@ pub fn fn_arg_to_typed(item: &FnArg) -> Result<(PatIdent, PathSegment)> {
 			} else {
 				Err(Error::new(item.pat.span(), "Not sure how we got here.."))
 			}
-		// println!("\n\n{:?}\n\n", first);
 		} else {
 			Err(Error::new(
 				item.pat.span(),

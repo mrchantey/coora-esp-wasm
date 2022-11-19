@@ -20,16 +20,8 @@ sweet! {
 		let mut engine = WasmEngine::new();
 		let mut app = WasmApp::new(&mut engine, 0);
 	
-		app.build(&mut engine,SketchInstance::default_wasm());
+		app.build(&mut engine);
 
-		// let plugin = MyMathImpl;
-
-		// builder.
-
-		// let a = Arc::new(Mutex::new(2));
-
-		// let a1 = Arc::clone(&a);
-		// type StoreT = u32;
 
 	}
 }

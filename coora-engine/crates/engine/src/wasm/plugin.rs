@@ -13,8 +13,3 @@ where
 pub trait Plugin {
 	fn bind<StoreT>(&mut self, builder: &mut WasmApp<StoreT>) -> Result<()>;
 }
-// trait Plugin {
-// 	fn bind<StoreT>(&mut self, builder: &mut WasmInstanceBuilder<StoreT>) {}
-// }
-
-// fn as_shared(self) -> SharedLeds { Arc::new(Mutex::new(self)) }

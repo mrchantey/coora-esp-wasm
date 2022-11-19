@@ -12,8 +12,6 @@ pub fn generate_rust_bindings(plugin: &ItemTrait) -> LitStr {
 	let mut stream = TokenStream::new();
 	stream.append_all(body);
 	
-	// pub mod #name{
-	// }
 	let out = quote! {
 		#[link(wasm_import_module = #name_str)]
 		extern "C" {

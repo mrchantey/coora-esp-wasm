@@ -29,8 +29,6 @@ impl BindingFuncDefinition {
 		.enumerate()
 		.map(|(i, f)| BindingFuncDefinition::parse(i, f))
 		.collect()
-	// let body = body?;
-	// let body = body.iter();
 	}
 
 	pub fn parse(index: usize, item: &TraitItem) -> Result<BindingFuncDefinition> {
@@ -45,7 +43,6 @@ impl BindingFuncDefinition {
 				.filter(|i| i.is_ok()) //skip invalid
 				.collect();
 			let inputs = inputs?;
-			// let inputs = vec![];
 
 			Ok(BindingFuncDefinition {
 				index,

@@ -1,4 +1,5 @@
 use wasmi::*;
+use crate::*;
 
 pub struct WasmEngine {
 	pub engine: Engine,
@@ -14,5 +15,8 @@ impl WasmEngine {
 
 		Engine::default()
 		// }
+	}
+	pub fn default_wasm() -> &'static [u8] { 
+		include_wasm!("../../../", "hello_led") 
 	}
 }

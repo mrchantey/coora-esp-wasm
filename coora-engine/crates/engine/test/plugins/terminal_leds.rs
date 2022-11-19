@@ -1,6 +1,5 @@
 use coora_engine::*;
 
-// pub type SharedTerminalLeds = Arc<Mutex<TerminalLeds>>;
 
 pub struct TerminalLeds {
 	leds: Vec<rgb::RGBA8>,
@@ -22,9 +21,6 @@ impl TerminalLeds {
 	}
 }
 
-// impl LedStr
-
-
 impl LedStrip for TerminalLeds {
 	fn set_leds(&mut self, r: u32, g: u32, b: u32, w: u32) {
 		for mut led in &mut self.leds {
@@ -40,6 +36,4 @@ impl LedStrip for TerminalLeds {
 		}
 	}
 
-	// fn as_shared(self) -> SharedLeds { Arc::new(Mutex::new(self)) }
 }
-// impl Plugin<LedStrip> for TerminalLeds{}

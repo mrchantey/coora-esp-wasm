@@ -1,4 +1,4 @@
-use crate::Plugin;
+use crate::{Plugin, WasmEngine};
 use std::sync::{Arc, Mutex};
 use wasmi::*;
 use anyhow::Result;
@@ -14,7 +14,6 @@ impl<T> WasmApp<T> {
 
 	pub fn new(engine: &mut Engine, initial_state: T) -> WasmApp<T> {
 		let store = Store::new(&engine, initial_state);
-		// store.state
 		let linker = <Linker<T>>::new();
 		WasmApp {
 			store: Arc::new(Mutex::new(store)),
@@ -31,7 +30,11 @@ impl<T> WasmApp<T> {
 		Ok(self)
 	}
 
-	pub fn build(&mut self, engine: &mut Engine, stream: impl Read) -> &mut Self {
+	pub fn build(&mut self, engine: &mut Engine) -> &mut Self {
+		self.build_with_wasm(engine, WasmEngine::default_wasm())
+	}
+
+	pub fn build_with_wasm(&mut self, engine: &mut Engine, stream: impl Read) -> &mut Self {
 		let module = Module::new(&engine, stream).unwrap();
 		let store = Arc::clone(&self.store);
 		let mut store = store.lock().unwrap();

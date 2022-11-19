@@ -7,11 +7,10 @@ sweet! {
 	let mut time = StdTime::new().as_shared();
 	let mut engine = WasmEngine::new();
 	let mut app = WasmApp::new(&mut engine, 0);
-	// #[rustfmt::skip]
 	app
 		.add_plugin(&mut leds).unwrap()
 		.add_plugin(&mut time).unwrap()
-		.build(&mut engine, SketchInstance::default_wasm());
+		.build(&mut engine);
 
 	let mut sketch = SketchyInstance::new(&mut app);
 

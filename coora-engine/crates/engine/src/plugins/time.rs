@@ -6,7 +6,6 @@ use crate::*;
 
 #[coora_import]
 pub trait Time {
-	// fn as_shared(self) -> SharedLeds;
 	fn elapsed(&mut self) -> u64;
 }
 

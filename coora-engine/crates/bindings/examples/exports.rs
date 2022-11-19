@@ -1,11 +1,7 @@
 use coora_bindings::coora_export;
 pub use coora_engine::*;
 fn main() {
-	let a: FooInstance<u32>;
-
-	// a.run();
-	// a.ru
-	// let a = FooInstance::new();
+	let _a: FooInstance<u32>;
 }
 
 

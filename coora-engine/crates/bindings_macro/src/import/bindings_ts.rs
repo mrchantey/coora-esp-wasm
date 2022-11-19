@@ -1,4 +1,3 @@
-// use anyhow::anyhow;
 use convert_case::{Case, Casing};
 use proc_macro2::Span;
 use syn::{
@@ -37,7 +36,6 @@ pub fn rust_method_to_ts(plugin_name: &str, item: &TraitItem) -> Result<String> 
 		#[rustfmt::skip]
 		let args:std::result::Result<Vec<_>, _> = item.sig.inputs.iter().map(|item| {
 			if let FnArg::Typed(item) = item {
-				// item.attrs[0].
 				let ty = rust_type_to_ts(&*item.ty)?;
 				let ident = rust_pat_to_str(&*item.pat)?;
 				return Ok(format!("{}: {}",ident,ty))

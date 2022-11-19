@@ -1,14 +1,10 @@
 pub use coora_engine::*;
 
 fn main() {
-	//
 	let mut a = MyFoo;
 	a.do_thing();
 	let b = a.as_shared();
-	// let b = a.
-	// let b = a.to
 	bind_the_things(b);
-	//
 }
 
 
