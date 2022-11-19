@@ -31,21 +31,10 @@ command args:
 
 target := 'release'
 
-cmd command +args:
+cmd command *args:
 	node ./packages/cli/dist/main.js -- {{command}} {{args}}
 
-# deprecated, use cli instead
-@build-wasm-cli name:
- cd ./packages/examples && \
- {{npx}} asc ./src/entry/{{name}}.ts \
- -o ../../dist/{{name}}/{{target}}.wasm \
- -t ../../dist/{{name}}/{{target}}.wat \
- --config ./config/assemblyscript/asconfig.json \
- --target {{target}} \
- --stackSize 65536 \
- --lowMemoryLimit \
 
-# echo "built {{name}}"
 
 @run *args:
 	{{npm}} run {{args}}
@@ -54,10 +43,10 @@ cmd command +args:
 
 ip := '192.168.86.222'
 
-build-wasm file:
-	just cmd build ./packages/examples/src/entry/{{file}}.ts ./packages
-watch-wasm file:
-	just cmd watch {{ip}} ./packages/examples/src/entry/{{file}}.ts ./packages
+build-wasm file *args:
+	just cmd build ./packages/examples/src/entry/{{file}}.ts {{args}}
+watch-wasm file *args:
+	just cmd watch {{ip}} ./packages/examples/src/entry/{{file}}.ts ./packages {{args}}
 # ip := '192.168.7.1'
 
 get path:
@@ -90,3 +79,17 @@ test *args:
 	--forceExit --runInBand --detectOpenHandles \
 	--config ./config/jest/jest.config.ts \
 	{{args}}
+
+
+# deprecated, use cli instead
+# @build-wasm-cli name:
+#  cd ./packages/examples && \
+#  {{npx}} asc ./src/entry/{{name}}.ts \
+#  -o ../../dist/{{name}}/{{target}}.wasm \
+#  -t ../../dist/{{name}}/{{target}}.wat \
+#  --config ./config/assemblyscript/asconfig.json \
+#  --target {{target}} \
+#  --stackSize 65536 \
+#  --lowMemoryLimit \
+
+# echo "built {{name}}"

@@ -1,4 +1,4 @@
-import { spawnCmd } from './cli.test'
+import { spawnCmd } from './utils'
 
 
 

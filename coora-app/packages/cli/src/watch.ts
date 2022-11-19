@@ -11,13 +11,21 @@ export const appendWatchCommand = (parent: Command) => {
 		.argument('<ip>', 'ip address')
 		.argument('<entry>', 'entrypoint')
 		.argument('<watch>', 'watch location')
+		.option('-f --flash', 'flash device on build')
 	cmd.action(async(ip, location, watchDir, options) => {
-		consoleErrorOr(await watch(ip, location, watchDir), () => false)		
+		consoleErrorOr(await watch(ip, location, watchDir, options), () => false)		
 	})
 }
+type Options ={
+	target: BuildTarget
+	flash: boolean
+}
 
-
-const watch = async (ip: string, entry: string, watch: string, target: BuildTarget = 'release') => {
+const defaultOptions: Options = {
+	target: 'release',
+	flash: false
+}
+const watch = async (ip: string, entry: string, watch: string, options: Options = defaultOptions) => {
 	const err = assertExists(entry)
 	if (err instanceof Error)	
 		return err
@@ -26,12 +34,19 @@ const watch = async (ip: string, entry: string, watch: string, target: BuildTarg
 		return err2
 	
 	const func = async () => {
+		console.clear()
+		console.log('BUILD - building..')
 		const now = performance.now()
-		const result = await build(entry, target)
+		const result = await build(entry, options.target)
 		if (result instanceof Error){
-			console.error(result)
+			// console.error(result)
 			return
 		}
+		console.log('BUILD - success')
+		if (!options.flash)
+			return
+		console.log('WATCH - uploading...')
+		
 		await flash(ip, result.names.wasm)
 		const duration = performance.now() - now
 		console.log(`WATCH - updated in ${duration.toFixed()} ms`)
