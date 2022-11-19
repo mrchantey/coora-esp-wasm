@@ -11,14 +11,15 @@ export const appendWatchCommand = (parent: Command) => {
 		.argument('<ip>', 'ip address')
 		.argument('<entry>', 'entrypoint')
 		.argument('<watch>', 'watch location')
+		.option('<target>',)
 		.option('-f --flash', 'flash device on build')
 	cmd.action(async(ip, location, watchDir, options) => {
 		consoleErrorOr(await watch(ip, location, watchDir, options), () => false)		
 	})
 }
 type Options ={
-	target: BuildTarget
-	flash: boolean
+	target?: BuildTarget
+	flash?: boolean
 }
 
 const defaultOptions: Options = {
@@ -49,7 +50,7 @@ const watch = async (ip: string, entry: string, watch: string, options: Options 
 		
 		await flash(ip, result.names.wasm)
 		const duration = performance.now() - now
-		console.log(`WATCH - updated in ${duration.toFixed()} ms`)
+		console.log(`COORA - success in ${duration.toFixed()} ms`)
 	}
 
 	await func()

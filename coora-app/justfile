@@ -20,21 +20,14 @@ w *args:
 		just {{command}} $app; \
 	done
 
-command args:
-	cd ./packages/cli && \
-	{{npx}} onchange -i dist/**/* \
-	-k \
-	-- node ./dist/main.js {{args}}
-	
+
 
 ## Build
 
 target := 'release'
 
 cmd command *args:
-	node ./packages/cli/dist/main.js -- {{command}} {{args}}
-
-
+	node ./packages/cli/dist/main.js {{command}} {{args}}
 
 @run *args:
 	{{npm}} run {{args}}
@@ -79,6 +72,14 @@ test *args:
 	--forceExit --runInBand --detectOpenHandles \
 	--config ./config/jest/jest.config.ts \
 	{{args}}
+
+# deprecated, we have our own watch command
+# command args:
+# 	cd ./packages/cli && \
+# 	{{npx}} onchange -i dist/**/* \
+# 	-k \
+# 	-- node ./dist/main.js {{args}}	
+
 
 
 # deprecated, use cli instead
