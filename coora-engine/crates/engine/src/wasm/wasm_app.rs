@@ -3,13 +3,14 @@ use anyhow::Result;
 use std::sync::{Arc, Mutex};
 use wasmi::*;
 pub type SharedStore<T> = Arc<Mutex<Store<T>>>;
-
-pub struct WasmApp<StoreT> {
-	pub store: SharedStore<StoreT>,
-	pub linker: Linker<StoreT>,
+use super::*;
+pub struct WasmApp<T> {
+	pub store: SharedStore<T>,
+	pub linker: Linker<T>,
 	pub instance: Option<Instance>,
 	pub module: Option<Module>,
 	pub engine: Engine,
+	pub memory: SharedMemory<T>,
 }
 
 impl<T> WasmApp<T> {
@@ -22,11 +23,15 @@ impl<T> WasmApp<T> {
 	}
 	pub fn new_with_engine(engine: Engine, initial_state: T) -> WasmApp<T> {
 		let store = Store::new(&engine, initial_state);
-		let linker = <Linker<T>>::new();
+		let mut linker = <Linker<T>>::new();
+		let store = Arc::new(Mutex::new(store));
+		let memory = WasmMem::<T>::new(&store, &mut linker);
+
 		WasmApp {
 			engine,
-			store: Arc::new(Mutex::new(store)),
+			store,
 			linker,
+			memory,
 			instance: None,
 			module: None,
 		}
@@ -38,15 +43,6 @@ impl<T> WasmApp<T> {
 	{
 		plugin.bind(self)?;
 		Ok(self)
-	}
-
-	pub fn get_memory(&mut self) -> Memory {
-		let mut store = self.store.lock().unwrap();
-		let mem =
-			wasmi::Memory::new(&mut *store, wasmi::MemoryType::new(2, Some(16)).unwrap()).unwrap();
-		self.linker.define("", "", mem).unwrap();
-		// self.linker.define("env", "memory", mem).unwrap();
-		mem
 	}
 
 	pub fn build(&mut self) -> &mut Self { self.build_with_wasm(WasmApp::<T>::default_wasm()) }

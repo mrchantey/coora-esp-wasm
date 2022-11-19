@@ -29,6 +29,7 @@ export const build = async (entry: string, target: BuildTarget = 'release') => {
 		'--use', 'abort=',
 		'--use', 'trace=',
 		'--use', 'seed=',
+		'--importMemory',
 		// '--use', 'abort=packages/examples/src/utility/env/abortStub',
 		// '--use', 'trace=packages/examples/src/utility/env/traceStub',
 		// '--use', 'seed=packages/examples/src/utility/env/seedStub',
