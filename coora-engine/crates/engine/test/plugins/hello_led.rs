@@ -5,7 +5,7 @@ sweet! {
 
 	let mut leds = TerminalLeds::new(2).as_shared();
 	let mut time = StdTime::new().as_shared();
-	let mut app = WasmApp::new(0);
+	let mut app = WasmApp::new();
 	app
 		.add_plugin(&mut leds).unwrap()
 		.add_plugin(&mut time).unwrap()

@@ -1,7 +1,7 @@
 use crate::*;
 use anyhow::Result;
 // use wasmi::*;
-pub fn build_hello_world() -> Result<WasmApp<u32>> {
+pub fn build_hello_world() -> Result<WasmApp> {
 	let _buf = include_wasm!("../../", "hello_world");
 
 
@@ -9,7 +9,7 @@ pub fn build_hello_world() -> Result<WasmApp<u32>> {
 }
 
 
-pub fn build_hello_led() -> Result<WasmApp<u32>> {
+pub fn build_hello_led() -> Result<WasmApp> {
 	//
 	todo!()
 }

@@ -1,5 +1,5 @@
-use crate::utils;
 use super::*;
+use crate::utils;
 use anyhow::anyhow;
 use convert_case::{Case, Casing};
 use proc_macro2::{Group, Ident, Literal, Span, TokenStream, TokenTree};
@@ -17,7 +17,7 @@ pub fn create_plugin_implementation(plugin: &ItemTrait) -> Result<TokenStream> {
 	let ident_plugin = &plugin.ident;
 
 	let ident_plugin_str = ident_plugin.to_string();
-	let body= utils::BindingFuncDefinition::from_trait(&plugin)?;
+	let body = utils::BindingFuncDefinition::from_trait(&plugin)?;
 	let body = body.iter();
 
 	let mut bind_stream = TokenStream::new();
@@ -33,7 +33,7 @@ pub fn create_plugin_implementation(plugin: &ItemTrait) -> Result<TokenStream> {
 			let #ident_mutex = std::sync::Arc::clone(&self.0);
 			app.linker
 				.define(#ident_plugin_str, #func_name_str, wasmi::Func::wrap(&mut *store,
-				move |_:wasmi::Caller<StoreT>,#full_inputs| { #ident_mutex.lock().unwrap().#func_ident(#named_inputs) }))
+				move |_:wasmi::Caller<coora_engine::UserState>,#full_inputs| { #ident_mutex.lock().unwrap().#func_ident(#named_inputs) }))
 				.unwrap();
 		)
 	}));
@@ -54,7 +54,7 @@ pub fn create_plugin_implementation(plugin: &ItemTrait) -> Result<TokenStream> {
 		impl<T> coora_engine::Plugin for #ident_deorphaned<T> where
 		T: #ident_plugin + std::marker::Send + 'static
 		{
-			fn bind<StoreT>(&mut self, app: &mut coora_engine::WasmApp<StoreT>)->anyhow::Result<()> {
+			fn bind(&mut self, app: &mut coora_engine::WasmApp)->anyhow::Result<()> {
 				let store = std::sync::Arc::clone(&app.store);
 				let mut store = store.lock().unwrap();
 				//TODO if let some instance, throw

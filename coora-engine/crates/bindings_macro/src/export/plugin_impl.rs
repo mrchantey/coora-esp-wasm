@@ -22,19 +22,19 @@ pub fn create_plugin_implementation(plugin: &ItemTrait) -> Result<TokenStream> {
 		let private_ident = Ident::new(format!("_{}", &f.sig.ident).as_str(), f.sig.span());
 		let result_t = utils::fn_result_to_typed(&f.sig.output).unwrap();
 		let public_ident = &f.sig.ident;
-		(f,public_ident, private_ident, input_t, result_t)
+		(f, public_ident, private_ident, input_t, result_t)
 	});
 	let ident_plugin_str = ident_plugin.to_string();
 
 	let mut definition_stream = TokenStream::from_iter(
 		body.clone()
-			.map(|(_,_, n_priv, t1, t2)| quote!(#n_priv:  wasmi::TypedFunc<(#t1),#t2>,)),
+			.map(|(_, _, n_priv, t1, t2)| quote!(#n_priv:  wasmi::TypedFunc<(#t1),#t2>,)),
 	);
 
 	let mut exposure_stream = TokenStream::new();
-	exposure_stream.append_all(body.clone().map(|(f,n_pub, n_priv, _, t2)| {
-		let full_inputs = TokenStream::from_iter(f.inputs.iter().map(|(a,b)|quote!(#a:#b,)));
-		let named_inputs = TokenStream::from_iter(f.inputs.iter().map(|(a,_)|quote!(#a,)));
+	exposure_stream.append_all(body.clone().map(|(f, n_pub, n_priv, _, t2)| {
+		let full_inputs = TokenStream::from_iter(f.inputs.iter().map(|(a, b)| quote!(#a:#b,)));
+		let named_inputs = TokenStream::from_iter(f.inputs.iter().map(|(a, _)| quote!(#a,)));
 		quote!(
 			pub fn #n_pub(&mut self,#full_inputs) -> #t2 {
 				self.#n_priv
@@ -47,7 +47,7 @@ pub fn create_plugin_implementation(plugin: &ItemTrait) -> Result<TokenStream> {
 
 
 	let mut creation_stream = TokenStream::new();
-	creation_stream.append_all(body.clone().map(|(f,n_pub,n_priv,t1,t2)| {
+	creation_stream.append_all(body.clone().map(|(f, n_pub, n_priv, t1, t2)| {
 		let n_pub_str = n_pub.to_string();
 
 		quote!(#n_priv: instance
@@ -65,18 +65,18 @@ pub fn create_plugin_implementation(plugin: &ItemTrait) -> Result<TokenStream> {
 	);
 
 	Ok(quote! {
-		pub struct #ident_struct<T> {
-			store: coora_engine::SharedStore<T>,
+		pub struct #ident_struct {
+			store: coora_engine::SharedStore,
 			#definition_stream
 		}
 
-		impl<T> #ident_struct<T>{
-			pub fn new(app: &mut WasmApp<T>) -> #ident_struct<T> {
+		impl #ident_struct{
+			pub fn new(app: &mut WasmApp) -> #ident_struct {
 				let instance = Some(app.instance).unwrap().unwrap();
 					// instance.
 				let store = std::sync::Arc::clone(&app.store);
 				let mut store_locked = store.lock().unwrap();
-				#ident_struct::<T> {
+				#ident_struct {
 					store:std::sync::Arc::clone(&app.store),
 					#creation_stream
 				}

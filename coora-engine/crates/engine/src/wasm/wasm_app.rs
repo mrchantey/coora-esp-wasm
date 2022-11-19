@@ -2,30 +2,41 @@ use crate::{include_wasm, Plugin};
 use anyhow::Result;
 use std::sync::{Arc, Mutex};
 use wasmi::*;
-pub type SharedStore<T> = Arc<Mutex<Store<T>>>;
+pub type SharedStore = Arc<Mutex<Store<UserState>>>;
+pub type SharedMemory = Arc<Mutex<Memory>>;
+
 use super::*;
-pub struct WasmApp<T> {
-	pub store: SharedStore<T>,
-	pub linker: Linker<T>,
+pub struct WasmApp {
+	pub store: SharedStore,
+	pub linker: Linker<UserState>,
 	pub instance: Option<Instance>,
 	pub module: Option<Module>,
 	pub engine: Engine,
-	pub memory: SharedMemory<T>,
+	pub memory: SharedMemory,
 }
 
-impl<T> WasmApp<T> {
-	pub fn recycle(self, initial_state: T) -> WasmApp<T> {
-		WasmApp::new_with_engine(self.engine, initial_state)
+impl WasmApp {
+	pub fn recycle(self) -> WasmApp { self.recycle_with(UserState::default()) }
+	pub fn recycle_with(self, initial_state: UserState) -> WasmApp {
+		WasmApp::new_with(self.engine, initial_state)
 	}
 
-	pub fn new(initial_state: T) -> WasmApp<T> {
-		Self::new_with_engine(WasmApp::<T>::default_engine(), initial_state)
+	pub fn new() -> WasmApp { Self::new_with(WasmApp::default_engine(), UserState::default()) }
+
+	pub fn create_memory(store: &SharedStore, linker: &mut Linker<UserState>) -> SharedMemory {
+		let mut store_locked = store.lock().unwrap();
+		let memory =
+			Memory::new(&mut *store_locked, MemoryType::new(2, Some(16)).unwrap()).unwrap();
+		linker.define("env", "memory", memory).unwrap();
+		Arc::new(Mutex::new(memory))
 	}
-	pub fn new_with_engine(engine: Engine, initial_state: T) -> WasmApp<T> {
+
+
+	pub fn new_with(engine: Engine, initial_state: UserState) -> WasmApp {
 		let store = Store::new(&engine, initial_state);
-		let mut linker = <Linker<T>>::new();
+		let mut linker = <Linker<UserState>>::new();
 		let store = Arc::new(Mutex::new(store));
-		let memory = WasmMem::<T>::new(&store, &mut linker);
+		let memory = Self::create_memory(&store, &mut linker);
 
 		WasmApp {
 			engine,
@@ -45,7 +56,7 @@ impl<T> WasmApp<T> {
 		Ok(self)
 	}
 
-	pub fn build(&mut self) -> &mut Self { self.build_with_wasm(WasmApp::<T>::default_wasm()) }
+	pub fn build(&mut self) -> &mut Self { self.build_with_wasm(WasmApp::default_wasm()) }
 
 	pub fn build_with_wasm(&mut self, stream: impl Read) -> &mut Self {
 		let module = Module::new(&self.engine, stream).unwrap();
