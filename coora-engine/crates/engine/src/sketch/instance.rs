@@ -13,6 +13,11 @@ pub struct SketchInstance {
 
 
 impl SketchInstance {
+	#[rustfmt::skip]
+	pub fn default_wasm() -> &'static [u8] { 
+		include_wasm!("../../../", "hello_led") 
+	}
+
 	pub fn build_with_default_sketch(
 		engine: &mut WasmEngine,
 		builder: SketchBuilder,

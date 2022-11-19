@@ -8,7 +8,11 @@ sweet! {
 	let mut engine = WasmEngine::new();
 
 	let mut app = WasmInstanceBuilder::new(&mut engine, 0);
-	app.bind(&mut leds).bind(&mut time);
+	#[rustfmt::skip]
+	app
+		.bind(&mut leds)
+		.bind(&mut time);
+		// .build(&mut engine, SketchInstance::default_wasm());
 	let mut app = SketchInstance::build_with_default_sketch(&mut engine,app);
 
 	test "millis" {
