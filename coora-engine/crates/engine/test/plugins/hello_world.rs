@@ -1,9 +1,9 @@
 use crate::*;
-use coora_engine::*;
+// use coora_engine::*;
 
 sweet! {
 
-	let mut _instance = build_hello_world().unwrap();
+	// let mut _instance = build_hello_world().unwrap();
 
 	test "exports" {
 		// let add = instance.get_export::<(u64,u64),u64>("add");

@@ -11,16 +11,15 @@ pub trait MathPlugin {
 }
 
 #[coora_export]
-pub trait MyExports{
+pub trait MyExports {
 	fn run();
 }
 
 sweet! {
 	it "works" {
-		let mut engine = WasmEngine::new();
-		let mut app = WasmApp::new(&mut engine, 0);
-	
-		app.build(&mut engine);
+		let mut _app = WasmApp::new(0);
+
+		// app.build();
 
 
 	}

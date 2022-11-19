@@ -12,7 +12,8 @@ pub fn fn_result_to_typed(item: &ReturnType) -> Result<TokenStream> {
 				let ident = rtype.path.segments.first().unwrap().clone().ident;
 				Ok(quote!(#ident))
 			} else {
-				Err(Error::new(item.span(), "Hmmm whaaat."))
+				// Err(Error::new(item.span(), "Hmmm whaaat."))
+				Ok(quote!(()))
 			}
 		}
 		ReturnType::Default => Ok(quote!(())),

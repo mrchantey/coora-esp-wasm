@@ -11,18 +11,14 @@ sweet! {
 		.add_plugin(&mut time).unwrap()
 		.build();
 
-	let mut sketch = SketchInstance::new(&mut app);
+		let mut sketch = SketchInstance::new(&mut app);
 
-	test "millis" {
-		let a = sketch._millis();
-		forky_core::utility::sleep(1);
-		let b = sketch._millis();
-		expect((b - a) as i32).to_be_at_least(1000)?;
-	}
-
-
-	test "leds"{
-		sketch.run();
+		test "recycle" {
+		let mut app = app.recycle(0);
+			app
+				.add_plugin(&mut leds).unwrap()
+				.add_plugin(&mut time).unwrap()
+				.build();
 	}
 
 }

@@ -24,6 +24,14 @@ export const build = async (entry: string, target: BuildTarget = 'release') => {
 		'--target', target,
 		'-o', names.wasm,
 		'-t', names.wat,
+		'--disable', 'bulk-memory',
+		//THIS IS BAD, we should implement abort!
+		'--use', 'abort=',
+		'--use', 'trace=',
+		'--use', 'seed=',
+		// '--use', 'abort=packages/examples/src/utility/env/abortStub',
+		// '--use', 'trace=packages/examples/src/utility/env/traceStub',
+		// '--use', 'seed=packages/examples/src/utility/env/seedStub',
 		// --stackSize 65536 \
 		// --lowMemoryLimit \
 	]
