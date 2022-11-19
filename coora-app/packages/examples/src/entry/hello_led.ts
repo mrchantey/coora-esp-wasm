@@ -10,7 +10,7 @@ export function start(): void{
 
 export function run(): void{
 	// const a = time.elapsed() as i32 / 100
-	ledStrip.setLeds(8, 8, 0, 2)
+	ledStrip.setLeds(0, 0, 44, 0)
 	ledStrip.show()
 }
 

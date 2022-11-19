@@ -71,8 +71,6 @@ set key value:
 ping:
 	curl http://{{ip}}/ping
 
-wasm url crate:
-
 deploy name *args:
 	curl http://{{ip}}/sketch \
 	-X POST \

@@ -1,4 +1,3 @@
-
 use crate::*;
 use anyhow::Result;
 use coora_engine::*;
@@ -7,16 +6,20 @@ use esp_idf_hal::{
     rmt::CHANNEL0,
 };
 
-pub fn default_sketch() -> Result<SketchInstance> {
+pub fn default_sketch() -> Result<SketchInstance<u32>> {
     let (mut time, mut leds) = default_peripherals()?;
     let mut engine = WasmEngine::new();
 
-    let mut app = WasmInstanceBuilder::new(&mut engine, 0);
-    app.bind(&mut leds).bind(&mut time);
-    let app = SketchInstance::build_with_default_sketch(&mut engine, app);
+    let mut app = WasmApp::new(&mut engine, 0);
+    app.add_plugin(&mut leds)
+        .unwrap()
+        .add_plugin(&mut time)
+        .unwrap()
+        .build(&mut engine);
 
-    // let instance = SketchInstance::from_default(&leds);
-    Ok(app)
+    let sketch = SketchInstance::new(&mut app);
+
+    Ok(sketch)
 }
 
 pub fn default_peripherals() -> Result<(
