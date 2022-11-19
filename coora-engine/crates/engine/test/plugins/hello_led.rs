@@ -12,7 +12,7 @@ sweet! {
 		.add_plugin(&mut time).unwrap()
 		.build(&mut engine);
 
-	let mut sketch = SketchyInstance::new(&mut app);
+	let mut sketch = SketchInstance::new(&mut app);
 
 	test "millis" {
 		let a = sketch._millis();
