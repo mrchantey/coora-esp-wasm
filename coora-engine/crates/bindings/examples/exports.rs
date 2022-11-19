@@ -9,5 +9,6 @@ fn main() {
 pub trait Foo {
 	fn run();
 	fn get_millis() -> u64;
+	// fn
 	fn add(a: u32, b: u64) -> u32;
 }

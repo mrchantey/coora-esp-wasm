@@ -12,6 +12,8 @@ sweet! {
 		.add_plugin(&mut time).unwrap()
 		.build(&mut engine);
 
+	// app.store.lock().unwrap().state_mut();
+
 	let mut sketch = SketchInstance::new(&mut app);
 
 	test "millis" {

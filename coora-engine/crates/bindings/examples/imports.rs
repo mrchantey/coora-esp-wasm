@@ -18,6 +18,9 @@ struct MyFoo;
 // impl Shared for MyFoo {}
 impl Foo for MyFoo {
 	fn do_thing(&mut self) {}
+	fn log(&self,_ptr: u32, _len: u32) {
+		// self.st
+	}
 	fn do_other_thing(&self, _a: u32) {}
 	fn add(&self, a: u32) -> u32 { a }
 }
@@ -25,6 +28,7 @@ impl Foo for MyFoo {
 #[coora_import]
 trait Foo {
 	fn do_thing(&mut self);
+	fn log(&self,ptr: u32, len: u32);
 	fn do_other_thing(&self, a: u32);
 	fn add(&self, a: u32) -> u32;
 }
