@@ -125,8 +125,8 @@ fn get_ref_conversions(func: &ParsedFunc) -> String {
 		let str_name = format!("{name_ptr}_str");
 		format!("
 	const {str_name} = String.UTF8.encode({name})
-	let {name_ptr} = changetype<usize>(${str_name})
-	let {name_len} = {str_name}.byteLength
+	const {name_ptr} = changetype<usize>({str_name}) as u32
+	const {name_len} = {str_name}.byteLength as u32
 		")
 	}).collect();
 	reference_conversions.join("")
