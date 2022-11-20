@@ -19,3 +19,6 @@ fs_extra = "1.2.0"
 [dev-dependencies]
 wasmi = {workspace = true}
 coora_engine = {workspace = true}
+
+[features]
+bindings = []
