@@ -1,9 +1,10 @@
 use std::sync::{Arc, Mutex};
 
 use anyhow::Result;
-use coora_engine::{include_wasm, AdderInstance, SketchInstance, WasmApp};
+use coora_engine::{SketchInstance, WasmApp};
 use embedded_svc::http::server::registry::Registry;
 use esp_idf_svc::wifi::EspWifi;
+// use esp_idf_hal::me
 
 use crate::*;
 
@@ -22,36 +23,33 @@ impl SketchServer {
             // .build_with_wasm(&include_wasm!("../../", "hello_world")[..]);
             .build();
 
-        // let mut adder = AdderInstance::new(&mut app);
-        // let result = adder.add(1, 2);
-        // println!("{result}");
-        // let mut sketch = SketchInstance::new(&mut app);
-        // sketch.start();
-        // let buffer = Arc::new(Mutex::new(SketchBuffer::new()));
-        // // let engine = Arc::clone(&sketch);
-        // let buffer2 = Arc::clone(&buffer);
-        // server.handle_post("/sketch", move |mut request, response| {
-        //     let mut buffer = buffer2.lock().unwrap();
-        //     buffer.from_request(&mut request)?;
-        //     println!("\nsketch received! {}b", buffer.len);
+        let mut sketch = SketchInstance::new(&mut app);
+        sketch.start();
+        let buffer = Arc::new(Mutex::new(SketchBuffer::new()));
+        // let engine = Arc::clone(&sketch);
+        let buffer2 = Arc::clone(&buffer);
+        server.handle_post("/sketch", move |mut request, response| {
+            let mut buffer = buffer2.lock().unwrap();
+            buffer.from_request(&mut request)?;
+            println!("\nsketch received! {}b", buffer.len);
 
-        //     response.ok()?;
-        //     Ok(())
-        // })?;
+            response.ok()?;
+            Ok(())
+        })?;
         loop {
-            // let mut buffer = buffer.lock().unwrap();
-            // if buffer.dirty {
-            //     //TODO recycle engine
-            //     let mut app = WasmApp::new();
-            //     app.add_plugin(&mut leds)?;
-            //     app.add_plugin(&mut time)?;
-            //     app.build_with_wasm(&buffer.buffer[..buffer.len]);
+            let mut buffer = buffer.lock().unwrap();
+            if buffer.dirty {
+                //TODO recycle engine
+                let mut app = WasmApp::new();
+                app.add_plugin(&mut leds)?;
+                app.add_plugin(&mut time)?;
+                app.build_with_wasm(&buffer.buffer[..buffer.len]);
 
-            //     sketch = SketchInstance::new(&mut app);
-            //     sketch.start();
-            //     buffer.dirty = false;
-            // }
-            // sketch.run();
+                sketch = SketchInstance::new(&mut app);
+                sketch.start();
+                buffer.dirty = false;
+            }
+            sketch.run();
             utility::sleep_ms(16);
         }
     }

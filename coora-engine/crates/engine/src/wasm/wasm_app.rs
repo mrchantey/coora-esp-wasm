@@ -79,7 +79,8 @@ impl WasmApp {
 		//https://github.com/rustwasm/wasm-pack/issues/479
 		//IMPORTANT - also set stack size compiler flag in .cargo/config.toml
 		// config.wasm_features().bulk_memory = true;
-		let mut config = Config::default();
+
+		// let mut config = Config::default();
 		// config.set_stack_limits(StackLimits::new(256, 512, 128).unwrap());
 		// Engine::new(&config)
 		Engine::default()

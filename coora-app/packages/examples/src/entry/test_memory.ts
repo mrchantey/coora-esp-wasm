@@ -21,7 +21,7 @@ export function getString(): u32{
 	return changetype<usize>(str) as u32
 }
 export function printHello(): void{
-	const str = 'hello from wasm, im over here!'
+	const str = '🤘🤘party on wayne!🤘🤘'
 	console.log(str)
 	// println(str)
 }
