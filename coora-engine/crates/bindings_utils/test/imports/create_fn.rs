@@ -1,5 +1,5 @@
 use crate::utility::print_token_stream_in_main;
-use coora_bindings_utils::{func_args::parse_func, import::create_func};
+use coora_bindings_utils::{utils_func::parse_func, import::create_func};
 use quote::quote;
 use sweet::*;
 use syn::*;

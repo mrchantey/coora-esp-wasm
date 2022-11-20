@@ -17,15 +17,11 @@ pub struct PrimitiveArg {
 	pub ty: Ident,
 	pub index: usize,
 }
-// #[derive(Clone)]
-// pub struct EitherArg {
-// 	pub name: Ident,
-// 	pub ty: Ident,
-// 	pub is_reference: bool,
-// }
-
-
-pub enum Arg {
-	Reference(ReferenceArg),
-	Primitive(PrimitiveArg),
+#[derive(Clone)]
+pub struct Arg {
+	pub index: usize,
+	pub name: Ident,
+	pub pat_ty: PatType,
+	pub ty: Ident,
+	// pub is_reference: bool,
 }

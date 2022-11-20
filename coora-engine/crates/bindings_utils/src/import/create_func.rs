@@ -1,4 +1,4 @@
-use crate::func_args::*;
+use crate::utils_func::*;
 // extern crate proc_macro;
 use crate::utils::{pat_to_ident, type_path_to_ident, type_to_ident};
 use proc_macro2::TokenStream;
@@ -53,7 +53,7 @@ pub fn create_func(plugin_name:&str,ParsedFunc { args, sig,index }: &ParsedFunc)
 	let ident_mutex = Ident::new(format!("self{index}").as_str(), sig.span());
 	let ident_mem = Ident::new(format!("mem{index}").as_str(), sig.span());
 	// let full_inputs = TokenStream::from_iter(together.iter().map(|(a,b)|quote!(#a:#b,)));
-	let named_inputs = TokenStream::from_iter(together.iter().map(|(a,b)|quote!(#a,)));
+	let named_inputs = TokenStream::from_iter(together.iter().map(|Arg{name,..}|quote!(#name,)));
 
 	// quote!(
 

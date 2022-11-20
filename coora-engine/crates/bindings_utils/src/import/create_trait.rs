@@ -1,5 +1,5 @@
 use super::*;
-use crate::{func_args::parse_trait_funcs, utils};
+use crate::{utils_func::parse_trait_funcs, utils};
 use anyhow::anyhow;
 use convert_case::{Case, Casing};
 use proc_macro2::{Group, Ident, Literal, Span, TokenStream, TokenTree};

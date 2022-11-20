@@ -6,6 +6,7 @@ pub fn type_to_ident(ty: &Type) -> Result<Ident> {
 	match ty {
 		Type::Path(ty) => type_path_to_ident(ty),
 		Type::Slice(ty) => type_to_ident(&ty.elem),
+		Type::Reference(ty) => type_to_ident(&ty.elem),
 		_ => Err(Error::new(ty.span(), "Expected a path type")),
 	}
 }
@@ -19,8 +20,8 @@ pub fn type_path_to_ident(ty: &TypePath) -> Result<Ident> {
 	}
 }
 
-pub fn pat_to_ident(pat: &PatType) -> Result<Ident> {
-	if let Pat::Ident(ident) = &*pat.pat {
+pub fn pat_to_ident(pat: &Pat) -> Result<Ident> {
+	if let Pat::Ident(ident) = &*pat {
 		Ok(ident.ident.clone())
 	} else {
 		Err(Error::new(pat.span(), "Expected an identifer"))

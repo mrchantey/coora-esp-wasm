@@ -31,7 +31,7 @@ impl Parse for WasmImport {
 		let name = &plugin_trait.ident;
 		let name_str = name.to_string();
 
-		let typescript_bindings = generate_typescript_bindings(&plugin_trait)?;
+		let typescript_bindings = create_typescript_bindings(&plugin_trait)?;
 		let rust_bindings = generate_rust_bindings(&plugin_trait);
 		let implementation = create_trait(&plugin_trait)?;
 
