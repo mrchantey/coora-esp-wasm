@@ -1,4 +1,5 @@
 pub use coora_bindings::*;
+pub use wasmi;
 
 mod wasm;
 pub use wasm::*;

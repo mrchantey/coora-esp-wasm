@@ -1,11 +1,11 @@
-use super::*;
+use crate::func_args::*;
 // extern crate proc_macro;
 use crate::utils::{pat_to_ident, type_path_to_ident, type_to_ident};
 use proc_macro2::TokenStream;
 use quote::*;
 use syn::{*, spanned::Spanned};
 
-pub fn create_import_func(plugin_name:&str,ParsedFunc { args, sig,index }: &ParsedFunc) -> parse::Result<TokenStream> {
+pub fn create_func(plugin_name:&str,ParsedFunc { args, sig,index }: &ParsedFunc) -> parse::Result<TokenStream> {
 	let ParsedFuncArgs {
 		together,
 		primitive,
@@ -38,7 +38,7 @@ pub fn create_import_func(plugin_name:&str,ParsedFunc { args, sig,index }: &Pars
 			let bytes = quote!(let #ident_bytes = &memory.data(ctx)
 				[#name_ptr as usize..(#name_ptr + #name_len) as usize];);
 			if ty.to_string() == "str" {
-				quote!(#bytes let #name = str::from_utf8(&#ident_bytes).unwrap();
+				quote!(#bytes let #name = std::str::from_utf8(&#ident_bytes).unwrap();
 				)
 			} else {
 				//only i32 for now,TODO calculate int length
@@ -50,7 +50,7 @@ pub fn create_import_func(plugin_name:&str,ParsedFunc { args, sig,index }: &Pars
 
 	let func_name_str = sig.ident.to_string();
 	let func_ident = Ident::new(func_name_str.as_str(),sig.span());
-	let ident_mutex = Ident::new(format!("self{}",index).as_str(), sig.span());
+	let ident_mutex = Ident::new(format!("self{index}").as_str(), sig.span());
 	let ident_mem = Ident::new(format!("mem{index}").as_str(), sig.span());
 	// let full_inputs = TokenStream::from_iter(together.iter().map(|(a,b)|quote!(#a:#b,)));
 	let named_inputs = TokenStream::from_iter(together.iter().map(|(a,b)|quote!(#a,)));
@@ -59,8 +59,7 @@ pub fn create_import_func(plugin_name:&str,ParsedFunc { args, sig,index }: &Pars
 
 			// )
 	let func_pre = if contains_refs {
-
-		quote!(let #ident_mem = Arc::clone(&app.memory);)
+		quote!(let #ident_mem = std::sync::Arc::clone(&app.memory);)
 	} else {
 		quote!()
 	};
@@ -68,19 +67,19 @@ pub fn create_import_func(plugin_name:&str,ParsedFunc { args, sig,index }: &Pars
 	let body_pre = if contains_refs {
 		quote!(
 			let memory = #ident_mem.lock().unwrap();
-			let ctx = caller.as_context();
+			let ctx = _caller.as_context();
 		)
 	} else {
 		quote!()
 	};
 		
 	let func = quote!(
-		let #ident_mutex = std::sync::Arc::clone(&sel0);
+		let #ident_mutex = std::sync::Arc::clone(&self.0);
 		#func_pre
 
 		app.linker
 			.define(#plugin_name, #func_name_str, wasmi::Func::wrap(&mut *store,
-				move |_:wasmi::Caller<coora_engine::UserState>,#func_args_ref #func_args_pri| { 
+				move |_caller:wasmi::Caller<coora_engine::UserState>,#func_args_ref #func_args_pri| { 
 					#body_pre
 					#ref_body
 					#ident_mutex.lock().unwrap().#func_ident(#named_inputs) 

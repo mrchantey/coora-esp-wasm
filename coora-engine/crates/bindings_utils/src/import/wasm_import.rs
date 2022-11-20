@@ -33,7 +33,7 @@ impl Parse for WasmImport {
 
 		let typescript_bindings = generate_typescript_bindings(&plugin_trait)?;
 		let rust_bindings = generate_rust_bindings(&plugin_trait);
-		let implementation = create_plugin_implementation(&plugin_trait)?;
+		let implementation = create_trait(&plugin_trait)?;
 
 		let out = quote! {
 				#plugin_trait
