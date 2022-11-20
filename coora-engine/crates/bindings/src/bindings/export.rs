@@ -9,7 +9,7 @@ pub fn export_and_collect<T>(out_dir: &PathBuf, write_file: T) -> Result<Vec<&Co
 where
 	T: Fn(&CooraPluginBindings) -> (PathBuf, &str),
 {
-	fs::remove_dir_all(out_dir)?;
+	fs::remove_dir_all(out_dir).unwrap_or(());
 	fs::create_dir_all(out_dir)?;
 	let mut plugins = vec![];
 	for plugin in inventory::iter::<CooraPluginBindings> {

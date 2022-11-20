@@ -89,7 +89,7 @@ fn get_args_internal(func:&ParsedFunc)->String{
 	}
 ).collect();
 let mut next:Vec<_> = func.args.primitive.iter()
-.map(|f| format!("{}:{}", f.name.to_string(), f.ty.to_string())).collect();
+.map(|f| format!("{}: {}", f.name.to_string(), f.ty.to_string())).collect();
 args_internal.append(&mut next);
 args_internal.join(", ")
 }
@@ -113,7 +113,7 @@ fn get_args_external(func: &ParsedFunc) -> String {
 		.args
 		.together
 		.iter()
-		.map(|f| format!("{}:{}", f.name.to_string(), arg_to_ts(f)))
+		.map(|f| format!("{}: {}", f.name.to_string(), arg_to_ts(f)))
 		.collect();
 	args_external.join(", ")
 }
@@ -124,9 +124,9 @@ fn get_ref_conversions(func: &ParsedFunc) -> String {
 		.map(|(i,ReferenceArg{name,name_ptr,name_len,..})|{
 		let str_name = format!("{name_ptr}_str");
 		format!("
-	const {str_name} = String.UTF8.encode({name});
-	let {name_ptr} = changetype<usize>(${str_name});
-	let {name_len} = {str_name}.byteLength;
+	const {str_name} = String.UTF8.encode({name})
+	let {name_ptr} = changetype<usize>(${str_name})
+	let {name_len} = {str_name}.byteLength
 		")
 	}).collect();
 	reference_conversions.join("")

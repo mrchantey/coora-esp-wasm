@@ -20,5 +20,6 @@ fs_extra = "1.2.0"
 wasmi = {workspace = true}
 coora_engine = {workspace = true}
 
+#not working..
 [features]
 bindings = []
