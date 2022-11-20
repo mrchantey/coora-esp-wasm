@@ -1,6 +1,10 @@
-use syn::{parse_macro_input,Result, parse::{Parse, ParseStream}};
-use quote::quote;
+use syn::{
+	parse::{Parse, ParseStream},
+	parse_macro_input, Result,
+};
+extern crate proc_macro;
 use super::*;
+use quote::quote;
 pub struct WasmExport {
 	pub out: proc_macro::TokenStream,
 }
@@ -23,7 +27,8 @@ impl Parse for WasmExport {
 		let out = quote!(
 			#plugin_trait
 			#export_impl
-		).into();
+		)
+		.into();
 		Ok(WasmExport { out })
 	}
 }

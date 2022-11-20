@@ -1,8 +1,31 @@
 use proc_macro2::{Ident, TokenStream};
 use quote::quote;
-use syn::{
-	parse::Result, spanned::Spanned, Error, FnArg, Pat, PatIdent, PathSegment, ReturnType, Type,
-};
+use syn::{parse::Result, spanned::Spanned, *};
+
+pub fn type_to_ident(ty: &Type) -> Result<Ident> {
+	match ty {
+		Type::Path(ty) => type_path_to_ident(ty),
+		Type::Slice(ty) => type_to_ident(&ty.elem),
+		_ => Err(Error::new(ty.span(), "Expected a path type")),
+	}
+}
+
+pub fn type_path_to_ident(ty: &TypePath) -> Result<Ident> {
+	let first = ty.path.segments.first();
+	if let Some(first) = first {
+		Ok(first.clone().ident)
+	} else {
+		Err(Error::new(ty.span(), "Expected a path segment"))
+	}
+}
+
+pub fn pat_to_ident(pat: &PatType) -> Result<Ident> {
+	if let Pat::Ident(ident) = &*pat.pat {
+		Ok(ident.ident.clone())
+	} else {
+		Err(Error::new(pat.span(), "Expected an identifer"))
+	}
+}
 
 
 pub fn fn_result_to_typed(item: &ReturnType) -> Result<TokenStream> {

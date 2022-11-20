@@ -21,9 +21,9 @@ impl StdSerial {
 }
 
 impl Serial for StdSerial {
-	fn println(&mut self, ptr: u32, len: u32) {
+	fn println(&mut self, _ptr: u32, _len: u32) {
 		// println!("here we are");
-		let memory = &self.memory.lock().unwrap();
+		let _memory = &self.memory.lock().unwrap();
 		// let store = memory.store.lock().unwrap();
 		// let a = &memory.memory.data(&*store)[6800..6815];
 		// //TODO print

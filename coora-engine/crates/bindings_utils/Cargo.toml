@@ -1,5 +1,5 @@
 [package]
-name = "coora_bindings_macro"
+name = "coora_bindings_utils"
 version = {workspace=true}
 edition = {workspace=true}
 authors = {workspace=true}
@@ -18,7 +18,12 @@ inventory = {workspace = true}
 extend = {workspace = true}
 anyhow = {workspace = true}
 convert_case = {workspace=true}
-coora_bindings_utils = {workspace=true}
 
-[lib]
-proc-macro = true
+[dev-dependencies]
+sweet = {workspace = true}
+prettyplease = "0.1.21"
+
+[[test]]
+name = "sweet"
+path = "test/sweet.rs"
+harness = false

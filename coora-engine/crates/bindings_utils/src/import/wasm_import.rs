@@ -1,4 +1,7 @@
 use super::*;
+// use std:;
+extern crate proc_macro;
+
 use quote::quote;
 use syn::{
 	parse::{Parse, ParseStream, Result},
