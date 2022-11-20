@@ -1,13 +1,11 @@
-use std::fmt::format;
-
 use crate::utils_func::{parse_trait_funcs, Arg, ParsedFunc, ReferenceArg};
 use convert_case::{Case, Casing};
 use proc_macro2::Span;
+use std::fmt::format;
 use syn::{
 	parse::Result, spanned::Spanned, Error, FnArg, ItemTrait, LitStr, Pat, ReturnType, TraitItem,
 	Type,
 };
-
 
 #[rustfmt::skip]
 pub fn rust_method_to_ts(plugin_name: &str, func: &ParsedFunc) -> Result<String> {

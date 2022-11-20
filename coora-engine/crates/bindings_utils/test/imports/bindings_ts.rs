@@ -1,5 +1,3 @@
-use std::fmt::format;
-
 use coora_bindings_utils::import::create_typescript_bindings_str;
 use quote::quote;
 use sweet::*;
@@ -18,7 +16,6 @@ sweet! {
 		let stream:ItemTrait = parse2(stream)?;
 
 		let ts = create_typescript_bindings_str(&stream)?;
-		// let ts = format!("{}",ts);
 		println!("{ts}");
 		// let stream = create_trait(&stream)?;
 		// print_token_stream_in_main(quote!(#ts))?;
