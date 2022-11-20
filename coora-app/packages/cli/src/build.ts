@@ -16,8 +16,10 @@ export const build = async (entry: string, target: BuildTarget = 'release') => {
 	if (exists instanceof Error)
 		return exists
 	
+	
 	const now = performance.now()
-	const names = parseBuildFileNames(entry, target)
+	const names = parseBuildFileNames(entry, target)	
+	
 	const args = [
 		entry,
 		'--config', './config/assemblyscript/asconfig.json',
@@ -25,16 +27,18 @@ export const build = async (entry: string, target: BuildTarget = 'release') => {
 		'-o', names.wasm,
 		'-t', names.wat,
 		'--disable', 'bulk-memory',
+		// '--importMemory',
+		// '--lowMemoryLimit',
+		// '--runtime', 'stub', //this will have big consequences
+		// '--stackSize', '65536',
+		// '--initialMemory 30',
 		//THIS IS BAD, we should implement abort!
 		'--use', 'abort=',
 		'--use', 'trace=',
 		'--use', 'seed=',
-		'--importMemory',
 		// '--use', 'abort=packages/examples/src/utility/env/abortStub',
 		// '--use', 'trace=packages/examples/src/utility/env/traceStub',
 		// '--use', 'seed=packages/examples/src/utility/env/seedStub',
-		// --stackSize 65536 \
-		// --lowMemoryLimit \
 	]
 	const result = await run(args)
 		.catch((err: Error) => err)
