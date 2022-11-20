@@ -11,6 +11,14 @@ pub struct ParsedFuncArgs {
 	pub reference: Vec<ReferenceArg>,
 }
 
+fn is_ref(ty: &Type) -> bool {
+	if let Type::Reference(ty) = ty {
+		true
+	} else {
+		false
+	}
+}
+
 pub fn parse_func_args(sig: &Signature) -> syn::parse::Result<ParsedFuncArgs> {
 	let together: Vec<_> = sig
 		.inputs
@@ -20,8 +28,10 @@ pub fn parse_func_args(sig: &Signature) -> syn::parse::Result<ParsedFuncArgs> {
 			FnArg::Typed(a) => {
 				let name = pat_to_ident(&*a.pat).unwrap();
 				let ty = type_to_ident(&*a.ty).unwrap();
+				let is_reference = is_ref(&*a.ty);
 				let i = Arg {
 					index,
+					is_reference,
 					name,
 					ty,
 					pat_ty: a.clone(),

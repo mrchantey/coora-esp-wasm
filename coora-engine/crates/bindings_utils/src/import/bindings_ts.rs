@@ -1,4 +1,7 @@
-use crate::utils_func::{parse_trait_funcs, Arg, ParsedFunc, ReferenceArg};
+use crate::{
+	utils::type_to_ident,
+	utils_func::{parse_trait_funcs, Arg, ParsedFunc, ReferenceArg},
+};
 use convert_case::{Case, Casing};
 use proc_macro2::Span;
 use std::fmt::format;
@@ -68,7 +71,8 @@ pub fn create_typescript_bindings(plugin: &ItemTrait) -> Result<LitStr> {
 
 fn get_return_type(func: &ParsedFunc) -> Result<String> {
 	if let ReturnType::Type(_rarrow, rtype) = &func.sig.output {
-		rust_type_to_ts(&**rtype)
+		let ident = type_to_ident(rtype)?;
+		Ok(ident.to_string())
 	} else {
 		Ok(format!("void"))
 	}
@@ -109,7 +113,7 @@ fn get_args_external(func: &ParsedFunc) -> String {
 		.args
 		.together
 		.iter()
-		.map(|f| format!("{}:{}", f.name.to_string(), f.ty.to_string()))
+		.map(|f| format!("{}:{}", f.name.to_string(), arg_to_ts(f)))
 		.collect();
 	args_external.join(", ")
 }
@@ -128,34 +132,14 @@ fn get_ref_conversions(func: &ParsedFunc) -> String {
 	reference_conversions.join("")
 }
 
-
-
-pub fn rust_pat_to_str(pat: &Pat) -> Result<String> {
-	if let Pat::Ident(pat) = pat {
-		Ok(pat.ident.to_string())
+pub fn arg_to_ts(arg: &Arg) -> String {
+	if arg.is_reference {
+		if arg.ty.to_string() == "str" {
+			String::from("string")
+		} else {
+			arg.ty.to_string()
+		}
 	} else {
-		Err(Error::new(pat.span(), "Expected identifier"))
+		arg.ty.to_string()
 	}
 }
-
-pub fn rust_type_to_ts(rtype: &Type) -> Result<String> {
-	if let Type::Path(rt) = rtype {
-		Ok(rt.path.segments.first().unwrap().ident.to_string())
-	} else {
-		Err(Error::new(
-			rtype.span(),
-			"Currently only primitives are allowed",
-		))
-	}
-}
-
-/*
-//@ts-ignore externam
-@external("Serial", "println")
-declare function _println(ptr: usize, len: i32): void;
-
-export function println(str: string): void {
-	const out = String.UTF8.encode(str)
-	_println(changetype<usize>(out), out.byteLength)
-}
-*/

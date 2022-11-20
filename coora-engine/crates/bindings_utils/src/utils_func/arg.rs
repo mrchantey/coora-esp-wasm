@@ -23,5 +23,5 @@ pub struct Arg {
 	pub name: Ident,
 	pub pat_ty: PatType,
 	pub ty: Ident,
-	// pub is_reference: bool,
+	pub is_reference: bool,
 }
