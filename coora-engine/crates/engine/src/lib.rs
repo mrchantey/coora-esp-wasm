@@ -3,8 +3,10 @@ pub use wasmi;
 
 mod wasm;
 pub use wasm::*;
-mod plugins;
-pub use plugins::*;
+mod exports;
+pub use exports::*;
+mod imports;
+pub use imports::*;
 mod include_wasm;
 pub use include_wasm::*;
 mod factories;

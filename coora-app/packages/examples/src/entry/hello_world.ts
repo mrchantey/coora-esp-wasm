@@ -1,14 +1,7 @@
 //@ts-ignore external
-@external("host", "howdy")
-export declare function howdy(val: i32): void
+// @external("host", "howdy")
+// export declare function howdy(val: i32): void
 
-export function hello(): void{
-	const a = 2
-	const b = 10
-	const c = add(a, b)
-	howdy(a + b)
-}
-
-export function add(a: u64, b: u64): u64{
+export function add(a: i32, b: i32): i32{
 	return a + b
 }

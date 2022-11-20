@@ -38,8 +38,8 @@ impl Parse for WasmImport {
 		let out = quote! {
 				#plugin_trait
 				//TODO better flag
-				// #[cfg(any(target_os="windows",target_os="linux",target_os="macos"))]
 				// #[cfg(feature="bindings")]
+				#[cfg(any(target_os="windows",target_os="linux",target_os="macos"))]
 				inventory::submit!(coora_bindings::CooraPluginBindings {
 					name: #name_str,
 					typescript_bindings: #typescript_bindings,

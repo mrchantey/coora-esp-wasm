@@ -5,8 +5,9 @@ use crate::*;
 pub trait Console {
 	fn log(&mut self, val: &str);
 }
-
+#[derive(Default)]
 pub struct StdConsole {}
+
 
 impl Console for StdConsole {
 	fn log(&mut self, val: &str) {

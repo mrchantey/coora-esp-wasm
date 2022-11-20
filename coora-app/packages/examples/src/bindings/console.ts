@@ -5,10 +5,15 @@
 declare function _log(val_ptr: u32, val_len: u32): void;			
 export function log(val: string): void {
 	
-	const val_ptr_str = String.UTF8.encode(val)
-	const val_ptr = changetype<usize>(val_ptr_str) as u32
-	const val_len = val_ptr_str.byteLength as u32
+	// const val_ptr_str = String.UTF8.encode(val)
+	// const val_ptr_str = new ArrayBuffer(10)
+	// const arr = Uint8Array.wrap(val_ptr_str)
+	// arr[0] = 0
+	// arr[1] = 1
+	// arr[2] = 2
+	// const val_ptr = changetype<usize>(val_ptr_str) as u32
+	// const val_len = val_ptr_str.byteLength as u32
 		
-	_log(val_ptr, val_len)
+	// _log(val_ptr, val_len)
 }
 	
