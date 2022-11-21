@@ -8,9 +8,10 @@ export const appendPingCommand = (parent: Command) => {
 		.option('-f', 'something')
 	// .arg
 	// .argument(flags, description, fn)
-	cmd.action(async (ip, options) => 		
+	cmd.action(async (ip, options) => {
 		consoleErrorOr(await ping(ip), ({ duration }) =>
-			`PING - ok - ${duration?.toFixed(0)} ms`))
+			`PING - ok - ${duration?.toFixed(0)} ms`)
+	})
 }
 
 export const ping = async (ip: string) => {

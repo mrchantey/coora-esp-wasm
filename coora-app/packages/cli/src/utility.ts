@@ -35,7 +35,7 @@ export const parseResponse = async (prefix: string, prom: Promise<Response>, ip:
 export const consoleErrorOr = <T>(val: Error|T, func: (data: T) => string|false) => {
 	if (val instanceof Error){
 		console.error(val)
-		return
+		return val
 	}
 	const str = func(val)
 	if (str !== false)

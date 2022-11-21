@@ -73,7 +73,7 @@ impl WifiClient {
 
     pub fn start_server(&self, store: &Store) -> Result<EspHttpServer> {
         println!(
-            "WIF CLIENT - server running at http://{:?}",
+            "WIFI CLIENT - server running at http://{:?}",
             self.settings.ip
         );
         start_server(store)

@@ -9,15 +9,10 @@
 		"release": {
 			"outFile": "../dist/release.wasm",
 			"textFile": "../dist/release.wat",
-			"sourceMap": true,
-			"optimizeLevel": 3,
-			"shrinkLevel": 0,
-			"converge": false,
-			"noAssert": false
+			"sourceMap": true
 		}
 	},
 	"options": {
-		"bindings": "raw",
-		"stackSize": 3939
+		"bindings": "raw"
 	}
 }

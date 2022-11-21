@@ -1,4 +1,4 @@
-use anyhow::{Ok, Result};
+use anyhow::Result;
 use embedded_svc::storage::{RawStorage, StorageBase};
 use std::sync::{Arc, Mutex};
 // use embedded_svc::storage as _;
@@ -14,7 +14,16 @@ pub struct NvsStore {
 
 pub type Store = Arc<Mutex<EspNvsStorage>>;
 
-pub struct StoreBuilder;
+impl NvsStore {
+    pub fn new() -> Result<NvsStore> {
+        let nvs = Arc::new(EspDefaultNvs::new()?);
+        let storage = EspNvsStorage::new_default(Arc::clone(&nvs), "default", true)?;
+        // Ok(Arc::new(Mutex::new(StoreData { nvs, storage })))
+        let store = Arc::new(Mutex::new(storage));
+        Ok(NvsStore { nvs, store })
+    }
+}
+
 #[ext]
 pub impl Arc<Mutex<EspNvsStorage>> {
     fn has(&self, key: &str) -> Result<bool> {
@@ -31,26 +40,35 @@ pub impl Arc<Mutex<EspNvsStorage>> {
         store.put_raw(key, buf)?;
         Ok(())
     }
+    fn set_u32(&self, key: &str, val: u32) -> Result<()> {
+        let mut store = self.lock().unwrap();
+        store.put_raw(key, &val.to_le_bytes())?;
+        Ok(())
+    }
 
-    fn get<const T: usize>(&self, key: &str) -> Result<([u8; T], usize)> {
+    fn get_u32(&self, key: &str) -> Result<u32> {
         let store = self.lock().unwrap();
-        // .unwrap_or_else(|_| Err(anyhow::anyhow!("key not found: {key}")));
-        let mut buff = [0; T];
-
-        if let Some((_, len)) = store.get_raw(key, &mut buff)? {
-            Ok((buff, len))
+        let mut buff = [0; 4];
+        if let Some(_) = store.get_raw(key, &mut buff)? {
+            Ok(u32::from_le_bytes(buff))
         } else {
             Err(anyhow::anyhow!("key not found: {key}"))
         }
     }
-}
 
-impl StoreBuilder {
-    pub fn take() -> Result<NvsStore> {
-        let nvs = Arc::new(EspDefaultNvs::new()?);
-        let storage = EspNvsStorage::new_default(Arc::clone(&nvs), "default", true)?;
-        // Ok(Arc::new(Mutex::new(StoreData { nvs, storage })))
-        let store = Arc::new(Mutex::new(storage));
-        Ok(NvsStore { nvs, store })
+    fn get<const T: usize>(&self, key: &str) -> Result<([u8; T], usize)> {
+        let mut buf = [0; T];
+        match self.get_with(key, &mut buf) {
+            Ok(len) => Ok((buf, len)),
+            Err(err) => Err(err),
+        }
+    }
+    fn get_with(&self, key: &str, buff: &mut [u8]) -> Result<usize> {
+        let store = self.lock().unwrap();
+        if let Some((_, len)) = store.get_raw(key, buff)? {
+            Ok(len)
+        } else {
+            Err(anyhow::anyhow!("key not found: {key}"))
+        }
     }
 }

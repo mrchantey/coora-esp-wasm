@@ -3,7 +3,7 @@ use coora_target_esp32::*;
 use embedded_svc::storage::*;
 
 fn main() -> Result<()> {
-    let store1 = StoreBuilder::take()?;
+    let store1 = NvsStore::new()?;
     let mut store1 = store1.store.lock().unwrap();
 
     let key = "foobar";

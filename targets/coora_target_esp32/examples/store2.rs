@@ -6,7 +6,7 @@ use embedded_svc::storage::*;
 
 fn main() -> Result<()> {
     println!("ok 0");
-    let store1 = StoreBuilder::take()?;
+    let store1 = NvsStore::new()?;
     let store1 = store1.store;
     let store2 = Arc::clone(&store1);
     {

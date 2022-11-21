@@ -1,7 +1,7 @@
 import { Command } from 'commander'
 import fs from 'fs'
 import pkg from 'lodash'
-import { build, BuildTarget } from './build.js'
+import { BuildTarget, buildWithLog } from './build.js'
 import { flash } from './flash.js'
 import { assertExists, consoleErrorOr } from './utility.js'
 const { debounce } = pkg
@@ -38,12 +38,11 @@ const watch = async (ip: string, entry: string, watch: string, options: Options 
 		console.clear()
 		console.log('BUILD - building..')
 		const now = performance.now()
-		const result = await build(entry, options.target)
+		const result = await buildWithLog(entry, options.target)
 		if (result instanceof Error){
 			// console.error(result)
 			return
 		}
-		console.log('BUILD - success')
 		if (!options.flash)
 			return
 		console.log('WATCH - uploading...')
@@ -57,6 +56,9 @@ const watch = async (ip: string, entry: string, watch: string, options: Options 
 	
 	const debounceRun = debounce(func, 100)
 	// try {
+	fs.watch('./config', { recursive: true }, _ => 
+		debounceRun()
+	)
 	fs.watch(watch, { recursive: true }, _ => 
 		debounceRun()
 	)

@@ -13,7 +13,7 @@ pub fn default_sketch() -> Result<SketchInstance> {
     app.add_plugin(&mut leds)?
         .add_plugin(&mut time)?
         .add_plugin(&mut console)?
-        .build();
+        .build()?;
 
     let sketch = SketchInstance::new(&mut app);
 

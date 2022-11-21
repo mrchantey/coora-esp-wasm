@@ -6,7 +6,10 @@ resolver = "2"
 
 [profile.release]
 opt-level = "s"
-debug = true # uncomment for production
+debug = true # apparently zero cost
+# wasmi performance?
+# lto = "fat"
+# codegen-units = 1
 
 [profile.dev]
 opt-level = "s"
