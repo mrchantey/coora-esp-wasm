@@ -3,8 +3,8 @@ use coora_target_esp32::*;
 use embedded_svc::storage::*;
 
 fn main() -> Result<()> {
-    let store1 = NvsStore::new()?;
-    let mut store1 = store1.store.lock().unwrap();
+    let (_, store) = take_nvs_store()?;
+    let mut store1 = store.lock().unwrap();
 
     let key = "foobar";
     if store1.contains(key)? == false {

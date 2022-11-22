@@ -1,12 +1,6 @@
-use std::{
-    rc::Rc,
-    sync::{Arc, Mutex},
-};
-
 use anyhow::Result;
-use coora_engine::{SketchInstance, UserState, WasmApp};
+use coora_engine::WasmApp;
 use coora_target_esp32::*;
-use wasmi::*;
 /*
 better if you throw out whole thing?
 

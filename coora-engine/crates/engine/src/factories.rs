@@ -5,7 +5,7 @@ use anyhow::Result;
 pub fn build_hello_world() -> Result<WasmApp> {
 	let wasm = include_wasm!("../../", "hello_world");
 	let mut app = WasmApp::new();
-	app.build_with_wasm(&wasm[..]);
+	app.build_with_wasm(&wasm[..])?;
 	let mut adder = AdderInstance::new(&mut app);
 	let result = adder.add(1, 2);
 	println!("{result}");
@@ -20,7 +20,7 @@ pub fn build_mem_test() -> Result<MemoryTestInstance> {
 	let mut app = WasmApp::new();
 	// link(&mut app);
 	app.add_plugin(&mut console)?;
-	app.build_with_wasm(&wasm[..]);
+	app.build_with_wasm(&wasm[..])?;
 
 	let mem_test = MemoryTestInstance::new(&mut app);
 	Ok(mem_test)

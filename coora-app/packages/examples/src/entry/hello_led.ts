@@ -5,7 +5,9 @@ export function ping(): u64{
 }
 
 export function start(): void{
-	console.log('🤘🤘lets do this pwoita!🤘🤘')
+	ledStrip.setLeds(5, 5, 10, 0)
+	ledStrip.show()
+	console.log('foo!🤘🤘')
 }
 
 export function getValue(): Array<u32>{
@@ -23,6 +25,5 @@ export function run(): void{
 	const a = arr[0]
 	// console.log(`${arr.length}`)
 	// console.log('🤘🤘lets do this monkey doodle!🤘🤘')
-	ledStrip.setLeds(0, 0, 0, 6)
-	ledStrip.show()
+	// ledStrip.setLeds(0, 12, 6, 6)
 }

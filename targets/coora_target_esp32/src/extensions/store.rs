@@ -7,22 +7,35 @@ use extend::ext;
 // const STORE: Arc<Mutex<Option<EspNvsStorage>>> = Arc::new(Mutex::new(None));
 // const STORE: Arc<Mutex<Option<EspNvsStorage>>> = Arc::new(Mutex::new(None));
 
-pub struct NvsStore {
-    pub nvs: Arc<EspDefaultNvs>,
-    pub store: Store,
-}
+/// Gets EspDefaultNvs & EspNvsStorage
+/// Seems like the only one that throws if dropped and recreated in combination with server
 
 pub type Store = Arc<Mutex<EspNvsStorage>>;
+pub type Nvs = Arc<EspDefaultNvs>;
 
-impl NvsStore {
-    pub fn new() -> Result<NvsStore> {
-        let nvs = Arc::new(EspDefaultNvs::new()?);
-        let storage = EspNvsStorage::new_default(Arc::clone(&nvs), "default", true)?;
-        // Ok(Arc::new(Mutex::new(StoreData { nvs, storage })))
-        let store = Arc::new(Mutex::new(storage));
-        Ok(NvsStore { nvs, store })
-    }
+pub fn take_nvs() -> Result<Nvs> {
+    Ok(Arc::new(EspDefaultNvs::new()?))
 }
+
+pub fn take_store(nvs: &Nvs) -> Result<Store> {
+    let storage = EspNvsStorage::new_default(Arc::clone(&nvs), "default", true)?;
+    Ok(Arc::new(Mutex::new(storage)))
+}
+
+pub fn take_nvs_store() -> Result<(Nvs, Store)> {
+    let nvs = take_nvs()?;
+    let store = take_store(&nvs)?;
+    Ok((nvs, store))
+}
+
+// impl NvsStore {
+//     pub fn new() -> Result<NvsStore> {
+//         let nvs = Arc::new(EspDefaultNvs::new()?);
+//         let storage = EspNvsStorage::new_default(Arc::clone(&nvs), "default", true)?;
+//         let store = Arc::new(Mutex::new(storage));
+//         Ok(NvsStore { nvs, store })
+//     }
+// }
 
 #[ext]
 pub impl Arc<Mutex<EspNvsStorage>> {

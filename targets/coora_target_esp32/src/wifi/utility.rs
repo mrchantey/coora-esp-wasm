@@ -6,18 +6,18 @@ use std::time::Duration;
 
 use anyhow::Result;
 
-use crate::NvsStore;
+use crate::*;
 
 // pub const timeout_secs: u32 = 10;
 pub const TIMEOUT_DURATION: Duration = Duration::from_secs(2);
 
 //should be take wifi!
-pub fn get_wifi(store: &NvsStore) -> Result<EspWifi> {
+pub fn get_wifi(nvs: &Nvs) -> Result<EspWifi> {
     //this is a take as well i think!!!
     let netif_stack = Arc::new(EspNetifStack::new()?);
     let sys_look_stack = Arc::new(EspSysLoopStack::new()?);
     // let nvs = Arc::new(EspDefaultNvs::new()?);
-    let nvs = Arc::clone(&store.nvs);
+    let nvs = Arc::clone(&nvs);
     let wifi = EspWifi::new(netif_stack, sys_look_stack, nvs)?;
     Ok(wifi)
 }

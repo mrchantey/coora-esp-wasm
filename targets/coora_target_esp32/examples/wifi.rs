@@ -2,8 +2,9 @@ use anyhow::Result;
 use coora_target_esp32::{wifi::get_wifi, *};
 
 fn main() -> Result<()> {
-    let store = NvsStore::new()?;
-    let mut wifi = get_wifi(&store)?;
+    let nvs = take_nvs()?;
+    let mut wifi = get_wifi(&nvs)?;
+
     let wifi = wifi::WifiClient::new(&mut wifi, secret::SSID, secret::PASSWORD)?;
 
     wifi.get("http://example.com")?;

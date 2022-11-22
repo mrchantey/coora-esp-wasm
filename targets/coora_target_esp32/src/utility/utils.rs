@@ -1,4 +1,5 @@
 #![allow(non_upper_case_globals)]
+use ::log::{set_max_level, LevelFilter};
 use esp_idf_sys::*;
 use std::time::Duration;
 //https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/misc_system_api.html
@@ -15,17 +16,29 @@ where
 
 pub fn print_free_heap(prefix: &str) {
     println!(
-        "HEAP - {prefix} - total: {}, internal: {}",
+        "HEAP - {prefix} - total: {}, internal: {}, largest block: {}",
         b_to_kb(free_heap_size()),
-        b_to_kb(free_internal_heap_size())
+        b_to_kb(free_internal_heap_size()),
+        b_to_kb(largest_block()),
     );
 }
+
+pub fn set_log_level(level: LevelFilter) {
+    set_max_level(level);
+}
+//this is dumb
+// pub fn dump_heap() {
+//     unsafe { heap_caps_dump_all() };
+// }
 
 pub fn free_heap_size() -> u32 {
     unsafe { esp_get_free_heap_size() }
 }
 pub fn free_internal_heap_size() -> u32 {
     unsafe { esp_get_free_internal_heap_size() }
+}
+pub fn largest_block() -> u32 {
+    unsafe { heap_caps_get_largest_free_block(MALLOC_CAP_DEFAULT) }
 }
 
 pub fn was_ok_reset() -> bool {

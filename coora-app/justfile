@@ -36,6 +36,7 @@ cmd command *args:
 ## POST
 
 ip := '192.168.86.222'
+# ip := '192.168.7.1'
 
 build-wasm file *args:
 	just cmd build ./packages/examples/src/entry/{{file}}.ts {{args}}
@@ -43,7 +44,6 @@ watch-wasm file *args:
 	{{npx}} onchange -i -k packages/*/dist/**/* -- \
 	just cmd watch {{ip}} ./packages/examples/src/entry/{{file}}.ts ./packages {{args}}
 # echo bang
-# ip := '192.168.7.1'
 
 get path:
 	curl http://{{ip}}/{{path}}

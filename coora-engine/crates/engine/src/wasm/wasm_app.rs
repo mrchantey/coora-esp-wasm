@@ -70,7 +70,7 @@ impl WasmApp {
 	pub fn build(&mut self) -> Result<&mut Self> { self.build_with_wasm(Self::default_wasm()) }
 
 	pub fn build_with_wasm(&mut self, stream: impl Read) -> Result<&mut Self> {
-		self.link_memory(); //would duplicate if we attempted reuse
+		self.link_memory()?; //would duplicate if we attempted reuse
 		let module = Module::new(&self.engine, stream)?;
 		let store = Arc::clone(&self.store);
 		let mut store = store.lock().unwrap();
