@@ -4,6 +4,8 @@ use std::sync::{Arc, Mutex};
 // use embedded_svc::storage as _;
 use esp_idf_svc::{nvs::*, nvs_storage::*};
 use extend::ext;
+use std::str;
+
 // const STORE: Arc<Mutex<Option<EspNvsStorage>>> = Arc::new(Mutex::new(None));
 // const STORE: Arc<Mutex<Option<EspNvsStorage>>> = Arc::new(Mutex::new(None));
 
@@ -76,6 +78,12 @@ pub impl Arc<Mutex<EspNvsStorage>> {
             Err(err) => Err(err),
         }
     }
+    fn get_string<const T: usize>(&self, key: &str) -> Result<String> {
+        let (bytes, len) = self.get::<{ T }>(key)?;
+        let str = str::from_utf8(&bytes[..len])?;
+        Ok(String::from(str))
+    }
+
     fn get_with(&self, key: &str, buff: &mut [u8]) -> Result<usize> {
         let store = self.lock().unwrap();
         if let Some((_, len)) = store.get_raw(key, buff)? {
