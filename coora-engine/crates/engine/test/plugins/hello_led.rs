@@ -24,7 +24,7 @@ sweet! {
 
 
 	test "leds"{
-		sketch.run();
+		sketch.update();
 	}
 
 }

@@ -1,16 +1,16 @@
 use super::*;
 use crate::{
     utility::b_to_kb,
-    wifi::{get_wifi, EspWifiExt, WifiFallbackClient},
+    wifi::{get_wifi, WifiFallbackClient},
     *,
 };
 use anyhow::Result;
-use embedded_svc::{http::server::registry::Registry, ipv4::ClientSettings};
+use embedded_svc::{http::server::registry::Registry};
 use esp_idf_svc::{http::server::EspHttpServer, wifi::EspWifi};
 use std::sync::{Arc, Mutex};
 
 pub struct SketchServer {
-    pub settings: Option<ClientSettings>,
+    // pub settings: Option<ClientSettings>,
     pub wifi: EspWifi,
     pub store: Store,
     pub sketch_buffer: Arc<Mutex<SketchBuffer>>,
@@ -29,7 +29,7 @@ impl SketchServer {
         let mut wifi = get_wifi(nvs)?;
         let store = Arc::clone(store);
         // wifi.set
-        let client = WifiFallbackClient::new(&mut wifi, &store)?;
+        let client = WifiFallbackClient::new_from_store(&mut wifi, &store)?;
 
         Ok(SketchServer {
             wifi,
@@ -38,18 +38,19 @@ impl SketchServer {
             reload_mode,
             sketch_buffer,
             server: None,
-            settings: None,
+            // settings: None,
         })
     }
 
     pub fn update(&mut self) -> Result<()> {
-        if let None = self.settings {
-            if let Some(settings) = self.client.check_status(&mut self.wifi)? {
-                self.settings = Some(settings);
-                self.start_server()?
-            }
+        if self.client.connected {
+            Ok(())
+        } else if let Some(_settings) = self.client.check_status(&mut self.wifi)? {
+            // self.settings = Some(settings);
+            self.start_server()
+        } else {
+            Ok(())
         }
-        Ok(())
     }
 
     pub fn start_server(&mut self) -> Result<()> {
@@ -68,6 +69,7 @@ impl SketchServer {
             response.ok()?;
             Ok(())
         })?;
+        self.server = Some(server);
         Ok(())
     }
 }

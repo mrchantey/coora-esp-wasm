@@ -4,6 +4,6 @@ use crate::*;
 #[coora_export]
 pub trait Sketch {
 	fn start();
-	fn run();
+	fn update();
 	fn ping() -> u64;
 }

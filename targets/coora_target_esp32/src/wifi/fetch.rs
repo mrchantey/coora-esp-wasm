@@ -9,6 +9,7 @@ use embedded_svc::{
 };
 use esp_idf_svc::http::client::{EspHttpClient, EspHttpClientConfiguration};
 
+//TODO return response
 /// Advised not to call this directly, if you do make sure your connection doesnt go out of scope!
 pub fn fetch(method: Method, url: impl AsRef<str>) -> anyhow::Result<()> {
     //no https
@@ -48,8 +49,8 @@ pub fn fetch(method: Method, url: impl AsRef<str>) -> anyhow::Result<()> {
             }
             _total_size += size;
             // 6. try converting the bytes into a Rust (UTF-8) string and print it
-            let response_text = str::from_utf8(&buf[..size])?;
-            println!("{}", response_text);
+            let _response_text = str::from_utf8(&buf[..size])?;
+            // println!("{}", response_text);
         }
     } else {
         anyhow::bail!("unexpected response code: {}", status)

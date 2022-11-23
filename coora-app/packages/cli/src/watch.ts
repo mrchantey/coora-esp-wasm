@@ -2,7 +2,7 @@ import { Command } from 'commander'
 import fs from 'fs'
 import pkg from 'lodash'
 import { BuildTarget, buildWithLog } from './build.js'
-import { flash } from './flash.js'
+import { flashWithLog } from './flash.js'
 import { assertExists, consoleErrorOr } from './utility.js'
 const { debounce } = pkg
 
@@ -26,6 +26,7 @@ const defaultOptions: Options = {
 	target: 'release',
 	flash: false
 }
+
 const watch = async (ip: string, entry: string, watch: string, options: Options = defaultOptions) => {
 	const err = assertExists(entry)
 	if (err instanceof Error)	
@@ -36,8 +37,7 @@ const watch = async (ip: string, entry: string, watch: string, options: Options 
 	
 	const func = async () => {
 		console.clear()
-		console.log('BUILD - building..')
-		const now = performance.now()
+		// const now = performance.now()
 		const result = await buildWithLog(entry, options.target)
 		if (result instanceof Error){
 			// console.error(result)
@@ -45,11 +45,9 @@ const watch = async (ip: string, entry: string, watch: string, options: Options 
 		}
 		if (!options.flash)
 			return
-		console.log('WATCH - uploading...')
-		
-		await flash(ip, result.names.wasm)
-		const duration = performance.now() - now
-		console.log(`COORA - success in ${duration.toFixed()} ms`)
+		await flashWithLog(ip, result.names.wasm)
+		// const duration = performance.now() - now
+		// console.log(`COORA - success in ${duration.toFixed()} ms`)
 	}
 
 	await func()

@@ -17,7 +17,6 @@ pub fn run_sketch() -> Result<()> {
     let (mut time, mut leds, mut console) = default_peripherals()?;
     let buffer = Arc::new(Mutex::new(SketchBuffer::from_nvs_or_default(&store)));
     'main: loop {
-        // let buffer = Arc::new(Mutex::new(SketchBuffer::from_nvs_or_default(&store)));
         let mut app = WasmApp::new();
         {
             //releasable buffer
@@ -41,9 +40,9 @@ pub fn run_sketch() -> Result<()> {
                     break;
                 }
             }
-            utility::sleep_ms(16);
             sketch.run();
             server.update()?;
+            utility::sleep_ms(16);
         }
         utility::sleep_ms(500); //allow for return ok message
         println!("SKETCH - reloading..");

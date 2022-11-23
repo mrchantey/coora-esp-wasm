@@ -1,5 +1,3 @@
-mod esp_wifi;
-pub use self::esp_wifi::*;
 mod fetch;
 pub use self::fetch::*;
 mod server;

@@ -8,8 +8,8 @@ use anyhow::Result;
 
 use crate::*;
 
-// pub const timeout_secs: u32 = 10;
-pub const TIMEOUT_DURATION: Duration = Duration::from_secs(2);
+pub const STATUS_POLL_MILLIS: u64 = 10;
+pub const TIMEOUT_DURATION: Duration = Duration::from_secs(5);
 
 //should be take wifi!
 pub fn get_wifi(nvs: &Nvs) -> Result<EspWifi> {

@@ -11,9 +11,10 @@ export const appendBuildCommand = (parent: Command) => {
 export type BuildTarget = 'release' | 'debug'
 
 export const buildWithLog = async(entry: string, target?: BuildTarget) => {
+	console.log('BUILD - building..')
 	const result = await build(entry, target)
-	consoleErrorOr(result, ({ names, duration, size }) =>
-		`BUILD - success - ${names.name} - ${duration.toFixed(0)} ms - ${(size / 1024).toFixed(2)} KB`)
+	consoleErrorOr(result, ({ duration, size }) =>
+		`BUILD - success - ${duration.toFixed(0)} ms - ${(size / 1024).toFixed(2)} KB`)
 	return result
 }
 

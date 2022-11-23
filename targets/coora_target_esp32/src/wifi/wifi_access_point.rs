@@ -1,3 +1,4 @@
+use crate::utility::{Timeout, self};
 use crate::wifi;
 use anyhow::{Ok, Result};
 use embedded_svc::ipv4;
@@ -10,6 +11,7 @@ use std::net::Ipv4Addr;
 
 pub struct WifiAccessPoint {
     config: AccessPointConfiguration,
+    pub timeout: Timeout,
 }
 
 impl WifiAccessPoint {
@@ -44,36 +46,42 @@ impl WifiAccessPoint {
             ..Default::default()
         };
 
-        wifi.set_configuration(&Configuration::AccessPoint(config))?;
+        wifi.set_configuration(&Configuration::AccessPoint(config.clone()))?;
 
-        Ok(WifiAccessPoint { config })
+        Ok(WifiAccessPoint {
+            config,
+            timeout: Timeout::new_wifi(),
+        })
     }
 
     //todo throw on timeout
-    pub fn check_status(&self, wifi: &EspWifi) -> Option<ipv4::ClientSettings> {
+    pub fn check_status(&self, wifi: &EspWifi) -> Result<Option<ipv4::ClientSettings>> {
         let status = wifi.get_status();
         if let ApStatus::Started(ApIpStatus::Done) = status.1 {
             println!("\n\nWIFI AP - ready, ssid: {}", self.config.ssid);
             let ip_conf = self.config.ip_conf.unwrap();
-            Some(ipv4::ClientSettings {
+            Ok(Some(ipv4::ClientSettings {
                 subnet: ip_conf.subnet,
                 dns: ip_conf.dns,
                 secondary_dns: ip_conf.secondary_dns,
                 ip: ip_conf.subnet.gateway,
-            })
+            }))
+        } else if self.timeout.check_elapsed()? {
+            Err(anyhow::anyhow!("WIFI AP - failed to connect in time."))
         } else {
-            None
+            Ok(None)
         }
     }
 
     pub fn check_status_sync(&self, wifi: &EspWifi) -> Result<ipv4::ClientSettings> {
-        println!("WIFI AP - creating access point '{}'...", self.config.ssid);
-        wifi.wait_status_with_timeout(wifi::TIMEOUT_DURATION, |s| !s.is_transitional())
-            .map_err(|e| anyhow::anyhow!("WIFI AP - timeout: {:?}", e))?;
-        if let Some(client_settings) = self.check_status(wifi) {
-            Ok(client_settings)
-        } else {
-            Err(anyhow::anyhow!("WIFI AP - Failed to connect in time."))
+        // println!("WIFI AP - creating access point '{}'...", self.config.ssid);
+        // wifi.wait_status_with_timeout(wifi::TIMEOUT_DURATION, |s| !s.is_transitional())
+        //     .map_err(|e| anyhow::anyhow!("WIFI AP - timeout: {:?}", e))?;
+        loop {
+            if let Some(settings) = self.check_status(wifi)? {
+                break Ok(settings);
+            }
+            utility::sleep_ms(wifi::STATUS_POLL_MILLIS);
         }
     }
 }
