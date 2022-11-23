@@ -3,7 +3,7 @@ use crate::{
     ArcMutexEspNvsStorageExt, EspHttpRequest_Ext, Store,
 };
 use anyhow::Result;
-use coora_engine::WasmApp;
+use coora_engine::*;
 use esp_idf_svc::http::server::EspHttpRequest;
 
 pub const MAX_SKETCH_SIZE: usize = 8 * 1024;
@@ -36,7 +36,7 @@ impl SketchBuffer {
         } else {
             println!("SKETCH - loading default sketch..");
         }
-        buf.set_bytes(WasmApp::default_wasm());
+        buf.set_bytes(sketch_default());
         buf
     }
 

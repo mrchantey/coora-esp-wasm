@@ -10,6 +10,9 @@ where
 }
 
 
-pub trait Plugin {
+pub trait Plugin
+where
+	Self: Sized,
+{
 	fn bind(&mut self, app: &mut WasmApp) -> Result<()>;
 }

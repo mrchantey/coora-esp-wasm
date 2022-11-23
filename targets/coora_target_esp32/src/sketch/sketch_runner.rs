@@ -1,5 +1,5 @@
 use anyhow::Result;
-use coora_engine::{SketchInstance, WasmApp};
+use coora_engine::*;
 use std::sync::{Arc, Mutex};
 
 use crate::{utility::b_to_kb, *};
@@ -14,7 +14,7 @@ const RELOAD_MODE: SketchReloadMode = SketchReloadMode::RestartWifi;
 
 pub fn run_sketch() -> Result<()> {
     let (nvs, mut store) = take_nvs_store()?;
-    let (mut time, mut leds, mut console) = default_peripherals()?;
+    let mut esp32_imports = take_esp32_imports()?;
     let buffer = Arc::new(Mutex::new(SketchBuffer::from_nvs_or_default(&store)));
     'main: loop {
         let mut app = WasmApp::new();
@@ -23,9 +23,8 @@ pub fn run_sketch() -> Result<()> {
             let mut buffer = buffer.lock().unwrap();
             println!("SKETCH - building.. {}", b_to_kb(buffer.len));
             buffer.dirty = false;
-            app.add_plugin(&mut leds)?
-                .add_plugin(&mut time)?
-                .add_plugin(&mut console)?
+            app.add_plugin(&mut esp32_imports)?
+                .add_plugin(&mut StdImports)?
                 .build_with_wasm(&buffer.buffer[..buffer.len])?;
         }
         let mut sketch = SketchInstance::new(&mut app);

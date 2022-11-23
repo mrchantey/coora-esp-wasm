@@ -5,7 +5,7 @@ use crate::{
     *,
 };
 use anyhow::Result;
-use embedded_svc::{http::server::registry::Registry};
+use embedded_svc::http::server::registry::Registry;
 use esp_idf_svc::{http::server::EspHttpServer, wifi::EspWifi};
 use std::sync::{Arc, Mutex};
 
@@ -62,9 +62,9 @@ impl SketchServer {
             let mut buffer = buffer.lock().unwrap();
             buffer.from_request(&mut request)?;
             //TODO optionally dont nvs and attempt no restart
-            if reload_mode == SketchReloadMode::RestartDevice {
-                buffer.set_nvs(&store)?;
-            }
+            // if reload_mode == SketchReloadMode::RestartDevice {
+            buffer.set_nvs(&store)?;
+            // }
             println!("\nSKETCH received! {}", b_to_kb(buffer.len));
             response.ok()?;
             Ok(())
