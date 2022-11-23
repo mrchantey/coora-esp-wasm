@@ -1,9 +1,11 @@
-mod console;
-pub use self::console::*;
+mod debug;
+pub use self::debug::*;
 mod env;
 pub use self::env::*;
 mod led;
 pub use self::led::*;
+mod math;
+pub use self::math::*;
 mod memory_test;
 pub use self::memory_test::*;
 mod time;

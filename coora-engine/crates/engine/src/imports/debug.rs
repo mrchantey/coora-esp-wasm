@@ -2,14 +2,14 @@ use crate as coora_engine;
 use crate::*;
 
 #[coora_import]
-pub trait Console {
+pub trait Debug {
 	fn log(&mut self, val: &str);
 }
 #[derive(Default)]
-pub struct StdConsole {}
+pub struct StdDebug {}
 
 
-impl Console for StdConsole {
+impl Debug for StdDebug {
 	fn log(&mut self, val: &str) {
 		println!("{val}");
 	}

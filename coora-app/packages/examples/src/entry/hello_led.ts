@@ -1,4 +1,4 @@
-import { console, ledStrip, time } from '../bindings'
+import { debug, ledStrip, time } from '../bindings'
 //for testing
 export function ping(): u64{
 	return time.elapsed()
@@ -7,16 +7,10 @@ export function ping(): u64{
 export function start(): void{
 	ledStrip.setLeds(0, 0, 0, 0)
 	ledStrip.show()
-	console.log('foo!🤘🤘')
+	debug.log('foo!🤘🤘')
 }
 
-export function getValue(): Array<u32>{
-	const arr: Array<u32> = []
-	arr.push(10)
-	return arr
-}
-
-export function run(): void{	
+export function update(): void{	
 	const a = time.elapsed() as i32 / 10
 	// const arr: Array<u32> = []
 	// arr.slice(2, 2)

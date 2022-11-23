@@ -3,7 +3,7 @@ use crate::{
 	utils_func::{parse_trait_funcs, Arg, ParsedFunc, ReferenceArg},
 };
 use convert_case::{Case, Casing};
-use proc_macro2::Span;
+use proc_macro2::{Ident, Span};
 use std::fmt::format;
 use syn::{
 	parse::Result, spanned::Spanned, Error, FnArg, ItemTrait, LitStr, Pat, ReturnType, TraitItem,
@@ -72,7 +72,7 @@ pub fn create_typescript_bindings(plugin: &ItemTrait) -> Result<LitStr> {
 fn get_return_type(func: &ParsedFunc) -> Result<String> {
 	if let ReturnType::Type(_rarrow, rtype) = &func.sig.output {
 		let ident = type_to_ident(rtype)?;
-		Ok(ident.to_string())
+		Ok(type_to_ts(&ident))
 	} else {
 		Ok(format!("void"))
 	}
@@ -113,7 +113,7 @@ fn get_args_external(func: &ParsedFunc) -> String {
 		.args
 		.together
 		.iter()
-		.map(|f| format!("{}: {}", f.name.to_string(), arg_to_ts(f)))
+		.map(|f| format!("{}: {}", f.name.to_string(), type_to_ts(&f.ty)))
 		.collect();
 	args_external.join(", ")
 }
@@ -132,14 +132,13 @@ fn get_ref_conversions(func: &ParsedFunc) -> String {
 	reference_conversions.join("")
 }
 
-pub fn arg_to_ts(arg: &Arg) -> String {
-	if arg.is_reference {
-		if arg.ty.to_string() == "str" {
-			String::from("string")
-		} else {
-			arg.ty.to_string()
-		}
-	} else {
-		arg.ty.to_string()
+pub fn type_to_ts(ident: &Ident) -> String {
+	match ident.to_string().as_str() {
+		"str" => "string",
+		//wasmi float types
+		"F32" => "f32",
+		"F64" => "f64",
+		other => other,
 	}
+	.to_string()
 }

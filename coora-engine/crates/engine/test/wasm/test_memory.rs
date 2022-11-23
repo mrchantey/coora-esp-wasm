@@ -8,7 +8,7 @@ sweet! {
 	it "works" {
 		let wasm = include_wasm!("../../../", "test_memory");
 
-		let mut console = StdConsole{}.as_shared();
+		let mut console = StdDebug{}.as_shared();
 		let mut app = WasmApp::new();
 		// link(&mut app);
 		app.add_plugin(&mut console)?;
