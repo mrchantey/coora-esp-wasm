@@ -1,3 +1,4 @@
+// #![feature(generic_arg_infer)]
 pub use coora_bindings::*;
 pub use wasmi;
 

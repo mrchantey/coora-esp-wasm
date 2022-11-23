@@ -15,6 +15,9 @@ pub struct WasmApp {
 	pub memory: SharedMemory,
 }
 
+pub fn sketch_default() -> &'static [u8] { include_wasm!("../../../", "default_sketch") }
+pub fn sketch_hello_world() -> &'static [u8] { include_wasm!("../../../", "hello_world") }
+
 const INITIAL_PAGES: u32 = 1;
 const MAX_PAGES: u32 = 1;
 
@@ -67,7 +70,7 @@ impl WasmApp {
 		Ok(self)
 	}
 
-	pub fn build(&mut self) -> Result<&mut Self> { self.build_with_wasm(Self::default_wasm()) }
+	pub fn build(&mut self) -> Result<&mut Self> { self.build_with_wasm(sketch_default()) }
 
 	pub fn build_with_wasm(&mut self, stream: impl Read) -> Result<&mut Self> {
 		self.link_memory()?; //would duplicate if we attempted reuse
@@ -82,8 +85,6 @@ impl WasmApp {
 		// self.module = Some(module);
 		Ok(self)
 	}
-	pub fn default_wasm() -> &'static [u8] { include_wasm!("../../../", "hello_led") }
-	pub fn wasm_hello_world() -> &'static [u8] { include_wasm!("../../../", "hello_world") }
 
 	pub fn default_engine() -> Engine {
 		//https://github.com/barafael/wasm-on-mcu/blob/5303133d1c8b96d64452675ee486b05f26dc6e03/src/bin/wasmi.rs#L43

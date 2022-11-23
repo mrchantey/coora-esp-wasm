@@ -40,7 +40,7 @@ pub fn run_sketch() -> Result<()> {
                     break;
                 }
             }
-            sketch.run();
+            sketch.update();
             server.update()?;
             utility::sleep_ms(16);
         }

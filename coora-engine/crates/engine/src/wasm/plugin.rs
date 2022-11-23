@@ -11,5 +11,5 @@ where
 
 
 pub trait Plugin {
-	fn bind(&mut self, builder: &mut WasmApp) -> Result<()>;
+	fn bind(&mut self, app: &mut WasmApp) -> Result<()>;
 }

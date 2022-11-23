@@ -5,13 +5,10 @@ sweet! {
 	before {
 
 		let mut leds = TerminalLeds::new(2).as_shared();
-		let mut time = StdTime::new().as_shared();
-		let mut console = StdDebug::default().as_shared();
 		let mut app = WasmApp::new();
 		app
+		.add_plugin(&mut StdImports)?
 		.add_plugin(&mut leds)?
-		.add_plugin(&mut time)?
-		.add_plugin(&mut console)?
 		.build()?;
 
 		let mut sketch = SketchInstance::new(&mut app);

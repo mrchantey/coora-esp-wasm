@@ -8,11 +8,10 @@ sweet! {
 	it "works" {
 		let wasm = include_wasm!("../../../", "test_memory");
 
-		let mut console = StdDebug{}.as_shared();
 		let mut app = WasmApp::new();
 		// link(&mut app);
-		app.add_plugin(&mut console)?;
-		app.build_with_wasm(&wasm[..]);
+		app.add_plugin(&mut StdImports)?;
+		app.build_with_wasm(&wasm[..])?;
 
 		let mut mem_test = MemoryTestInstance::new(&mut app);
 		mem_test.printHello();
