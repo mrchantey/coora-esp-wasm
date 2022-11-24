@@ -4,15 +4,14 @@ use std::sync::{Arc, Mutex};
 
 use crate::{utility::b_to_kb, *};
 
-#[derive(PartialEq, Clone)]
+#[derive(PartialEq, Copy, Clone)]
 pub enum SketchReloadMode {
     RestartDevice,
     RestartWifi,
 }
 
-const RELOAD_MODE: SketchReloadMode = SketchReloadMode::RestartWifi;
-
 pub fn run_sketch() -> Result<()> {
+    let reload_mode = SketchReloadMode::RestartWifi;
     let (nvs, mut store) = take_nvs_store()?;
     let mut esp32_imports = take_esp32_imports()?;
     let buffer = Arc::new(Mutex::new(SketchBuffer::from_nvs_or_default(&store)));
@@ -30,10 +29,10 @@ pub fn run_sketch() -> Result<()> {
         let mut sketch = SketchInstance::new(&mut app);
         sketch.start();
 
-        let mut server = SketchServer::new(Arc::clone(&buffer), &nvs, &mut store, RELOAD_MODE)?;
+        let mut server = SketchServer::new(Arc::clone(&buffer), &nvs, &mut store, reload_mode)?;
         loop {
             if buffer.lock().unwrap().dirty {
-                if RELOAD_MODE == SketchReloadMode::RestartDevice {
+                if reload_mode == SketchReloadMode::RestartDevice {
                     break 'main;
                 } else {
                     break;

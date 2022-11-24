@@ -7,9 +7,8 @@ export const appendFlashCommand = (parent: Command) => {
 	const cmd = parent.command('flash')
 		.argument('<ip>', 'ip address')
 		.argument('<location>', 'wasm file location')
-	cmd.action(async(ip, location) => {
-		consoleErrorOr(await flash(ip, location), ({ duration }) =>
-			`FLASH - OK - completed in ${duration.toFixed(0)} ms`)
+	cmd.action(async(ip, location) => { 
+		flashWithLog(ip, location)
 	})
 }
 
@@ -17,7 +16,7 @@ export const flashWithLog = async (ip: string, location: string) => {
 	console.log('FLASH - uploading..')
 	const result = await flash(ip, location)
 	consoleErrorOr(await flash(ip, location), ({ duration }) =>
-		`FLASH - OK - completed in ${duration.toFixed(0)} ms`)
+		`FLASH - success - ${duration.toFixed(0)} ms`)
 	return result
 }
 

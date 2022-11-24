@@ -49,7 +49,7 @@ fn main() -> Result<()> {
         ))) = status.0
         {
             println!(
-                "\n\nWIFI CLIENT - connected\nWIFI CLIENT - IP: {:?}\n\n",
+                "WIFI CLIENT - connected\nWIFI CLIENT - IP: {:?}",
                 client_settings.ip
             );
         }

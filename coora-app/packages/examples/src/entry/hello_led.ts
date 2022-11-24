@@ -7,13 +7,13 @@ export function ping(): u64{
 export function start(): void{
 	ledStrip.setLeds(0, 0, 0, 0)
 	ledStrip.show()
-	debug.log('foo!🤘🤘')
+	debug.log('hello led!🤘🤘')
 }
 
 export function update(): void{	
 	const t = math.sin((time.elapsed() as f32) / 1000) / 2 + 0.5
 	// debug.log(`${t}`)
-	ledStrip.setLeds(0, t * 32 as u32, 0, 0)
+	ledStrip.setLeds(0, t * 12 as u32, 0, 0)
 	// const arr: Array<u32> = []
 	// arr.slice(2, 2)
 	// arr.push(10)
@@ -23,4 +23,4 @@ export function update(): void{
 	// console.log('🤘🤘lets do this monkey doodle!🤘🤘')
 	ledStrip.show()
 
-}
+} 

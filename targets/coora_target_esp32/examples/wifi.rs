@@ -1,20 +1,25 @@
 use anyhow::Result;
-use coora_target_esp32::{wifi::get_wifi, *};
+use coora_target_esp32::{utility::set_favourite_log_level, wifi::get_wifi, *};
+use embedded_svc::http::Status;
+use esp_idf_svc::http::client::EspHttpClient;
 
 fn main() -> Result<()> {
+    set_favourite_log_level();
     //sync
     {
         let nvs = take_nvs()?;
         let mut wifi = get_wifi(&nvs)?;
 
-        let client = wifi::WifiClient::new(&mut wifi, secret::SSID, secret::PASSWORD)?;
-        let settings = client.check_status_sync(&wifi)?;
-				println!("SYNC OK! ip: {}", settings.ip);
+        let wifi_client = wifi::WifiClient::new(&mut wifi, secret::SSID, secret::PASSWORD)?;
+        let settings = wifi_client.check_status_sync(&wifi)?;
+        let mut http = EspHttpClient::new_https()?;
+        println!("SYNC OK! ip: {}", settings.ip);
 
-        wifi.get("http://example.com")?;
-        println!("HTTP OK!");
-        wifi.get("https://espressif.com")?;
-        println!("HTTPS OK!");
+        assert!(http.get("http://httpbin.org/get")?.status() == 200);
+        assert!(http.get("https://httpbin.org/get")?.status() == 200);
+        let result = http.post("https://httpbin.org/post", b"howdy doody")?;
+        assert!(result.status() == 200);
+        // let len = result.read_bytes()
     }
     //async
     {
@@ -28,10 +33,11 @@ fn main() -> Result<()> {
                 break;
             }
         }
+        let mut http = EspHttpClient::new_https()?;
 
-        wifi.get("http://example.com")?;
+        http.get("http://example.com")?;
         println!("HTTP OK!");
-        wifi.get("https://espressif.com")?;
+        http.get("https://espressif.com")?;
         println!("HTTPS OK!");
     }
     Ok(())

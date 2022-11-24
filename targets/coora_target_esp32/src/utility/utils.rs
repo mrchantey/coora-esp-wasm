@@ -1,5 +1,6 @@
 #![allow(non_upper_case_globals)]
-use ::log::{set_max_level, LevelFilter};
+use ::log::LevelFilter;
+use esp_idf_svc::log::EspLogger;
 use esp_idf_sys::*;
 use std::time::Duration;
 //https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/misc_system_api.html
@@ -23,8 +24,20 @@ pub fn print_free_heap(prefix: &str) {
     );
 }
 
-pub fn set_log_level(level: LevelFilter) {
-    set_max_level(level);
+pub fn set_favourite_log_level() {
+    set_esp_log_level(log::LevelFilter::Warn);
+    set_wifi_log_level(log::LevelFilter::Error);
+}
+
+pub fn set_esp_log_level(level: LevelFilter) {
+    let logger = EspLogger;
+    logger.set_target_level("*", level);
+    // logger.initialize();
+}
+pub fn set_wifi_log_level(level: LevelFilter) {
+    let logger = EspLogger;
+    logger.set_target_level("wifi", level);
+    // logger.initialize();
 }
 //this is dumb
 // pub fn dump_heap() {

@@ -5,7 +5,7 @@ use embedded_svc::{
 };
 use esp_idf_svc::http::server::{EspHttpRequest, EspHttpResponse};
 use extend::ext;
-#[ext]
+#[ext(name = ServerHttpRequest)]
 pub impl EspHttpRequest<'_> {
     fn read_bytes_to_arr<const T: usize>(&mut self, buff: &mut [u8; T]) -> Result<usize> {
         let len = self.reader().read(buff)?;
@@ -18,7 +18,7 @@ pub impl EspHttpRequest<'_> {
     }
 }
 
-#[ext]
+#[ext(name = ServerHttpResponse)]
 pub impl EspHttpResponse<'_> {
     fn write_bytes(self, bytes: &[u8]) -> Result<()> {
         let mut writer = self.into_writer()?;

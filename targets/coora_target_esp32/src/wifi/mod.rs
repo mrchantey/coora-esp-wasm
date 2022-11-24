@@ -1,5 +1,3 @@
-mod fetch;
-pub use self::fetch::*;
 mod server;
 pub use self::server::*;
 mod utility;
