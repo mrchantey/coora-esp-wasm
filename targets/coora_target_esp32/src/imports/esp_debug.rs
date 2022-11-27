@@ -1,10 +1,24 @@
 use coora_engine::Debug;
+use esp_idf_svc::http::client::EspHttpClient;
+use std::sync::{Arc, Mutex};
 
-pub struct EspDebug;
+use crate::EspHttpClientExt;
 
-impl Debug for EspDebug {
+pub struct EspDebug<'a> {
+    url: &'a str,
+    http: Arc<Mutex<EspHttpClient>>,
+}
+
+impl<'a> EspDebug<'a> {
+    pub fn new(url: &'a str, http: Arc<Mutex<EspHttpClient>>) -> EspDebug<'a> {
+        EspDebug { url, http }
+    }
+}
+
+impl<'a> Debug for EspDebug<'a> {
     fn log(&mut self, val: &str) {
         println!("{val}");
-        //TODO post
+        let mut http = self.http.lock().unwrap();
+        http.post(self.url, val.as_bytes()).unwrap();
     }
 }

@@ -11,14 +11,17 @@ fn main() -> Result<()> {
         let mut wifi = get_wifi(&nvs)?;
 
         let wifi_client = wifi::WifiClient::new(&mut wifi, secret::SSID, secret::PASSWORD)?;
-        let settings = wifi_client.check_status_sync(&wifi)?;
+        wifi_client.check_status_sync(&wifi)?;
         let mut http = EspHttpClient::new_https()?;
-        println!("SYNC OK! ip: {}", settings.ip);
 
         assert!(http.get("http://httpbin.org/get")?.status() == 200);
         assert!(http.get("https://httpbin.org/get")?.status() == 200);
-        let result = http.post("https://httpbin.org/post", b"howdy doody")?;
+        let mut result = http.post("https://httpbin.org/post", b"howdy doody")?;
         assert!(result.status() == 200);
+        let mut buf = [0u8; 2048];
+        let _txt = result.read_str(&mut buf)?;
+        // println!("TEXT - \n{txt}");
+        // assert!(txt == "howdy doody");
         // let len = result.read_bytes()
     }
     //async

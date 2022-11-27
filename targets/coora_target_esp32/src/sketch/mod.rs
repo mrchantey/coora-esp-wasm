@@ -1,7 +1,5 @@
 mod default_sketch;
 pub use self::default_sketch::*;
-mod esp32_imports;
-pub use self::esp32_imports::*;
 mod sketch_buffer;
 pub use self::sketch_buffer::*;
 mod sketch_runner;

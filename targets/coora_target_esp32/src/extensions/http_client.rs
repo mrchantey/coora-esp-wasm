@@ -6,6 +6,7 @@ use embedded_svc::{
 use esp_idf_svc::http::client::*;
 use esp_idf_sys::EspError;
 use extend::ext;
+use std::str;
 
 #[ext]
 pub impl EspHttpClient {
@@ -45,13 +46,11 @@ pub impl EspHttpClient {
 
 #[ext(name = ClientHttpResponse)]
 pub impl EspHttpResponse<'_> {
-    fn read_bytes(&mut self) -> usize {
+    fn read_bytes(&mut self, buf: &mut [u8]) -> Result<usize> {
         let mut total_size = 0;
-        // 5. if the status is OK, read self data chunk by chunk into a buffer and print it until done
-        let mut buf = [0_u8; 256];
         let mut reader = self.reader();
         loop {
-            let Ok(size) = Read::read(&mut reader, &mut buf) else { continue };
+            let size = reader.read(buf)?;
             if size == 0 {
                 break;
             }
@@ -59,6 +58,11 @@ pub impl EspHttpResponse<'_> {
         }
         // let _response_text = str::from_utf8(&buf[..size])?;
         // println!("{}", response_text);
-        total_size
+        Ok(total_size)
+    }
+    fn read_str<'a>(&mut self, buf: &'a mut [u8]) -> Result<&'a str> {
+        let len = self.read_bytes(buf)?;
+        let str = str::from_utf8(&buf[..len])?;
+        Ok(str)
     }
 }
