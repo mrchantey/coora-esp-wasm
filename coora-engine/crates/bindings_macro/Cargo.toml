@@ -18,5 +18,7 @@ inventory = {workspace = true}
 extend = {workspace = true}
 anyhow = {workspace = true}
 convert_case = {workspace=true}
+coora_bindings_utils = {workspace=true}
+
 [lib]
 proc-macro = true

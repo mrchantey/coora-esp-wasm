@@ -1,8 +1,6 @@
 use coora_bindings::coora_export;
 pub use coora_engine::*;
-fn main() {
-	let _a: FooInstance<u32>;
-}
+fn main() { let _a: FooInstance; }
 
 
 #[coora_export]

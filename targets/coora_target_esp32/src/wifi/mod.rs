@@ -1,5 +1,3 @@
-mod fetch;
-pub use self::fetch::*;
 mod server;
 pub use self::server::*;
 mod utility;
@@ -10,3 +8,5 @@ mod wifi_client;
 pub use self::wifi_client::*;
 mod wifi_credentials;
 pub use self::wifi_credentials::*;
+mod wifi_fallback_client;
+pub use self::wifi_fallback_client::*;

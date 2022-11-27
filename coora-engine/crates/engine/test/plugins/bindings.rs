@@ -17,7 +17,7 @@ pub trait MyExports {
 
 sweet! {
 	it "works" {
-		let mut _app = WasmApp::new(0);
+		let mut _app = WasmApp::new();
 
 		// app.build();
 

@@ -2,11 +2,10 @@ use anyhow::Result;
 use coora_target_esp32::{mqtt::*, wifi::*, *};
 
 fn main() -> Result<()> {
-    // let store = StoreBuilder::take()?;
-    let store = StoreBuilder::take()?;
-    let mut wifi = get_wifi(&store)?;
-    let _wifi = wifi::WifiClient::from_store_or_ap(&store.store, &mut wifi)?;
-
+    let (nvs, store) = take_nvs_store()?;
+    let mut wifi = get_wifi(&nvs)?;
+    let mut client = WifiFallbackClient::new_from_store(&mut wifi, &store)?;
+    client.check_status_sync(&mut wifi)?;
     let mut mqtt = MqttClient::new()?;
 
     mqtt.subscribe()?;

@@ -1,20 +1,44 @@
-use anyhow::{Ok, Result};
+use anyhow::Result;
 use embedded_svc::storage::{RawStorage, StorageBase};
 use std::sync::{Arc, Mutex};
 // use embedded_svc::storage as _;
 use esp_idf_svc::{nvs::*, nvs_storage::*};
 use extend::ext;
+use std::str;
+
 // const STORE: Arc<Mutex<Option<EspNvsStorage>>> = Arc::new(Mutex::new(None));
 // const STORE: Arc<Mutex<Option<EspNvsStorage>>> = Arc::new(Mutex::new(None));
 
-pub struct NvsStore {
-    pub nvs: Arc<EspDefaultNvs>,
-    pub store: Store,
-}
+/// Gets EspDefaultNvs & EspNvsStorage
+/// Seems like the only one that throws if dropped and recreated in combination with server
 
 pub type Store = Arc<Mutex<EspNvsStorage>>;
+pub type Nvs = Arc<EspDefaultNvs>;
 
-pub struct StoreBuilder;
+pub fn take_nvs() -> Result<Nvs> {
+    Ok(Arc::new(EspDefaultNvs::new()?))
+}
+
+pub fn take_store(nvs: &Nvs) -> Result<Store> {
+    let storage = EspNvsStorage::new_default(Arc::clone(&nvs), "default", true)?;
+    Ok(Arc::new(Mutex::new(storage)))
+}
+
+pub fn take_nvs_store() -> Result<(Nvs, Store)> {
+    let nvs = take_nvs()?;
+    let store = take_store(&nvs)?;
+    Ok((nvs, store))
+}
+
+// impl NvsStore {
+//     pub fn new() -> Result<NvsStore> {
+//         let nvs = Arc::new(EspDefaultNvs::new()?);
+//         let storage = EspNvsStorage::new_default(Arc::clone(&nvs), "default", true)?;
+//         let store = Arc::new(Mutex::new(storage));
+//         Ok(NvsStore { nvs, store })
+//     }
+// }
+
 #[ext]
 pub impl Arc<Mutex<EspNvsStorage>> {
     fn has(&self, key: &str) -> Result<bool> {
@@ -31,26 +55,41 @@ pub impl Arc<Mutex<EspNvsStorage>> {
         store.put_raw(key, buf)?;
         Ok(())
     }
+    fn set_u32(&self, key: &str, val: u32) -> Result<()> {
+        let mut store = self.lock().unwrap();
+        store.put_raw(key, &val.to_le_bytes())?;
+        Ok(())
+    }
 
-    fn get<const T: usize>(&self, key: &str) -> Result<([u8; T], usize)> {
+    fn get_u32(&self, key: &str) -> Result<u32> {
         let store = self.lock().unwrap();
-        // .unwrap_or_else(|_| Err(anyhow::anyhow!("key not found: {key}")));
-        let mut buff = [0; T];
-
-        if let Some((_, len)) = store.get_raw(key, &mut buff)? {
-            Ok((buff, len))
+        let mut buff = [0; 4];
+        if let Some(_) = store.get_raw(key, &mut buff)? {
+            Ok(u32::from_le_bytes(buff))
         } else {
             Err(anyhow::anyhow!("key not found: {key}"))
         }
     }
-}
 
-impl StoreBuilder {
-    pub fn take() -> Result<NvsStore> {
-        let nvs = Arc::new(EspDefaultNvs::new()?);
-        let storage = EspNvsStorage::new_default(Arc::clone(&nvs), "default", true)?;
-        // Ok(Arc::new(Mutex::new(StoreData { nvs, storage })))
-        let store = Arc::new(Mutex::new(storage));
-        Ok(NvsStore { nvs, store })
+    fn get<const T: usize>(&self, key: &str) -> Result<([u8; T], usize)> {
+        let mut buf = [0; T];
+        match self.get_with(key, &mut buf) {
+            Ok(len) => Ok((buf, len)),
+            Err(err) => Err(err),
+        }
+    }
+    fn get_string<const T: usize>(&self, key: &str) -> Result<String> {
+        let (bytes, len) = self.get::<{ T }>(key)?;
+        let str = str::from_utf8(&bytes[..len])?;
+        Ok(String::from(str))
+    }
+
+    fn get_with(&self, key: &str, buff: &mut [u8]) -> Result<usize> {
+        let store = self.lock().unwrap();
+        if let Some((_, len)) = store.get_raw(key, buff)? {
+            Ok(len)
+        } else {
+            Err(anyhow::anyhow!("key not found: {key}"))
+        }
     }
 }

@@ -2,16 +2,17 @@ use crate::*;
 use anyhow::Result;
 
 pub const CREDENTIALS_MAX_LEN: usize = 50;
-pub struct WifiCredentialsInfo {
-    pub ssid: [u8; CREDENTIALS_MAX_LEN],
-    pub ssid_len: usize,
-    pub pass: [u8; CREDENTIALS_MAX_LEN],
-    pub pass_len: usize,
-}
+// pub ssid: [u8; CREDENTIALS_MAX_LEN],
+// pub ssid_len: usize,
+// pub pass: [u8; CREDENTIALS_MAX_LEN],
+// pub pass_len: usize,
 const STORE_SSID: &str = "ssid";
 const STORE_PASS: &str = "pass";
 
-pub struct WifiCredentials;
+pub struct WifiCredentials {
+    pub ssid: String,
+    pub pass: String,
+}
 
 impl WifiCredentials {
     pub fn set(store: &Store, ssid: &str, pass: &str) -> Result<()> {
@@ -34,14 +35,9 @@ impl WifiCredentials {
         Ok(())
     }
 
-    pub fn get(store: &Store) -> Result<WifiCredentialsInfo> {
-        let (ssid, ssid_len) = store.get::<{ CREDENTIALS_MAX_LEN }>(STORE_SSID)?;
-        let (pass, pass_len) = store.get::<{ CREDENTIALS_MAX_LEN }>(STORE_PASS)?;
-        Ok(WifiCredentialsInfo {
-            ssid,
-            pass,
-            ssid_len,
-            pass_len,
-        })
+    pub fn get(store: &Store) -> Result<WifiCredentials> {
+        let ssid = store.get_string::<{ CREDENTIALS_MAX_LEN }>(STORE_SSID)?;
+        let pass = store.get_string::<{ CREDENTIALS_MAX_LEN }>(STORE_PASS)?;
+        Ok(WifiCredentials { ssid, pass })
     }
 }

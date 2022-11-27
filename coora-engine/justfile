@@ -23,6 +23,8 @@ watch command:
 mod:
 	just watch 'cargo run --manifest-path ../../forky/crates/forky_cli/Cargo.toml'
 
+export-bindings:
+	just run coora_bindings export_bindings
 
 ## Compiling
 expand crate example:

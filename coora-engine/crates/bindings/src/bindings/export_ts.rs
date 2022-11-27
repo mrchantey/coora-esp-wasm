@@ -13,10 +13,7 @@ pub fn export_ts() -> Result<()> {
 	write_index(plugins, &out.join("index.ts"), |plugin| {
 		let name = plugin.name.to_case(Case::Camel);
 // invalid asc: export * as {name} from \'./{name}\'
-		format!("
-import * as {name} from './{name}'
-export {{ {name} as {name} }}
-")
+		format!("import * as {name} from './{name}'\nexport {{ {name} as {name} }}")
 	})?;
 	move_files_ts()?;
 	Ok(())

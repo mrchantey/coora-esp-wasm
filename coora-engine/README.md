@@ -37,3 +37,9 @@ For crates both inside this repo and elsewhere the naming conventions should be 
 	- ie 
 		- `coora_plugin_led_display_esp32`
 		- `coora_plugin_led_display_stm32`
+
+
+## Tradeoffs
+
+- Non generic user state
+	- In making the userstate generic, basically the app and every plugin would also need to be. Side effects of this mean being unable to collect plugins etc, so instead userstate is a heap allocated key-value store.

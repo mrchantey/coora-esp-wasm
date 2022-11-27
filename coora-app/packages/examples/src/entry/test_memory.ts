@@ -1,3 +1,4 @@
+import { console } from '../bindings'
 // memory.
 
 export function _size(): u32{
@@ -20,17 +21,18 @@ export function getString(): u32{
 	return changetype<usize>(str) as u32
 }
 export function printHello(): void{
-	const str = 'hello from wasm'
-	println(str)
+	const str = '🤘🤘party on wayne!🤘🤘'
+	console.log(str)
+	// println(str)
 }
 
 //@ts-ignore externam
-@external("Serial", "println")
-declare function _println(ptr: usize, len: i32): void;
+// @external("Serial", "println")
+// declare function _println(ptr: usize, len: i32): void;
 
-export function println(str: string): void {
-	const out = String.UTF8.encode(str)
-	_println(changetype<usize>(out), out.byteLength)
-}
+// export function println(str: string): void {
+// 	const out = String.UTF8.encode(str)
+// 	_println(changetype<usize>(out), out.byteLength)
+// }
 
-export const a: string = '\1\2\3\4'
+// export const a: string = '\1\2\3\4'

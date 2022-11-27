@@ -1,15 +1,26 @@
 use crate::*;
 use anyhow::Result;
 // use wasmi::*;
-pub fn build_hello_world() -> Result<WasmApp<u32>> {
-	let _buf = include_wasm!("../../", "hello_world");
-
+// use coora_engine::*;
+pub fn build_hello_world() -> Result<WasmApp> {
+	let wasm = include_wasm!("../../", "hello_world");
+	let mut app = WasmApp::new();
+	app.build_with_wasm(&wasm[..])?;
+	let mut adder = AdderInstance::new(&mut app);
+	let result = adder.add(1, 2);
+	println!("{result}");
 
 	todo!()
 }
 
+pub fn build_mem_test() -> Result<MemoryTestInstance> {
+	let wasm = include_wasm!("../../", "test_memory");
 
-pub fn build_hello_led() -> Result<WasmApp<u32>> {
-	//
-	todo!()
+	let mut app = WasmApp::new();
+	// link(&mut app);
+	app.add_plugin(&mut StdImports)?;
+	app.build_with_wasm(&wasm[..])?;
+
+	let mem_test = MemoryTestInstance::new(&mut app);
+	Ok(mem_test)
 }

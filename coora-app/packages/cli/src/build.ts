@@ -1,15 +1,22 @@
 import { Command } from 'commander'
+import fs from 'fs'
 import { run } from './runAsc.js'
 import { assertExists, consoleErrorOr, parseBuildFileNames } from './utility.js'
 export const appendBuildCommand = (parent: Command) => {
 	const cmd = parent.command('build')
 		.argument('<entry>', 'entrypoint')
-	cmd.action(async(entry, _options) => 
-		consoleErrorOr(await build(entry), ({ names, duration }) =>
-			`BUILD - success - ${names.name} - ${duration.toFixed(0)} millis`))
+	cmd.action(async(entry, _options) => { buildWithLog(entry) })
 }
 
 export type BuildTarget = 'release' | 'debug'
+
+export const buildWithLog = async(entry: string, target?: BuildTarget) => {
+	console.log('BUILD - building..')
+	const result = await build(entry, target)
+	consoleErrorOr(result, ({ duration, size }) =>
+		`BUILD - success - ${duration.toFixed(0)} ms - ${(size / 1024).toFixed(2)} KB`)
+	return result
+}
 
 export const build = async (entry: string, target: BuildTarget = 'release') => {
 	const exists = assertExists(entry)
@@ -17,7 +24,8 @@ export const build = async (entry: string, target: BuildTarget = 'release') => {
 		return exists
 	
 	const now = performance.now()
-	const names = parseBuildFileNames(entry, target)
+	const names = parseBuildFileNames(entry, target)	
+	
 	const args = [
 		entry,
 		'--config', './config/assemblyscript/asconfig.json',
@@ -25,16 +33,28 @@ export const build = async (entry: string, target: BuildTarget = 'release') => {
 		'-o', names.wasm,
 		'-t', names.wat,
 		'--disable', 'bulk-memory',
+		'--noExportMemory',
+		'--importMemory',
+		//-------------------------^^ required
+
+		'--initialMemory', '1',
+		'--maximumMemory', '1',
+		'--optimizeLevel', '0', //0,1,2,3
+		'--shrinkLevel', '2', //0,1,2
+		// '-Osize',
+		// '--lowMemoryLimit',
+		// '--runtime', 'minimal',
+		// '--exportRuntime',
+		// '--runtime', 'stub', //this will have big consequences
+		// '--stackSize', '65536',
+		// '--initialMemory 30',
 		//THIS IS BAD, we should implement abort!
 		'--use', 'abort=',
 		'--use', 'trace=',
 		'--use', 'seed=',
-		'--importMemory',
 		// '--use', 'abort=packages/examples/src/utility/env/abortStub',
 		// '--use', 'trace=packages/examples/src/utility/env/traceStub',
 		// '--use', 'seed=packages/examples/src/utility/env/seedStub',
-		// --stackSize 65536 \
-		// --lowMemoryLimit \
 	]
 	const result = await run(args)
 		.catch((err: Error) => err)
@@ -44,5 +64,6 @@ export const build = async (entry: string, target: BuildTarget = 'release') => {
 		return new Error(`BUILD - failed, compile error \n${result.error}`)
 		// err = result.error
 	const duration = performance.now() - now
-	return { duration, result, names }
+	const size = fs.statSync(names.wasm).size
+	return { duration, result, names, size }
 }
