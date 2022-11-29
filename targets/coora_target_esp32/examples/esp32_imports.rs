@@ -12,13 +12,13 @@ fn main() -> Result<()> {
     let led_pin = device.peripherals.pins.gpio7.into_output()?;
     let channel = device.peripherals.rmt.channel0;
     print_free_heap("before");
-    let leds = led_strip_rgbw!(led_pin, channel, 24)?;
+    let _leds = led_strip_rgbw!(led_pin, channel, 24)?;
     print_free_heap("after");
 
     println!("ok1");
     // let leds = Mutex::new(leds);
     println!("ok2");
-    let leds = Arc::new(leds);
+    // let leds = Arc::new(leds);
     println!("ok3");
     println!("ok4");
 

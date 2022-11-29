@@ -13,7 +13,7 @@ export function start(): void{
 export function update(): void{	
 	const t = math.sin((time.elapsed() as f32) / 1000) / 2 + 0.5
 	// debug.log(`${t}`)
-	ledStrip.setLeds(0, t * 12 as u32, 0, 0)
+	ledStrip.setLeds(0, t * 32 as u32, 0, 0)
 	// const arr: Array<u32> = []
 	// arr.slice(2, 2)
 	// arr.push(10)

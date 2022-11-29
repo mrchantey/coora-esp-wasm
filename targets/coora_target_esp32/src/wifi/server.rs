@@ -2,9 +2,9 @@
 //https://github.com/esp-rs/esp-idf-svc
 // use crate::*;
 use anyhow::Result;
-use std::str;
 use embedded_svc::http::server::registry::Registry;
 use esp_idf_svc::http::server::{Configuration, EspHttpServer};
+use std::str;
 use std::sync::Arc;
 
 use crate::*;
@@ -54,7 +54,7 @@ pub fn start_server(store: &Store) -> Result<EspHttpServer> {
         response.ok()?;
         Ok(())
     })?;
-
+    println!("WIFI SERVER - Port: {}", server_config.http_port);
     Ok(server)
 }
 
