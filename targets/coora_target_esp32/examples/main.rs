@@ -1,8 +1,8 @@
 // use anyhow::Result;
-use coora_target_esp32::{utility::set_esp_log_level, *};
+use coora_target_esp32::*;
 
 fn main() {
-    set_esp_log_level(log::LevelFilter::Warn);
+    utility::set_favourite_log_level();
     run_sketch().unwrap_or_else(|_| {
         panic!("failed..");
     });

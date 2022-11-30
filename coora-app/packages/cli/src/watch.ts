@@ -13,6 +13,7 @@ export const appendWatchCommand = (parent: Command) => {
 		.argument('<watch>', 'watch location')
 		.option('<target>',)
 		.option('-f --flash', 'flash device on build')
+		.option('-s --save', 'save to nvs storage')
 	cmd.action(async(ip, location, watchDir, options) => {
 		consoleErrorOr(await watch(ip, location, watchDir, options), () => false)		
 	})
@@ -20,6 +21,7 @@ export const appendWatchCommand = (parent: Command) => {
 type Options ={
 	target?: BuildTarget
 	flash?: boolean
+	save?: boolean
 }
 
 const defaultOptions: Options = {
@@ -45,7 +47,7 @@ const watch = async (ip: string, entry: string, watch: string, options: Options 
 		}
 		if (!options.flash)
 			return
-		await flashWithLog(ip, result.names.wasm)
+		await flashWithLog(ip, result.names.wasm, options)
 		// const duration = performance.now() - now
 		// console.log(`COORA - success in ${duration.toFixed()} ms`)
 	}

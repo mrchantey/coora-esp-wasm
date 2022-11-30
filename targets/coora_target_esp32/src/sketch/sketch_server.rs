@@ -56,21 +56,32 @@ impl SketchServer {
 
     pub fn start_server(&mut self) -> Result<()> {
         let mut server = self.wifi.start_server(&self.store)?;
+        self.set_handle_sketch(&mut server, "/sketch", self.reload_mode.clone())?;
+        self.set_handle_sketch(&mut server, "/sketch-nvs", SketchReloadMode::RestartDevice)?;
+        self.server = Some(server);
+        Ok(())
+    }
+
+    fn set_handle_sketch(
+        &mut self,
+        server: &mut EspHttpServer,
+        name: &str,
+        reload_mode: SketchReloadMode,
+    ) -> Result<()> {
         let store = self.store.clone();
         let buffer = self.sketch_buffer.clone();
-        let reload_mode = self.reload_mode.clone();
-        server.handle_post("/sketch", move |mut request, response| {
+        server.handle_post(name, move |mut request, response| {
             let mut buffer = buffer.lock().unwrap();
             buffer.from_request(&mut request)?;
             //TODO optionally dont nvs and attempt no restart
             if reload_mode == SketchReloadMode::RestartDevice {
                 buffer.set_nvs(&store)?;
+                //TODO return OK then restart device
             }
             println!("\nSKETCH received! {}", b_to_kb(buffer.len));
             response.ok()?;
             Ok(())
         })?;
-        self.server = Some(server);
         Ok(())
     }
 }
