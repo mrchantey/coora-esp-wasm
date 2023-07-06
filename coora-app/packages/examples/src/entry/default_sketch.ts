@@ -11,7 +11,5 @@ export function start(): void{
 }
 
 export function update(): void{	
-	// const t = math.sin(time.elapsed() as f32 / 1000) / 2 + 0.5
-	// ledStrip.setLeds(0, t * 32 as u32, 0, 0)
 	ledStrip.show()
 }
