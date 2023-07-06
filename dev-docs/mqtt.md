@@ -1,10 +1,14 @@
 # MQTT
 
 ## Quickstart
-1. `docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:5.0.10`
+1. `docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:5.0.26`
 2. [Visit dashboard](http://localhost:18083)
+	- username: admin
+	- password: public
 3. [Open test client](http://localhost:18083/#/websocket)
-
+4. Test
+	- `just mqtt subscribe`
+	- `just mqtt publish hi there`
 
 ## Ports
 - Nonsecure: MQTT `1883`
