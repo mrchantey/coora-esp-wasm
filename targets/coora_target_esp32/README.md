@@ -2,7 +2,7 @@
 
 ## Troubleshooting
 ### Object Path Max
-`CMAKE_OBJECT_PATH_MAX`
+- Also looks like `... No such file or directory`, or `CMAKE_OBJECT_PATH_MAX`
 - Path too long? you may be able to get away with just using powershell instead of cygwin
 - Otherwise you need to reduce path length, DO NOT specify a target dir other than default, it will randomly 'stack overflow' at RUNTIME
 
